@@ -3,397 +3,250 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>کانال تلگرام ارزکیه - نرخ ارز افغانستان + سیستم انبارداری پیشرفته</title>
-<meta name="description" content="کانال تلگرام ارزکیه - جدیدترین اخبار و نرخ‌های ارز افغانستان، ارز دیجیتال و بازارهای مالی. پوشش مناطق هرات، کابل، مزارشریف، کندهار و غزنی." />
-<meta name="keywords" content="ارزکیه, ارز افغانستان, نرخ ارز, کانال تلگرام, بیت کوین, دلار, افغانی, تحلیل بازار" />
-<meta name="robots" content="index, follow" />
-<meta name="author" content="Arzkeyahe" />
-<link rel="canonical" href="https://rezarozibay123.github.io/arzkeyahe-landing/" />
-<meta name="google-site-verification" content="zMSLtzpIeWs0XXeyQKb7T9yU0H7bbKkXisP6uT53ZM8" />
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-
+<title>برنامه مدیریت موجودی انبار - ارزکیه</title>
 <style>
-  /* استایل معرفی کانال */
+  /* Reset */
+  * {
+    box-sizing: border-box;
+  }
   body {
     font-family: Tahoma, sans-serif;
+    background: #f5f7fa;
+    margin: 0; padding: 0;
+    color: #333;
     direction: rtl;
-    background: #f0f0f0;
-    margin: 0;
-    padding: 20px;
-    color: #222;
   }
-  .intro-container {
-    max-width: 600px;
-    background: white;
-    margin: auto  auto 40px auto;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px #ccc;
-    text-align: center;
-  }
-  .intro-container h1 {
-    color: #0088cc;
-    margin-bottom: 15px;
-  }
-  .intro-container a {
+  header {
+    background-color: #0070f3;
     color: white;
-    background: #0088cc;
-    text-decoration: none;
-    font-weight: bold;
-    display: inline-block;
-    padding: 10px 20px;
-    border-radius: 6px;
-    margin-top: 20px;
-    transition: background 0.3s;
-  }
-  .intro-container a:hover {
-    background: #006699;
-  }
-  .intro-container p {
-    line-height: 1.6;
-    margin-bottom: 10px;
-  }
-
-  /* استایل سیستم انبارداری */
-  :root {
-    --primary: #2c3e50;
-    --secondary: #3498db;
-    --accent: #1abc9c;
-    --light: #f8f9fa;
-    --telegram: #0088cc;
-    --danger: #e74c3c;
+    padding: 20px;
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 700;
   }
   .container {
-    max-width: 900px;
-    background: rgba(30, 30, 46, 0.9);
-    border-radius: 20px;
+    max-width: 960px;
+    margin: 30px auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgb(0 0 0 / 0.1);
     padding: 20px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-    margin: auto;
-    color: var(--light);
   }
-  .header {
+  .telegram-section {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
   }
-  .header h1 {
-    font-size: 2rem;
-    margin-bottom: 6px;
+  .telegram-section h1 {
+    color: #0070f3;
+    margin-bottom: 10px;
   }
-  .products-grid {
+  .telegram-section p {
+    font-size: 1.1rem;
+    line-height: 1.5;
+    margin-bottom: 15px;
+  }
+  .telegram-link {
+    background: #0070f3;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+  }
+  .telegram-link:hover {
+    background-color: #005bb5;
+  }
+
+  /* Inventory Section */
+  h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #0070f3;
+    font-weight: 700;
+  }
+  .products {
     display: grid;
-    grid-template-columns: repeat(auto-fill,minmax(200px,1fr));
-    gap: 15px;
+    grid-template-columns: repeat(auto-fill,minmax(250px,1fr));
+    gap: 20px;
   }
   .product-card {
-    background: rgba(255,255,255,0.1);
+    background: #ffffff;
     border-radius: 12px;
+    box-shadow: 0 2px 10px rgb(0 0 0 / 0.05);
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
-    display: flex; flex-direction: column;
+    transition: box-shadow 0.3s ease;
+  }
+  .product-card:hover {
+    box-shadow: 0 6px 20px rgb(0 0 0 / 0.1);
   }
   .product-image {
-    height: 140px;
-    background-size: cover;
-    background-position: center;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-bottom: 1px solid #eee;
   }
   .product-info {
-    padding: 12px;
+    padding: 15px 20px;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
   }
   .product-name {
-    font-weight: bold;
+    font-weight: 700;
+    font-size: 1.2rem;
     margin-bottom: 8px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    color: #111;
   }
-  .product-stock {
-    font-size: 0.9rem;
-    margin-bottom: 10px;
-  }
-  .add-btn {
-    background: var(--telegram);
-    border: none;
-    color: white;
-    padding: 8px 0;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background 0.3s;
-  }
-  .add-btn:hover {
-    background: #006699;
-  }
-  .cart-container {
-    margin-top: 30px;
-    background: rgba(255,255,255,0.1);
-    border-radius: 15px;
-    padding: 20px;
-  }
-  .cart-container h2 {
+  .product-price {
+    font-size: 1.1rem;
+    color: #0070f3;
     margin-bottom: 15px;
-    text-align: center;
+    font-weight: 600;
   }
-  .cart-item {
+  .quantity-controls {
+    margin-top: auto;
     display: flex;
     align-items: center;
-    padding: 10px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.2);
+    justify-content: center;
+    gap: 15px;
   }
-  .cart-item:last-child {
-    border-bottom: none;
-  }
-  .cart-item-image {
-    width: 70px; height: 70px;
-    border-radius: 12px;
-    background-size: cover;
-    background-position: center;
-    margin-left: 15px;
-  }
-  .cart-item-details {
-    flex-grow: 1;
-  }
-  .cart-item-name {
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-  .cart-item-actions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .qty-btn {
-    background: rgba(255,255,255,0.15);
+  .btn {
+    background-color: #0070f3;
     border: none;
-    border-radius: 50%;
-    width: 30px; height: 30px;
     color: white;
+    padding: 8px 15px;
+    border-radius: 8px;
+    font-weight: 600;
     cursor: pointer;
-    font-size: 20px;
-    font-weight: bold;
-    line-height: 20px;
+    transition: background-color 0.25s ease;
     user-select: none;
   }
-  .qty-btn:hover {
-    background: rgba(255,255,255,0.3);
+  .btn:hover {
+    background-color: #005bb5;
   }
-  .cart-summary {
-    margin-top: 15px;
-    text-align: center;
-    font-weight: bold;
+  .quantity {
     font-size: 1.2rem;
+    min-width: 30px;
+    text-align: center;
   }
-  .send-btn {
-    margin-top: 25px;
-    background: var(--telegram);
-    color: white;
-    width: 100%;
-    padding: 15px;
-    font-weight: bold;
-    font-size: 1.1rem;
-    border: none;
-    border-radius: 15px;
-    cursor: pointer;
-    display: flex; justify-content: center; align-items: center; gap: 10px;
-    transition: background 0.3s;
-  }
-  .send-btn:hover {
-    background: #006699;
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .products {
+      grid-template-columns: 1fr;
+    }
   }
 </style>
 </head>
 <body>
 
-  <!-- معرفی کانال -->
-  <div class="intro-container">
+<header>کانال تلگرام ارزکیه + مدیریت موجودی انبار</header>
+
+<div class="container">
+  <section class="telegram-section">
     <h1>کانال تلگرام ارزکیه</h1>
-    <p>به کانال <strong>ارزکیه</strong> خوش آمدید. این کانال جدیدترین اخبار، تحلیل‌ها و نرخ‌های بازار هرات، کابل، مزارشریف، کندهار و غزنی را پوشش می‌دهد.</p>
-    <p>برای مشاهده آخرین محتوا و پیوستن به جمع ما، روی لینک زیر کلیک کنید:</p>
-    <a href="https://t.me/arzkeyahe" target="_blank" rel="noopener noreferrer">ورود به کانال تلگرام ارزکیه</a>
-  </div>
+    <p>به کانال <strong>ارزکیه</strong> خوش آمدید. این کانال جدیدترین اخبار، تحلیل‌ها و نرخ‌های بازار هرات، کابل، مزارشریف و غزنی را پوشش می‌دهد.</p>
+    <a href="https://t.me/arzkeyahe" target="_blank" rel="noopener noreferrer" class="telegram-link">ورود به کانال تلگرام</a>
+  </section>
 
-  <!-- سیستم انبارداری -->
-  <div class="container">
-    <div class="header">
-      <h1><i class="fas fa-warehouse"></i> سیستم انبارداری پیشرفته</h1>
-      <p>نمایش موجودی، افزودن به سبد خرید و ارسال سفارش به تلگرام یا واتساپ</p>
+  <section class="inventory-section">
+    <h2>📦 موجودی انبار</h2>
+    <div class="products" id="products-container">
+      <!-- کارت‌های محصولات اینجا نمایش داده می‌شوند -->
     </div>
-
-    <div class="products-grid" id="productsGrid"></div>
-
-    <div class="cart-container">
-      <h2><i class="fas fa-shopping-cart"></i> سبد خرید</h2>
-      <div id="cartItems"></div>
-      <div class="cart-summary" id="cartSummary">جمع کل: ۰ تومان</div>
-      <button class="send-btn" onclick="sendOrder()"><i class="fab fa-telegram"></i> ارسال سفارش به تلگرام یا واتساپ</button>
-    </div>
-  </div>
+  </section>
+</div>
 
 <script>
-  // نمونه داده کالاها
-  const products = [
+  const productsKey = 'arzkeyahe_inventory';
+
+  // نمونه داده اولیه محصولات با تصویر و قیمت
+  const defaultProducts = [
     {
       id: 1,
-      name: "لپ‌تاپ ایسوس مدل X515",
-      price: 24000000,
-      stock: 5,
-      image: "https://www.asus.com/media/global/products/h7nzz3v6q4vw7yjm/P_setting_000_1_90_end_500.png"
+      name: "برنج پاکستانی",
+      price: 2500,
+      quantity: 10,
+      image: "https://cdn.pixabay.com/photo/2017/04/15/11/14/rice-2220986_1280.jpg"
     },
     {
       id: 2,
-      name: "گوشی سامسونگ گلکسی A32",
-      price: 8000000,
-      stock: 10,
-      image: "https://images.samsung.com/is/image/samsung/p6pim/levant/galaxy-a32/gallery/levant-galaxy-a32-a325-sm-a325fzknmea-frontviolet-368553384?$720_576_PNG$"
+      name: "شکر سفید",
+      price: 1500,
+      quantity: 25,
+      image: "https://cdn.pixabay.com/photo/2017/06/07/12/04/sugar-2384797_1280.jpg"
     },
     {
       id: 3,
-      name: "هدفون بی‌سیم شیائومی",
-      price: 1200000,
-      stock: 7,
-      image: "https://cdn.shopify.com/s/files/1/0240/7323/0886/products/product-2885141-1_800x800.png"
-    },
-    {
-      id: 4,
-      name: "کوله پشتی لپ‌تاپ",
-      price: 600000,
-      stock: 15,
-      image: "https://cdn11.bigcommerce.com/s-l1h5j/products/450/images/1101/Backpack__83498.1570165627.1280.1280.png?c=2"
+      name: "روغن مایع",
+      price: 3500,
+      quantity: 15,
+      image: "https://cdn.pixabay.com/photo/2017/01/20/00/30/oil-1990381_1280.jpg"
     }
   ];
 
-  let cart = {};
-
-  function toCurrency(amount) {
-    return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " تومان";
+  // بارگذاری محصولات از localStorage یا استفاده از داده پیش‌فرض
+  function loadProducts() {
+    const stored = localStorage.getItem(productsKey);
+    if (stored) {
+      try {
+        return JSON.parse(stored);
+      } catch {
+        return defaultProducts;
+      }
+    }
+    return defaultProducts;
   }
 
-  // ساخت لیست محصولات
+  // ذخیره محصولات در localStorage
+  function saveProducts(products) {
+    localStorage.setItem(productsKey, JSON.stringify(products));
+  }
+
+  // رندر محصولات در صفحه
   function renderProducts() {
-    const grid = document.getElementById("productsGrid");
-    grid.innerHTML = "";
-    products.forEach(p => {
-      const card = document.createElement("div");
-      card.className = "product-card";
-
+    const products = loadProducts();
+    const container = document.getElementById('products-container');
+    container.innerHTML = '';
+    products.forEach(prod => {
+      const card = document.createElement('div');
+      card.className = 'product-card';
       card.innerHTML = `
-        <div class="product-image" style="background-image:url('${p.image}')"></div>
+        <img src="${prod.image}" alt="${prod.name}" class="product-image" />
         <div class="product-info">
-          <div class="product-name" title="${p.name}">${p.name}</div>
-          <div class="product-stock">موجودی: ${p.stock}</div>
-          <div class="product-price" style="color:var(--accent); font-weight:bold;">${toCurrency(p.price)}</div>
-          <button class="add-btn" onclick="addToCart(${p.id})"><i class="fas fa-cart-plus"></i> افزودن به سبد</button>
+          <div class="product-name">${prod.name}</div>
+          <div class="product-price">${prod.price.toLocaleString()} افغانی</div>
+          <div class="quantity-controls">
+            <button class="btn" onclick="changeQuantity(${prod.id}, -1)">-</button>
+            <div class="quantity">${prod.quantity}</div>
+            <button class="btn" onclick="changeQuantity(${prod.id}, 1)">+</button>
+          </div>
         </div>
       `;
-      grid.appendChild(card);
+      container.appendChild(card);
     });
   }
 
-  // افزودن به سبد خرید
-  function addToCart(productId) {
-    const product = products.find(p => p.id === productId);
-    if (!product) return;
-    if (!cart[productId]) {
-      if(product.stock < 1){
-        alert("موجودی این محصول تمام شده است!");
-        return;
-      }
-      cart[productId] = { ...product, quantity: 1 };
-    } else {
-      if(cart[productId].quantity < product.stock){
-        cart[productId].quantity++;
-      } else {
-        alert("موجودی کافی نیست!");
-      }
-    }
-    renderCart();
-  }
-
-  // حذف یا کم کردن تعداد
-  function changeQuantity(productId, delta) {
-    if (!cart[productId]) return;
-    cart[productId].quantity += delta;
-    if (cart[productId].quantity <= 0) {
-      delete cart[productId];
-    }
-    renderCart();
-  }
-
-  // نمایش سبد خرید
-  function renderCart() {
-    const cartItemsDiv = document.getElementById("cartItems");
-    cartItemsDiv.innerHTML = "";
-    const productIds = Object.keys(cart);
-    if(productIds.length === 0){
-      cartItemsDiv.innerHTML = "<p>سبد خرید خالی است.</p>";
-      document.getElementById("cartSummary").textContent = "جمع کل: ۰ تومان";
-      return;
-    }
-    let total = 0;
-    productIds.forEach(id => {
-      const item = cart[id];
-      total += item.price * item.quantity;
-      const div = document.createElement("div");
-      div.className = "cart-item";
-      div.innerHTML = `
-        <div class="cart-item-image" style="background-image:url('${item.image}')"></div>
-        <div class="cart-item-details">
-          <div class="cart-item-name">${item.name}</div>
-          <div>قیمت واحد: ${toCurrency(item.price)}</div>
-          <div>موجودی: ${item.stock}</div>
-        </div>
-        <div class="cart-item-actions">
-          <button class="qty-btn" onclick="changeQuantity(${item.id}, -1)">-</button>
-          <div>${item.quantity}</div>
-          <button class="qty-btn" onclick="changeQuantity(${item.id}, 1)">+</button>
-        </div>
-      `;
-      cartItemsDiv.appendChild(div);
-    });
-    document.getElementById("cartSummary").textContent = `جمع کل: ${toCurrency(total)}`;
-  }
-
-  // ارسال سفارش به تلگرام یا واتساپ
-  function sendOrder() {
-    const productIds = Object.keys(cart);
-    if(productIds.length === 0){
-      alert("سبد خرید خالی است!");
-      return;
-    }
-    let message = "📦 *سفارش جدید*\n\n";
-    let total = 0;
-    productIds.forEach(id => {
-      const item = cart[id];
-      total += item.price * item.quantity;
-      message += `🔹 ${item.name}\n`;
-      message += `  تعداد: ${item.quantity}\n`;
-      message += `  قیمت واحد: ${toCurrency(item.price)}\n`;
-      message += `  جمع: ${toCurrency(item.price * item.quantity)}\n\n`;
-    });
-    message += `💰 *جمع کل:* ${toCurrency(total)}`;
-
-    // کدگذاری پیام برای URL
-    const encodedMessage = encodeURIComponent(message);
-
-    // انتخاب بین تلگرام و واتساپ (در اینجا هر دو دکمه را باز می‌کنیم)
-    const telegramUrl = `https://t.me/share/url?url=&text=${encodedMessage}`;
-    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodedMessage}`;
-
-    if(confirm("می‌خواهید سفارش به تلگرام ارسال شود؟ (اگر خیر، واتساپ باز می‌شود)")){
-      window.open(telegramUrl, "_blank");
-    } else {
-      window.open(whatsappUrl, "_blank");
+  // تغییر مقدار موجودی یک محصول
+  function changeQuantity(id, delta) {
+    const products = loadProducts();
+    const index = products.findIndex(p => p.id === id);
+    if (index !== -1) {
+      products[index].quantity += delta;
+      if (products[index].quantity < 0) products[index].quantity = 0;
+      saveProducts(products);
+      renderProducts();
     }
   }
 
-  // راه‌اندازی اولیه
+  // اجرای اولیه رندر
   renderProducts();
-  renderCart();
 </script>
 
 </body>
-  </html>
+</html>
