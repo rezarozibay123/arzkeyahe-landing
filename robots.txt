@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://rezarozibay123.github.io/arzkeyahe-landing/sitemap.xml
