@@ -170,10 +170,17 @@
 <body>
 
 <div id="loginBox">
-  <h2>لطفاً رمز عبور را وارد کنید</h2>
+  <h2>Instagram.com/manto_vip_shop</h2>
+  <h2>تولید و پخش انواع مانتو پالتو</h2>
+
+  <h2>🇹🇷ارسال به تمام نقاط کشور🇮🇷</h2>
+  <h2>تهران بازار بزرگ پارسیان طبقه دوم گذر ۲پلاک۵/۴۱</h2>
+
   <input type="password" id="passwordInput" placeholder="رمز عبور" autofocus />
   <br/>
   <button onclick="checkPassword()">ورود</button>
+
+  <h2>🇹🇷 09128307890 🇮🇷 09371740280</h2>
   <div class="error-msg" id="errorMsg"></div>
 </div>
 
@@ -258,6 +265,10 @@
              <option value="کرم تیره">کرم تیره</option>
               <option value="سفید">سفید</option>
               <option value="طوسی">طوسی</option>
+             <option value="مشکی">مشکی</option>
+              <option value="آبی روشن">آبی روشن</option>
+              <option value="زرد">زرد</option>
+              <option value="سبز تیره">سبز تیره</option>
             </select>
             <select id="size${i}">
               <option value="1,2">سایز 1 و 2</option>
@@ -441,10 +452,10 @@
       return;
     }
 
-    let message = `آقا رضا زود بیا مشتری {name} منتظر است\nنام مشتری: ${name}\n\nلیست محصولات:\n`;
+    let message = `آقا رضا زود بیا مشتری ${name} منتظر است\n\nلیست محصولات:\n`;
 
     cart.forEach(item => {
-      message += `کد کالا${item.productId} - رنگ: ${item.color} - سایز: ${item.size} - تعداد: ${item.quantity}\n`;
+      message += `کد کالا ${item.productId}10 - رنگ: ${item.color} - سایز: ${item.size} - تعداد: ${item.quantity}\n\nبسته ای : ${name}`;
     });
 
     // لینک واتساپ به شماره دلخواه خودتان تغییر دهید:
