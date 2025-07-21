@@ -2,84 +2,76 @@
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8" />
-<title>آواتار زنانه سه‌بعدی آماده</title>
+<title>انتخاب مانتو و رنگ</title>
 <style>
-  body, html {
-    margin: 0; padding: 0; overflow: hidden; background: #222; color: white; font-family: Tahoma, sans-serif;
-    height: 100vh;
-    display: flex; justify-content: center; align-items: center;
+  .model-container {
+    position: relative;
+    width: 300px;
+    height: 500px;
   }
-  #canvas-container {
-    width: 100vw;
-    height: 100vh;
+  .model-img, .coat-img {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: auto;
   }
+  /* فقط برای مثال رنگ ها */
+  .color-red { filter: hue-rotate(0deg); }
+  .color-blue { filter: hue-rotate(200deg); }
+  .color-green { filter: hue-rotate(100deg); }
 </style>
 </head>
 <body>
-<div id="canvas-container"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/loaders/GLTFLoader.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/controls/OrbitControls.min.js"></script>
+<h2>انتخاب مدل مانتو</h2>
+<select id="coatModel">
+  <option value="">انتخاب مدل</option>
+  <option value="coat1.png">مدل ۱</option>
+  <option value="coat2.png">مدل ۲</option>
+</select>
+
+<h2>انتخاب رنگ مانتو</h2>
+<select id="coatColor" disabled>
+  <option value="">انتخاب رنگ</option>
+  <option value="red">قرمز</option>
+  <option value="blue">آبی</option>
+  <option value="green">سبز</option>
+</select>
+
+<div class="model-container">
+  <!-- تصویر مدل بدون مانتو -->
+  <img src="model.png" alt="مدل" class="model-img" />
+  <!-- تصویر مانتو که قرار است روی مدل نمایش داده شود -->
+  <img id="coatImage" src="" alt="مانتو" class="coat-img" style="display:none;" />
+</div>
 
 <script>
-  const container = document.getElementById('canvas-container');
+  const coatModelSelect = document.getElementById('coatModel');
+  const coatColorSelect = document.getElementById('coatColor');
+  const coatImage = document.getElementById('coatImage');
 
-  // تنظیمات پایه سه‌بعدی
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
-  camera.position.set(0, 1.5, 3);
-
-  const renderer = new THREE.WebGLRenderer({antialias:true, alpha:false});
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  container.appendChild(renderer.domElement);
-
-  const controls = new THREE.OrbitControls(camera, renderer.domElement);
-  controls.target.set(0, 1, 0);
-  controls.update();
-
-  // نورها
-  const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 1.0);
-  hemiLight.position.set(0, 20, 0);
-  scene.add(hemiLight);
-
-  const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
-  dirLight.position.set(5, 10, 7);
-  scene.add(dirLight);
-
-  // بارگذاری مدل آواتار زنانه glTF
-  const loader = new THREE.GLTFLoader();
-
-  loader.load(
-    'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/CesiumFemale/glTF/CesiumFemale.gltf',
-    gltf => {
-      const avatar = gltf.scene;
-      avatar.scale.set(1.5, 1.5, 1.5);
-      avatar.position.set(0, 0, 0);
-      scene.add(avatar);
-    },
-    undefined,
-    error => {
-      console.error('خطا در بارگذاری مدل:', error);
-      alert('خطا در بارگذاری مدل آواتار!');
+  coatModelSelect.addEventListener('change', function() {
+    const selectedModel = this.value;
+    if (selectedModel) {
+      coatImage.src = selectedModel; // عکس مدل مانتو انتخاب شده
+      coatImage.style.display = 'block';
+      coatColorSelect.disabled = false; // فعال کردن انتخاب رنگ
+      // تنظیم رنگ پیش‌فرض
+      coatImage.className = 'coat-img color-red';
+      coatColorSelect.value = 'red';
+    } else {
+      coatImage.style.display = 'none';
+      coatColorSelect.disabled = true;
+      coatColorSelect.value = '';
     }
-  );
+  });
 
-  // انیمیشن و رندر
-  function animate() {
-    requestAnimationFrame(animate);
-    controls.update();
-    renderer.render(scene, camera);
-  }
-
-  animate();
-
-  // واکنش به تغییر سایز پنجره
-  window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth/window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+  coatColorSelect.addEventListener('change', function() {
+    const color = this.value;
+    // حذف کلاس رنگ قبلی و اضافه کردن کلاس رنگ جدید
+    coatImage.className = 'coat-img color-' + color;
   });
 </script>
+
 </body>
 </html>
