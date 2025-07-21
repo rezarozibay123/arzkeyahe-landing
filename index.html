@@ -245,18 +245,24 @@
       container.innerHTML += `
         <div class="dress" id="dress${i}">
           <img src="${i}.jpg" alt="محصول ${i}" />
-          <h3>کد کالا ${i}10</h3>
+          <h3>کد کالا 10${i}</h3>
           <p class="stock" id="stock${i}">موجودی: ${stockData[`stock${i}`]}</p>
           <div class="options">
             <select id="color${i}">
-              <option value="قرمز">قرمز</option>
+              <option value="رنگ">رنگ</option>
               <option value="آبی">آبی</option>
               <option value="سبز">سبز</option>
+              <option value="قرمز">قرمز</option>
+              <option value="قهوه‌ای">قهوه‌ای</option>
+              <option value="کرم روشن">کرم روشن</option>
+             <option value="کرم تیره">کرم تیره</option>
+              <option value="سفید">سفید</option>
+              <option value="طوسی">طوسی</option>
             </select>
             <select id="size${i}">
-              <option value="S">S</option>
-              <option value="M">M</option>
-              <option value="L">L</option>
+              <option value="J">2 تا</option>
+              <option value="1">سایز 1</option>
+              <option value="2">سایز 2</option>
             </select>
           </div>
           <button class="add-to-cart" id="cartBtn${i}" onclick="addToCart(${i})">افزودن به سبد</button>
@@ -459,4 +465,4 @@
 </script>
 
 </body>
-</html>
+  </html>
