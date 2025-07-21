@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title> لیست کالاهای موجود به انبار- ورو</title>
+  <title>فروشگاه ایردراپ مانتو - ورود</title>
   <style>
     body {
       font-family: 'Tahoma', sans-serif;
@@ -179,7 +179,7 @@
 
 <div id="shopContainer">
   <header style="background:#ff4081; color:#fff; padding:20px; text-align:center; font-size:24px; border-radius:10px 10px 0 0;">
-لیست کالاهای موجود به انبار 
+    فروشگاه وی ای پی شاپ
   </header>
   <div class="container" id="productContainer">
     <!-- محصولات اینجا لود می‌شوند -->
@@ -244,8 +244,8 @@
     for (let i = 1; i <= totalProducts; i++) {
       container.innerHTML += `
         <div class="dress" id="dress${i}">
-          <img src="${i}.jpg" alt="گیپور کوتاه${i}" />
-          <h3>محصول ${i}</h3>
+          <img src="${i}.jpg" alt="محصول ${i}" />
+          <h3>کد کالا ${i}10</h3>
           <p class="stock" id="stock${i}">موجودی: ${stockData[`stock${i}`]}</p>
           <div class="options">
             <select id="color${i}">
@@ -459,4 +459,4 @@
 </script>
 
 </body>
-  </html>
+</html>
