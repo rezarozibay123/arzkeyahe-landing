@@ -170,7 +170,7 @@
 <body>
 
 <div id="loginBox">
-  <h2>Instagram.com/manto_vip_shop</h2>
+  <h2> اینستاگرام و تلگرام manto_vip_shop</h2>
   <h2>تولید و پخش انواع مانتو پالتو</h2>
 
   <h2>🇹🇷ارسال به تمام نقاط کشور🇮🇷</h2>
@@ -180,7 +180,7 @@
   <br/>
   <button onclick="checkPassword()">ورود</button>
 
-  <h2>🇹🇷 09128307890 🇮🇷 09371740280</h2>
+  <h2>🇹🇷 09128307890 🇮🇷 09371740280 </h2>
   <div class="error-msg" id="errorMsg"></div>
 </div>
 
@@ -197,7 +197,7 @@
     <table id="cartTable">
       <thead>
         <tr>
-          <th>کد محصول</th>
+          <th>کد کالا</th>
           <th>رنگ</th>
           <th>سایز</th>
           <th>تعداد</th>
@@ -383,7 +383,7 @@
     cart.forEach((item, index) => {
       tbody.innerHTML += `
         <tr>
-          <td>محصول ${item.productId}</td>
+          <td>کد کالا ${item.productId}</td>
           <td>${item.color}</td>
           <td>${item.size}</td>
           <td>${item.quantity}</td>
@@ -452,10 +452,15 @@
       return;
     }
 
-    let message = `آقا رضا زود بیا مشتری ${name} منتظر است\n\nلیست محصولات:\n`;
+    let message = `🥀®️`;
 
-    cart.forEach(item => {
-      message += `کد کالا ${item.productId}10 - رنگ: ${item.color} - سایز: ${item.size} - تعداد: ${item.quantity}\n\nبسته ای : ${name}`;
+    cart.forEach(item => {message += `
+☑️  کد      : ${item.productId}10
+☑️  رنگ    : ${item.color} 
+☑️  سایز   : ${item.size}
+*☑️  تعداد  : ${item.quantity} عدد*
+--------------------------
+🛍️بسته ای « ${name} »`;
     });
 
     // لینک واتساپ به شماره دلخواه خودتان تغییر دهید:
