@@ -2,75 +2,105 @@
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8" />
-<title>انتخاب مانتو و رنگ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>پوشیدن مانتو روی مدل زنانه</title>
 <style>
-  .model-container {
+  body {
+    font-family: Tahoma, sans-serif;
+    background-color: #f9f9f9;
+    padding: 20px;
+    text-align: center;
+  }
+  .container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  .model-box {
     position: relative;
-    width: 300px;
-    height: 500px;
+    width: 250px;
+    height: 400px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: white;
+    box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    padding: 10px;
   }
   .model-img, .coat-img {
     position: absolute;
-    top: 0; left: 0;
-    width: 100%;
-    height: auto;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 400px;
+    object-fit: contain;
+    pointer-events: none;
   }
-  /* فقط برای مثال رنگ ها */
-  .color-red { filter: hue-rotate(0deg); }
-  .color-blue { filter: hue-rotate(200deg); }
-  .color-green { filter: hue-rotate(100deg); }
+  .coat-img {
+    pointer-events: none;
+  }
+  select {
+    margin-top: 360px;
+    width: 100%;
+    padding: 6px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #aaa;
+  }
+  h1 {
+    margin-bottom: 30px;
+  }
 </style>
 </head>
 <body>
 
-<h2>انتخاب مدل مانتو</h2>
-<select id="coatModel">
-  <option value="">انتخاب مدل</option>
-  <option value="coat1.png">مدل ۱</option>
-  <option value="coat2.png">مدل ۲</option>
-</select>
+<h1>انتخاب مانتو برای مدل‌های زنانه</h1>
 
-<h2>انتخاب رنگ مانتو</h2>
-<select id="coatColor" disabled>
-  <option value="">انتخاب رنگ</option>
-  <option value="red">قرمز</option>
-  <option value="blue">آبی</option>
-  <option value="green">سبز</option>
-</select>
+<div class="container">
 
-<div class="model-container">
-  <!-- تصویر مدل بدون مانتو -->
-  <img src="model.png" alt="مدل" class="model-img" />
-  <!-- تصویر مانتو که قرار است روی مدل نمایش داده شود -->
-  <img id="coatImage" src="" alt="مانتو" class="coat-img" style="display:none;" />
+  <!-- مدل اول -->
+  <div class="model-box">
+    <img class="model-img" src="https://i.ibb.co/4S0Kq6r/female-model-1.png" alt="مدل زنانه 1" />
+    <img class="coat-img" id="coat1" src="" alt="مانتو مدل 1" />
+    <select onchange="changeCoat(this, 'coat1')">
+      <option value="">انتخاب مانتو</option>
+      <option value="https://i.ibb.co/4mZNg7H/coat-red.png">مانتو قرمز</option>
+      <option value="https://i.ibb.co/W0ZVYJy/coat-blue.png">مانتو آبی</option>
+      <option value="https://i.ibb.co/c6nXq1b/coat-green.png">مانتو سبز</option>
+    </select>
+  </div>
+
+  <!-- مدل دوم -->
+  <div class="model-box">
+    <img class="model-img" src="https://i.ibb.co/fY14QYk/female-model-2.png" alt="مدل زنانه 2" />
+    <img class="coat-img" id="coat2" src="" alt="مانتو مدل 2" />
+    <select onchange="changeCoat(this, 'coat2')">
+      <option value="">انتخاب مانتو</option>
+      <option value="https://i.ibb.co/4mZNg7H/coat-red.png">مانتو قرمز</option>
+      <option value="https://i.ibb.co/W0ZVYJy/coat-blue.png">مانتو آبی</option>
+      <option value="https://i.ibb.co/c6nXq1b/coat-green.png">مانتو سبز</option>
+    </select>
+  </div>
+
+  <!-- مدل سوم -->
+  <div class="model-box">
+    <img class="model-img" src="https://i.ibb.co/ZcKbZ9T/female-model-3.png" alt="مدل زنانه 3" />
+    <img class="coat-img" id="coat3" src="" alt="مانتو مدل 3" />
+    <select onchange="changeCoat(this, 'coat3')">
+      <option value="">انتخاب مانتو</option>
+      <option value="https://i.ibb.co/4mZNg7H/coat-red.png">مانتو قرمز</option>
+      <option value="https://i.ibb.co/W0ZVYJy/coat-blue.png">مانتو آبی</option>
+      <option value="https://i.ibb.co/c6nXq1b/coat-green.png">مانتو سبز</option>
+    </select>
+  </div>
+
 </div>
 
 <script>
-  const coatModelSelect = document.getElementById('coatModel');
-  const coatColorSelect = document.getElementById('coatColor');
-  const coatImage = document.getElementById('coatImage');
-
-  coatModelSelect.addEventListener('change', function() {
-    const selectedModel = this.value;
-    if (selectedModel) {
-      coatImage.src = selectedModel; // عکس مدل مانتو انتخاب شده
-      coatImage.style.display = 'block';
-      coatColorSelect.disabled = false; // فعال کردن انتخاب رنگ
-      // تنظیم رنگ پیش‌فرض
-      coatImage.className = 'coat-img color-red';
-      coatColorSelect.value = 'red';
-    } else {
-      coatImage.style.display = 'none';
-      coatColorSelect.disabled = true;
-      coatColorSelect.value = '';
-    }
-  });
-
-  coatColorSelect.addEventListener('change', function() {
-    const color = this.value;
-    // حذف کلاس رنگ قبلی و اضافه کردن کلاس رنگ جدید
-    coatImage.className = 'coat-img color-' + color;
-  });
+  function changeCoat(selectElem, coatId) {
+    const coatImg = document.getElementById(coatId);
+    coatImg.src = selectElem.value;
+  }
 </script>
 
 </body>
