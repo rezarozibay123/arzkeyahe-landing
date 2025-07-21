@@ -1,126 +1,462 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="fa">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>📈 نرخ لحظه‌ای ارز</title>
+  <title>فروشگاه ایردراپ مانتو - ورود</title>
   <style>
     body {
-      font-family: "Vazir", sans-serif;
-      background: linear-gradient(135deg, #007bff, #6f42c1);
-      color: #fff;
+      font-family: 'Tahoma', sans-serif;
+      background: #f0f0f0;
+      margin: 0; padding: 0;
+      direction: rtl;
+    }
+    #loginBox, #shopContainer {
+      max-width: 400px;
+      margin: 100px auto;
+      background: #fff;
+      border-radius: 10px;
+      padding: 30px 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       text-align: center;
-      padding: 20px;
+    }
+    #shopContainer {
+      display: none;
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 10px;
+    }
+    input[type="password"], input#customerName {
+      width: 80%;
+      padding: 10px;
+      margin: 15px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      text-align: center;
+    }
+    button {
+      background-color: #ff4081;
+      border: none;
+      color: #fff;
+      padding: 10px 25px;
+      font-size: 16px;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background-color: #e73370;
+    }
+    .error-msg {
+      color: red;
+      margin-top: 10px;
+      min-height: 20px;
     }
     .container {
-      max-width: 600px;
-      margin: auto;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 15px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+      gap: 15px;
       padding: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      background:#fff;
+      border-radius:0 0 10px 10px;
     }
-    .title {
-      font-size: 2rem;
+    .dress {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      text-align: center;
+      padding: 10px;
+      transition: transform 0.3s;
+    }
+    .dress:hover {
+      transform: translateY(-5px);
+    }
+    .dress img {
+      width: 100%;
+      border-radius: 12px;
+    }
+    .dress h3 {
+      margin: 10px 0 5px;
+    }
+    .stock {
+      font-weight: bold;
+      margin: 5px 0;
+      color: #4caf50;
+    }
+    .options select {
+      margin: 5px;
+      padding: 5px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      margin-top: 8px;
+    }
+    .buttons button {
+      padding: 6px 10px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      color: #fff;
+      font-size: 14px;
+    }
+    .add-stock {
+      background: #4caf50;
+    }
+    .remove-stock {
+      background: #f44336;
+    }
+    .add-to-cart {
+      background-color: #ff4081;
+      border: none;
+      color: #fff;
+      padding: 8px 15px;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: background 0.3s;
+      margin-top: 5px;
+    }
+    .add-to-cart:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    #cartSummary {
+      background: #fff;
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: right;
+      direction: rtl;
+    }
+    #cartSummary table {
+      width: 100%;
+      border-collapse: collapse;
       margin-bottom: 10px;
     }
-    .card {
-      background: rgba(0, 0, 0, 0.3);
-      border-radius: 10px;
-      padding: 15px;
-      margin: 10px 0;
-      text-align: right;
+    #cartSummary th, #cartSummary td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      vertical-align: middle;
     }
-    .currency {
-      font-size: 1.3rem;
-      color: #ffd700;
-      margin-bottom: 5px;
+    #cartSummary th {
+      background-color: #f2f2f2;
     }
-    .rate {
-      font-size: 1.2rem;
-      margin: 5px 0;
+    #customerName {
+      margin-top: 10px;
+      font-size: 16px;
     }
-    .time {
-      font-size: 0.95rem;
-      color: #f1f1f1;
-    }
-    .refresh-btn {
-      margin: 15px 0;
-      background: #ffc107;
-      color: #000;
-      padding: 8px 16px;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
+    .qty-btn {
       cursor: pointer;
+      padding: 2px 7px;
+      border-radius: 4px;
+      color: white;
+      font-weight: bold;
+      margin: 0 3px;
     }
-    .refresh-btn:hover {
-      background: #e0a800;
+    .qty-add {
+      background-color: #4caf50;
+    }
+    .qty-remove {
+      background-color: #f44336;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="title">📈 نرخ لحظه‌ای ارز</div>
-    <button class="refresh-btn" onclick="updateRates()">🔄 بروزرسانی</button>
-    <div id="cards"></div>
+
+<div id="loginBox">
+  <h2>لطفاً رمز عبور را وارد کنید</h2>
+  <input type="password" id="passwordInput" placeholder="رمز عبور" autofocus />
+  <br/>
+  <button onclick="checkPassword()">ورود</button>
+  <div class="error-msg" id="errorMsg"></div>
+</div>
+
+<div id="shopContainer">
+  <header style="background:#ff4081; color:#fff; padding:20px; text-align:center; font-size:24px; border-radius:10px 10px 0 0;">
+    فروشگاه ایردراپ مانتو
+  </header>
+  <div class="container" id="productContainer">
+    <!-- محصولات اینجا لود می‌شوند -->
   </div>
 
-  <script>
-    async function fetchRates() {
-      try {
-        const proxy = 'https://corsproxy.io/?';
-        const url = 'https://sarafi.af/public/exchange-rates';
-        const res = await fetch(proxy + encodeURIComponent(url));
-        const html = await res.text();
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-        const rows = Array.from(doc.querySelectorAll('table tbody tr'));
-        return rows.map(r => {
-          const tds = r.querySelectorAll('td');
-          return {
-            name: tds[0].textContent.trim(),
-            buy: tds[1].textContent.trim(),
-            sell: tds[2].textContent.trim(),
-            updated: tds[4]?.textContent.trim() || '---'
-          };
-        });
-      } catch (e) {
-        console.error('❌ خطا در دریافت نرخ‌ها', e);
-        return [];
+  <div id="cartSummary" style="display:none;">
+    <h3>سبد خرید شما</h3>
+    <table id="cartTable">
+      <thead>
+        <tr>
+          <th>محصول</th>
+          <th>رنگ</th>
+          <th>اندازه</th>
+          <th>تعداد</th>
+          <th>عملیات</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+    <input type="text" id="customerName" placeholder="نام خود را وارد کنید" />
+    <br/><br/>
+    <button onclick="finalizeOrder()">نهایی کردن سفارش و ارسال به واتساپ</button>
+  </div>
+</div>
+
+<script>
+  const PASSWORD_HASH = "NTUyMjM0Ng=="; // base64 رمز 5522346
+  const totalProducts = 50;
+
+  // موجودی هر محصول
+  let stockData = JSON.parse(localStorage.getItem('stockData')) || {};
+  // سبد خرید، آرایه ای از {productId, color, size, quantity}
+  let cart = JSON.parse(localStorage.getItem('cartData')) || [];
+
+  // اگر موجودی‌ها ذخیره نشده بود، همه را روی 10 قرار بده
+  for (let i = 1; i <= totalProducts; i++) {
+    if (!stockData[`stock${i}`]) stockData[`stock${i}`] = 10;
+  }
+
+  function base64Encode(str) {
+    return btoa(str);
+  }
+
+  function checkPassword() {
+    const input = document.getElementById('passwordInput').value;
+    const errorMsg = document.getElementById('errorMsg');
+    if (base64Encode(input) === PASSWORD_HASH) {
+      document.getElementById('loginBox').style.display = 'none';
+      document.getElementById('shopContainer').style.display = 'block';
+      loadShop();
+      loadCartUI();
+      document.getElementById('cartSummary').style.display = 'block';
+    } else {
+      errorMsg.innerText = 'رمز عبور اشتباه است!';
+    }
+  }
+
+  function loadShop() {
+    const container = document.getElementById('productContainer');
+    container.innerHTML = '';
+    for (let i = 1; i <= totalProducts; i++) {
+      container.innerHTML += `
+        <div class="dress" id="dress${i}">
+          <img src="images/${i}.jpg" alt="محصول ${i}" />
+          <h3>محصول ${i}</h3>
+          <p class="stock" id="stock${i}">موجودی: ${stockData[`stock${i}`]}</p>
+          <div class="options">
+            <select id="color${i}">
+              <option value="قرمز">قرمز</option>
+              <option value="آبی">آبی</option>
+              <option value="سبز">سبز</option>
+            </select>
+            <select id="size${i}">
+              <option value="S">S</option>
+              <option value="M">M</option>
+              <option value="L">L</option>
+            </select>
+          </div>
+          <button class="add-to-cart" id="cartBtn${i}" onclick="addToCart(${i})">افزودن به سبد</button>
+          <div class="buttons">
+            <button class="add-stock" onclick="updateStock(${i}, 1)">+ افزودن</button>
+            <button class="remove-stock" onclick="updateStock(${i}, -1)">- کم کردن</button>
+          </div>
+        </div>
+      `;
+      checkButton(i);
+    }
+  }
+
+  // ذخیره موجودی در localStorage
+  function saveStock() {
+    localStorage.setItem('stockData', JSON.stringify(stockData));
+  }
+
+  // ذخیره سبد خرید در localStorage
+  function saveCart() {
+    localStorage.setItem('cartData', JSON.stringify(cart));
+  }
+
+  // افزودن به سبد خرید
+  function addToCart(productId) {
+    const color = document.getElementById(`color${productId}`).value;
+    const size = document.getElementById(`size${productId}`).value;
+    const stockKey = `stock${productId}`;
+    if (stockData[stockKey] <= 0) {
+      alert("❌ موجودی این محصول تمام شده است!");
+      return;
+    }
+
+    // چک کن آیا همین محصول با رنگ و سایز هست یا نه
+    let found = false;
+    for (let item of cart) {
+      if (item.productId === productId && item.color === color && item.size === size) {
+        if (stockData[stockKey] >= item.quantity + 1) {
+          item.quantity++;
+          found = true;
+          break;
+        } else {
+          alert("موجودی کافی نیست!");
+          return;
+        }
       }
     }
-
-    function toPersian(str) {
-      return str.replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+    if (!found) {
+      cart.push({productId, color, size, quantity:1});
     }
+    stockData[stockKey]--;
+    updateStockUI(productId);
+    saveStock();
+    saveCart();
+    loadCartUI();
+    alert(`✅ محصول ${productId} (${color}، ${size}) به سبد خرید اضافه شد`);
+  }
 
-    function renderRates(rates) {
-      const container = document.getElementById('cards');
-      container.innerHTML = '';
-      if (!rates.length) {
-        container.innerHTML = '<p>❌ نرخ‌ها قابل بارگیری نیستند.</p>';
+  // آپدیت موجودی و فعال/غیرفعال کردن دکمه‌ها
+  function updateStock(productId, change) {
+    const stockKey = `stock${productId}`;
+    stockData[stockKey] = Math.max(0, stockData[stockKey] + change);
+
+    // اگر کم می‌کنیم و موجودی کافی نباشد، تلاش برای کاهش سبد هم
+    if (change < 0) {
+      // حذف از سبد به همان تعداد (اگر سبد بیشتر از موجودی است)
+      let toRemove = -change;
+      for (let i = cart.length -1; i >= 0 && toRemove > 0; i--) {
+        let item = cart[i];
+        if (item.productId === productId) {
+          if (item.quantity > toRemove) {
+            item.quantity -= toRemove;
+            toRemove = 0;
+          } else {
+            toRemove -= item.quantity;
+            cart.splice(i,1);
+          }
+        }
+      }
+    }
+    updateStockUI(productId);
+    saveStock();
+    saveCart();
+    loadCartUI();
+  }
+
+  // آپدیت نمایش موجودی محصول و دکمه افزودن
+  function updateStockUI(productId) {
+    document.getElementById(`stock${productId}`).innerText = `موجودی: ${stockData[`stock${productId}`]}`;
+    checkButton(productId);
+  }
+
+  // غیر فعال کردن دکمه افزودن اگر موجودی صفر بود
+  function checkButton(productId) {
+    const btn = document.getElementById(`cartBtn${productId}`);
+    btn.disabled = stockData[`stock${productId}`] <= 0;
+  }
+
+  // بارگذاری سبد خرید و نمایش در جدول
+  function loadCartUI() {
+    const tbody = document.querySelector("#cartTable tbody");
+    tbody.innerHTML = "";
+    if (cart.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">سبد خرید خالی است</td></tr>`;
+      return;
+    }
+    cart.forEach((item, index) => {
+      tbody.innerHTML += `
+        <tr>
+          <td>محصول ${item.productId}</td>
+          <td>${item.color}</td>
+          <td>${item.size}</td>
+          <td>${item.quantity}</td>
+          <td>
+            <span class="qty-btn qty-add" onclick="changeCartQuantity(${index}, 1)">+</span>
+            <span class="qty-btn qty-remove" onclick="changeCartQuantity(${index}, -1)">-</span>
+            <span class="qty-btn qty-remove" style="background:#555;" onclick="removeCartItem(${index})">×</span>
+          </td>
+        </tr>
+      `;
+    });
+  }
+
+  // تغییر تعداد در سبد خرید
+  function changeCartQuantity(index, change) {
+    const item = cart[index];
+    const stockKey = `stock${item.productId}`;
+    if (change > 0) {
+      // اضافه کردن به سبد اگر موجودی اجازه داد
+      if (stockData[stockKey] >= change) {
+        item.quantity += change;
+        stockData[stockKey] -= change;
+      } else {
+        alert("موجودی کافی نیست!");
         return;
       }
-      rates.forEach(rate => {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-          <div class="currency">${rate.name}</div>
-          <div class="rate">خرید: ${toPersian(rate.buy)} | فروش: ${toPersian(rate.sell)}</div>
-          <div class="time">⏰ بروزرسانی: ${toPersian(rate.updated)}</div>
-        `;
-        container.appendChild(card);
-      });
+    } else {
+      // کم کردن از سبد و بازگرداندن به موجودی
+      if (item.quantity + change > 0) {
+        item.quantity += change;
+        stockData[stockKey] -= change; // چون change منفی است، باید منهای منفی = جمع شود
+      } else {
+        // اگر تعداد می‌شود صفر یا کمتر، حذف آیتم
+        removeCartItem(index);
+        return;
+      }
+    }
+    saveStock();
+    saveCart();
+    updateStockUI(item.productId);
+    loadCartUI();
+  }
+
+  // حذف کامل آیتم از سبد خرید
+  function removeCartItem(index) {
+    const item = cart[index];
+    const stockKey = `stock${item.productId}`;
+    // بازگرداندن موجودی
+    stockData[stockKey] += item.quantity;
+    cart.splice(index, 1);
+    saveStock();
+    saveCart();
+    updateStockUI(item.productId);
+    loadCartUI();
+  }
+
+  // نهایی کردن سفارش و ساخت لینک واتساپ
+  function finalizeOrder() {
+    const name = document.getElementById('customerName').value.trim();
+    if (!name) {
+      alert("لطفا نام خود را وارد کنید");
+      return;
+    }
+    if (cart.length === 0) {
+      alert("سبد خرید شما خالی است!");
+      return;
     }
 
-    async function updateRates() {
-      const rates = await fetchRates();
-      renderRates(rates);
-    }
+    let message = `سفارش جدید از فروشگاه ایردراپ مانتو\nنام مشتری: ${name}\n\nلیست محصولات:\n`;
 
-    updateRates();
-    setInterval(updateRates, 60000); // هر ۶۰ ثانیه بروزرسانی خودکار
-  </script>
+    cart.forEach(item => {
+      message += `محصول ${item.productId} - رنگ: ${item.color} - سایز: ${item.size} - تعداد: ${item.quantity}\n`;
+    });
+
+    // لینک واتساپ به شماره دلخواه خودتان تغییر دهید:
+    const whatsappNumber = "+989105522346"; // شماره واتساپ با کد کشور بدون + یا 00
+
+    // ساخت لینک
+    const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+
+    // باز کردن لینک در تب جدید
+    window.open(url, '_blank');
+
+    // پاک کردن سبد خرید پس از نهایی شدن
+    cart = [];
+    saveCart();
+    loadCartUI();
+  }
+
+</script>
+
 </body>
-</html>
+  </html>
