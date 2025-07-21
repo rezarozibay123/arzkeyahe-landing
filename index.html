@@ -2,250 +2,148 @@
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>برنامه مدیریت موجودی انبار - ارزکیه</title>
+<title>پوشیدن مانتو روی آواتار زنانه</title>
 <style>
-  /* Reset */
-  * {
-    box-sizing: border-box;
-  }
-  body {
-    font-family: Tahoma, sans-serif;
-    background: #f5f7fa;
-    margin: 0; padding: 0;
-    color: #333;
-    direction: rtl;
-  }
-  header {
-    background-color: #0070f3;
-    color: white;
-    padding: 20px;
-    text-align: center;
-    font-size: 1.8rem;
-    font-weight: 700;
-  }
-  .container {
-    max-width: 960px;
-    margin: 30px auto;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgb(0 0 0 / 0.1);
-    padding: 20px;
-  }
-  .telegram-section {
-    text-align: center;
-    margin-bottom: 40px;
-  }
-  .telegram-section h1 {
-    color: #0070f3;
-    margin-bottom: 10px;
-  }
-  .telegram-section p {
-    font-size: 1.1rem;
-    line-height: 1.5;
-    margin-bottom: 15px;
-  }
-  .telegram-link {
-    background: #0070f3;
-    color: white;
-    padding: 12px 25px;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 1rem;
-    text-decoration: none;
-    display: inline-block;
-    transition: background-color 0.3s ease;
-  }
-  .telegram-link:hover {
-    background-color: #005bb5;
-  }
-
-  /* Inventory Section */
-  h2 {
-    text-align: center;
-    margin-bottom: 25px;
-    color: #0070f3;
-    font-weight: 700;
-  }
-  .products {
-    display: grid;
-    grid-template-columns: repeat(auto-fill,minmax(250px,1fr));
-    gap: 20px;
-  }
-  .product-card {
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 2px 10px rgb(0 0 0 / 0.05);
+  body { margin: 0; overflow: hidden; background: #222; font-family: Tahoma, sans-serif; color: white; }
+  #canvas-container { width: 100vw; height: 90vh; }
+  #buttons {
     display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    transition: box-shadow 0.3s ease;
-  }
-  .product-card:hover {
-    box-shadow: 0 6px 20px rgb(0 0 0 / 0.1);
-  }
-  .product-image {
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    object-fit: cover;
-    border-bottom: 1px solid #eee;
-  }
-  .product-info {
-    padding: 15px 20px;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-  }
-  .product-name {
-    font-weight: 700;
-    font-size: 1.2rem;
-    margin-bottom: 8px;
-    color: #111;
-  }
-  .product-price {
-    font-size: 1.1rem;
-    color: #0070f3;
-    margin-bottom: 15px;
-    font-weight: 600;
-  }
-  .quantity-controls {
-    margin-top: auto;
-    display: flex;
-    align-items: center;
     justify-content: center;
     gap: 15px;
+    padding: 10px;
+    background: #111;
   }
-  .btn {
-    background-color: #0070f3;
+  button {
+    background: linear-gradient(90deg, #6a11cb, #2575fc);
     border: none;
     color: white;
-    padding: 8px 15px;
-    border-radius: 8px;
-    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 12px;
     cursor: pointer;
-    transition: background-color 0.25s ease;
-    user-select: none;
+    font-weight: bold;
+    transition: background 0.3s ease;
   }
-  .btn:hover {
-    background-color: #005bb5;
-  }
-  .quantity {
-    font-size: 1.2rem;
-    min-width: 30px;
-    text-align: center;
-  }
-
-  /* Responsive */
-  @media (max-width: 600px) {
-    .products {
-      grid-template-columns: 1fr;
-    }
+  button:hover {
+    background: linear-gradient(90deg, #2575fc, #6a11cb);
   }
 </style>
 </head>
 <body>
 
-<header>کانال تلگرام ارزکیه + مدیریت موجودی انبار</header>
-
-<div class="container">
-  <section class="telegram-section">
-    <h1>کانال تلگرام ارزکیه</h1>
-    <p>به کانال <strong>ارزکیه</strong> خوش آمدید. این کانال جدیدترین اخبار، تحلیل‌ها و نرخ‌های بازار هرات، کابل، مزارشریف و غزنی را پوشش می‌دهد.</p>
-    <a href="https://t.me/arzkeyahe" target="_blank" rel="noopener noreferrer" class="telegram-link">ورود به کانال تلگرام</a>
-  </section>
-
-  <section class="inventory-section">
-    <h2>📦 موجودی انبار</h2>
-    <div class="products" id="products-container">
-      <!-- کارت‌های محصولات اینجا نمایش داده می‌شوند -->
-    </div>
-  </section>
+<div id="buttons">
+  <button onclick="changeMantoo('mantoo1')">مانتو ۱</button>
+  <button onclick="changeMantoo('mantoo2')">مانتو ۲</button>
+  <button onclick="changeMantoo('mantoo3')">مانتو ۳</button>
+  <button onclick="changeMantoo(null)">برداشتن مانتو</button>
 </div>
+<div id="canvas-container"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/loaders/GLTFLoader.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/controls/OrbitControls.min.js"></script>
 
 <script>
-  const productsKey = 'arzkeyahe_inventory';
+  const container = document.getElementById('canvas-container');
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
+  camera.position.set(0, 1.5, 3);
 
-  // نمونه داده اولیه محصولات با تصویر و قیمت
-  const defaultProducts = [
-    {
-      id: 1,
-      name: "برنج پاکستانی",
-      price: 2500,
-      quantity: 10,
-      image: "https://cdn.pixabay.com/photo/2017/04/15/11/14/rice-2220986_1280.jpg"
+  const renderer = new THREE.WebGLRenderer({antialias:true, alpha:true});
+  renderer.setSize(window.innerWidth, window.innerHeight * 0.9);
+  container.appendChild(renderer.domElement);
+
+  const controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.target.set(0, 1, 0);
+  controls.update();
+
+  // نورها
+  const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 1.2);
+  hemiLight.position.set(0, 20, 0);
+  scene.add(hemiLight);
+
+  const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+  dirLight.position.set(5, 10, 7);
+  scene.add(dirLight);
+
+  // لودر مدل
+  const loader = new THREE.GLTFLoader();
+
+  // مدل آواتار زنانه
+  let avatarModel = null;
+
+  loader.load(
+    'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/CesiumFemale/glTF/CesiumFemale.gltf',
+    gltf => {
+      avatarModel = gltf.scene;
+      avatarModel.scale.set(1.5, 1.5, 1.5);
+      avatarModel.position.set(0, 0, 0);
+      scene.add(avatarModel);
     },
-    {
-      id: 2,
-      name: "شکر سفید",
-      price: 1500,
-      quantity: 25,
-      image: "https://cdn.pixabay.com/photo/2017/06/07/12/04/sugar-2384797_1280.jpg"
-    },
-    {
-      id: 3,
-      name: "روغن مایع",
-      price: 3500,
-      quantity: 15,
-      image: "https://cdn.pixabay.com/photo/2017/01/20/00/30/oil-1990381_1280.jpg"
+    undefined,
+    error => {
+      console.error('خطا در بارگذاری آواتار:', error);
+      alert('خطا در بارگذاری آواتار');
     }
-  ];
+  );
 
-  // بارگذاری محصولات از localStorage یا استفاده از داده پیش‌فرض
-  function loadProducts() {
-    const stored = localStorage.getItem(productsKey);
-    if (stored) {
-      try {
-        return JSON.parse(stored);
-      } catch {
-        return defaultProducts;
+  // مدل‌های مانتو (لینک‌های نمونه)
+  const mantooModels = {
+    mantoo1: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/FlightHelmet/glTF/FlightHelmet.gltf', // این مدل را باید با مانتو جایگزین کنید
+    mantoo2: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/DamagedHelmet/glTF/DamagedHelmet.gltf',
+    mantoo3: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Avocado/glTF/Avocado.gltf',
+  };
+
+  let currentMantoo = null;
+
+  function changeMantoo(key) {
+    // حذف مدل مانتو فعلی
+    if(currentMantoo) {
+      scene.remove(currentMantoo);
+      currentMantoo.traverse(child => {
+        if (child.geometry) child.geometry.dispose();
+        if (child.material) {
+          if (Array.isArray(child.material)) {
+            child.material.forEach(m => m.dispose());
+          } else {
+            child.material.dispose();
+          }
+        }
+      });
+      currentMantoo = null;
+    }
+
+    if(!key) return; // اگر null باشد یعنی حذف مانتو
+
+    loader.load(
+      mantooModels[key],
+      gltf => {
+        currentMantoo = gltf.scene;
+        // مقیاس و موقعیت تنظیم کنید تا روی آواتار تقریبا قرار گیرد
+        currentMantoo.scale.set(1.5, 1.5, 1.5);
+        currentMantoo.position.set(0, 0, 0);
+        scene.add(currentMantoo);
+      },
+      undefined,
+      error => {
+        console.error('خطا در بارگذاری مانتو:', error);
+        alert('خطا در بارگذاری مانتو');
       }
-    }
-    return defaultProducts;
+    );
   }
 
-  // ذخیره محصولات در localStorage
-  function saveProducts(products) {
-    localStorage.setItem(productsKey, JSON.stringify(products));
+  function animate() {
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
   }
 
-  // رندر محصولات در صفحه
-  function renderProducts() {
-    const products = loadProducts();
-    const container = document.getElementById('products-container');
-    container.innerHTML = '';
-    products.forEach(prod => {
-      const card = document.createElement('div');
-      card.className = 'product-card';
-      card.innerHTML = `
-        <img src="${prod.image}" alt="${prod.name}" class="product-image" />
-        <div class="product-info">
-          <div class="product-name">${prod.name}</div>
-          <div class="product-price">${prod.price.toLocaleString()} افغانی</div>
-          <div class="quantity-controls">
-            <button class="btn" onclick="changeQuantity(${prod.id}, -1)">-</button>
-            <div class="quantity">${prod.quantity}</div>
-            <button class="btn" onclick="changeQuantity(${prod.id}, 1)">+</button>
-          </div>
-        </div>
-      `;
-      container.appendChild(card);
-    });
-  }
+  animate();
 
-  // تغییر مقدار موجودی یک محصول
-  function changeQuantity(id, delta) {
-    const products = loadProducts();
-    const index = products.findIndex(p => p.id === id);
-    if (index !== -1) {
-      products[index].quantity += delta;
-      if (products[index].quantity < 0) products[index].quantity = 0;
-      saveProducts(products);
-      renderProducts();
-    }
-  }
-
-  // اجرای اولیه رندر
-  renderProducts();
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight * 0.9);
+  });
 </script>
 
 </body>
