@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>فروشگاه ایردراپ مانتو - ورود</title>
+  <title>با مدیریت آقا  رضا - REZAMURADI</title>
   <style>
     body {
       font-family: 'Tahoma', sans-serif;
@@ -190,17 +190,17 @@
     <table id="cartTable">
       <thead>
         <tr>
-          <th>محصول</th>
+          <th>کد محصول</th>
           <th>رنگ</th>
-          <th>اندازه</th>
+          <th>سایز</th>
           <th>تعداد</th>
-          <th>عملیات</th>
+          <th> عملیات </th>
         </tr>
       </thead>
       <tbody>
       </tbody>
     </table>
-    <input type="text" id="customerName" placeholder="نام خود را وارد کنید" />
+    <input type="text" id="customerName" placeholder="نام مشتری را وارد کنید" />
     <br/><br/>
     <button onclick="finalizeOrder()">نهایی کردن سفارش و ارسال به واتساپ</button>
   </div>
@@ -244,7 +244,7 @@
     for (let i = 1; i <= totalProducts; i++) {
       container.innerHTML += `
         <div class="dress" id="dress${i}">
-          <img src="${i}.jpg" alt="محصول ${i}" />
+          <img src="${i}.jpg" alt="کد کالا 10${i}" />
           <h3>کد کالا 10${i}</h3>
           <p class="stock" id="stock${i}">موجودی: ${stockData[`stock${i}`]}</p>
           <div class="options">
@@ -260,7 +260,7 @@
               <option value="طوسی">طوسی</option>
             </select>
             <select id="size${i}">
-              <option value="J">2 تا</option>
+              <option value="1,2">سایز 1 و 2</option>
               <option value="1">سایز 1</option>
               <option value="2">سایز 2</option>
             </select>
@@ -433,7 +433,7 @@
   function finalizeOrder() {
     const name = document.getElementById('customerName').value.trim();
     if (!name) {
-      alert("لطفا نام خود را وارد کنید");
+      alert("لطفا نام مشتری را وارد کنید");
       return;
     }
     if (cart.length === 0) {
@@ -441,10 +441,10 @@
       return;
     }
 
-    let message = `سفارش جدید از فروشگاه ایردراپ مانتو\nنام مشتری: ${name}\n\nلیست محصولات:\n`;
+    let message = `آقا رضا زود بیا مشتری {name} منتظر است\nنام مشتری: ${name}\n\nلیست محصولات:\n`;
 
     cart.forEach(item => {
-      message += `محصول ${item.productId} - رنگ: ${item.color} - سایز: ${item.size} - تعداد: ${item.quantity}\n`;
+      message += `کد کالا${item.productId} - رنگ: ${item.color} - سایز: ${item.size} - تعداد: ${item.quantity}\n`;
     });
 
     // لینک واتساپ به شماره دلخواه خودتان تغییر دهید:
