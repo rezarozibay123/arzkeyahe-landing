@@ -3,481 +3,223 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>با مدیریت آقا  رضا - REZAMURADI</title>
+  <title>فروشگاه وی ای پی شاپ</title>
   <style>
+    :root {
+      --bg-light: #f0f0f0;
+      --bg-dark: #121212;
+      --text-light: #000;
+      --text-dark: #eee;
+      --card-bg-light: #fff;
+      --card-bg-dark: #1e1e1e;
+      --btn-bg-light: #ff4081;
+      --btn-bg-dark: #bb2f59;
+      --btn-hover-light: #e73370;
+      --btn-hover-dark: #992449;
+      --stock-color-light: #4caf50;
+      --stock-color-dark: #81c784;
+    }
+
     body {
       font-family: 'Tahoma', sans-serif;
-      background: #f0f0f0;
-      margin: 0; padding: 0;
-      direction: rtl;
-    }
-    #loginBox, #shopContainer {
-      max-width: 400px;
-      margin: 100px auto;
-      background: #fff;
-      border-radius: 10px;
-      padding: 30px 20px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      text-align: center;
-    }
-    #shopContainer {
-      display: none;
-      max-width: 1200px;
-      margin: 20px auto;
-      padding: 10px;
-    }
-    input[type="password"], input#customerName {
-      width: 80%;
-      padding: 10px;
-      margin: 15px 0;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-      text-align: center;
-    }
-    button {
-      background-color: #ff4081;
-      border: none;
-      color: #fff;
-      padding: 10px 25px;
-      font-size: 16px;
-      border-radius: 25px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    button:hover {
-      background-color: #e73370;
-    }
-    .error-msg {
-      color: red;
-      margin-top: 10px;
-      min-height: 20px;
-    }
-    .container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
-      gap: 15px;
+      margin: 0;
       padding: 20px;
-      background:#fff;
-      border-radius:0 0 10px 10px;
+      direction: rtl;
+      background-color: var(--bg-light);
+      color: var(--text-light);
+      transition: background-color 0.3s, color 0.3s;
     }
+
+    body.dark {
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+    }
+
     .dress {
-      background: #fff;
+      background-color: var(--card-bg-light);
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       text-align: center;
-      padding: 10px;
-      transition: transform 0.3s;
+      padding: 15px;
+      transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
+      color: inherit;
+      user-select: none;
     }
+
+    body.dark .dress {
+      background-color: var(--card-bg-dark);
+      box-shadow: 0 2px 8px rgba(255,255,255,0.1);
+    }
+
     .dress:hover {
       transform: translateY(-5px);
     }
+
     .dress img {
       width: 100%;
       border-radius: 12px;
+      pointer-events: none;
     }
+
     .dress h3 {
       margin: 10px 0 5px;
     }
+
     .stock {
       font-weight: bold;
-      margin: 5px 0;
-      color: #4caf50;
+      margin: 10px 0 15px;
+      color: var(--stock-color-light);
+      transition: color 0.3s;
     }
-    .options select {
-      margin: 5px;
-      padding: 5px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
+
+    body.dark .stock {
+      color: var(--stock-color-dark);
     }
+
     .buttons {
       display: flex;
       justify-content: center;
-      gap: 5px;
-      margin-top: 8px;
+      gap: 10px;
     }
-    .buttons button {
-      padding: 6px 10px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      color: #fff;
-      font-size: 14px;
-    }
-    .add-stock {
-      background: #4caf50;
-    }
-    .remove-stock {
-      background: #f44336;
-    }
-    .add-to-cart {
-      background-color: #ff4081;
-      border: none;
-      color: #fff;
+
+    button {
       padding: 8px 15px;
-      border-radius: 15px;
+      border: none;
+      border-radius: 25px;
       cursor: pointer;
-      transition: background 0.3s;
-      margin-top: 5px;
-    }
-    .add-to-cart:disabled {
-      background-color: #ccc;
-      cursor: not-allowed;
-    }
-    #cartSummary {
-      background: #fff;
-      max-width: 800px;
-      margin: 20px auto;
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      text-align: right;
-      direction: rtl;
-    }
-    #cartSummary table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 10px;
-    }
-    #cartSummary th, #cartSummary td {
-      border: 1px solid #ddd;
-      padding: 8px;
-      vertical-align: middle;
-    }
-    #cartSummary th {
-      background-color: #f2f2f2;
-    }
-    #customerName {
-      margin-top: 10px;
       font-size: 16px;
-    }
-    .qty-btn {
-      cursor: pointer;
-      padding: 2px 7px;
-      border-radius: 4px;
-      color: white;
       font-weight: bold;
-      margin: 0 3px;
+      color: #fff;
+      background-color: var(--btn-bg-light);
+      transition: background-color 0.3s;
+      user-select: none;
+      min-width: 80px;
     }
-    .qty-add {
-      background-color: #4caf50;
+
+    button:hover {
+      background-color: var(--btn-hover-light);
     }
-    .qty-remove {
-      background-color: #f44336;
+
+    body.dark button {
+      background-color: var(--btn-bg-dark);
+    }
+
+    body.dark button:hover {
+      background-color: var(--btn-hover-dark);
+    }
+
+    button:disabled {
+      background-color: #999 !important;
+      cursor: not-allowed;
     }
   </style>
 </head>
 <body>
 
-<div id="loginBox">
-  <h2> اینستاگرام و تلگرام manto_vip_shop</h2>
-  <h2>تولید و پخش انواع مانتو پالتو</h2>
+<h1>فروشگاه وی ای پی شاپ</h1>
 
-  <h2>🇹🇷ارسال به تمام نقاط کشور🇮🇷</h2>
-  <h2>تهران بازار بزرگ پارسیان طبقه دوم گذر ۲پلاک۵/۴۱</h2>
-
-  <input type="password" id="passwordInput" placeholder="رمز عبور" autofocus />
-  <br/>
-  <button onclick="checkPassword()">ورود</button>
-
-  <h2>🇹🇷 09128307890 🇮🇷 09371740280 </h2>
-  <div class="error-msg" id="errorMsg"></div>
-</div>
-
-<div id="shopContainer">
-  <header style="background:#ff4081; color:#fff; padding:20px; text-align:center; font-size:24px; border-radius:10px 10px 0 0;">
-    فروشگاه وی ای پی شاپ
-  </header>
-  <div class="container" id="productContainer">
-    <!-- محصولات اینجا لود می‌شوند -->
-  </div>
-
-  <div id="cartSummary" style="display:none;">
-    <h3>سبد خرید شما</h3>
-    <table id="cartTable">
-      <thead>
-        <tr>
-          <th>کد کالا</th>
-          <th>رنگ</th>
-          <th>سایز</th>
-          <th>تعداد</th>
-          <th> عملیات </th>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
-    <input type="text" id="customerName" placeholder="نام مشتری را وارد کنید" />
-    <br/><br/>
-    <button onclick="finalizeOrder()">نهایی کردن سفارش و ارسال به واتساپ</button>
-  </div>
+<div class="container" id="productContainer">
+  <!-- محصولات بارگذاری می‌شوند -->
 </div>
 
 <script>
-  const PASSWORD_HASH = "NTUyMjM0Ng=="; // base64 رمز 5522346
-  const totalProducts = 50;
-
-  // موجودی هر محصول
-  let stockData = JSON.parse(localStorage.getItem('stockData')) || {};
-  // سبد خرید، آرایه ای از {productId, color, size, quantity}
-  let cart = JSON.parse(localStorage.getItem('cartData')) || [];
-
-  // اگر موجودی‌ها ذخیره نشده بود، همه را روی 10 قرار بده
-  for (let i = 1; i <= totalProducts; i++) {
-    if (!stockData[`stock${i}`]) stockData[`stock${i}`] = 10;
+  // شناسایی حالت تاریک سیستم
+  function detectDarkMode() {
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   }
 
-  function base64Encode(str) {
-    return btoa(str);
+  // تنظیم کلاس dark به body
+  if (detectDarkMode()) {
+    document.body.classList.add('dark');
   }
 
-  function checkPassword() {
-    const input = document.getElementById('passwordInput').value;
-    const errorMsg = document.getElementById('errorMsg');
-    if (base64Encode(input) === PASSWORD_HASH) {
-      document.getElementById('loginBox').style.display = 'none';
-      document.getElementById('shopContainer').style.display = 'block';
-      loadShop();
-      loadCartUI();
-      document.getElementById('cartSummary').style.display = 'block';
-    } else {
-      errorMsg.innerText = 'رمز عبور اشتباه است!';
-    }
+  // داده محصولات به صورت JSON داخل همان فایل (موجودی داخل stock)
+  const products = [
+    { id: 1, name: "مانتو مدل A", image: "1.jpg", stock: 10 },
+    { id: 2, name: "مانتو مدل B", image: "2.jpg", stock: 7 },
+    { id: 3, name: "مانتو مدل C", image: "3.jpg", stock: 15 },
+    { id: 4, name: "مانتو مدل D", image: "4.jpg", stock: 0 },
+    { id: 5, name: "مانتو مدل E", image: "5.jpg", stock: 3 },
+    // می‌توانید محصولات بیشتر اضافه کنید
+  ];
+
+  const container = document.getElementById('productContainer');
+
+  function createProductCard(product) {
+    const card = document.createElement('div');
+    card.className = 'dress';
+    card.id = `dress${product.id}`;
+
+    card.innerHTML = `
+      <img src="${product.image}" alt="${product.name}" />
+      <h3>${product.name}</h3>
+      <p class="stock" id="stock${product.id}">موجودی: ${product.stock}</p>
+      <div class="buttons">
+        <button id="btnAdd${product.id}" ${product.stock >= 100 ? 'disabled' : ''}>افزایش</button>
+        <button id="btnSub${product.id}" ${product.stock <= 0 ? 'disabled' : ''}>کاهش</button>
+      </div>
+    `;
+
+    card.querySelector(`#btnAdd${product.id}`).addEventListener('click', () => {
+      if(product.stock < 100) {
+        product.stock++;
+        updateStockUI(product);
+      }
+    });
+
+    card.querySelector(`#btnSub${product.id}`).addEventListener('click', () => {
+      if(product.stock > 0) {
+        product.stock--;
+        updateStockUI(product);
+      }
+    });
+
+    return card;
   }
 
-  function loadShop() {
-    const container = document.getElementById('productContainer');
+  function updateStockUI(product) {
+    const stockElem = document.getElementById(`stock${product.id}`);
+    stockElem.textContent = `موجودی: ${product.stock}`;
+
+    const btnAdd = document.getElementById(`btnAdd${product.id}`);
+    const btnSub = document.getElementById(`btnSub${product.id}`);
+
+    btnSub.disabled = product.stock <= 0;
+    btnAdd.disabled = product.stock >= 100;
+  }
+
+  function loadProducts() {
     container.innerHTML = '';
-    for (let i = 1; i <= totalProducts; i++) {
-      container.innerHTML += `
-        <div class="dress" id="dress${i}">
-          <img src="${i}.jpg" alt="کد کالا 10${i}" />
-          <h3>کد کالا 10${i}</h3>
-          <p class="stock" id="stock${i}">موجودی: ${stockData[`stock${i}`]}</p>
-          <div class="options">
-            <select id="color${i}">
-              <option value="رنگ">رنگ</option>
-              <option value="آبی">آبی</option>
-              <option value="سبز">سبز</option>
-              <option value="قرمز">قرمز</option>
-              <option value="قهوه‌ای">قهوه‌ای</option>
-              <option value="کرم روشن">کرم روشن</option>
-             <option value="کرم تیره">کرم تیره</option>
-              <option value="سفید">سفید</option>
-              <option value="طوسی">طوسی</option>
-             <option value="مشکی">مشکی</option>
-              <option value="آبی روشن">آبی روشن</option>
-              <option value="زرد">زرد</option>
-              <option value="سبز تیره">سبز تیره</option>
-            </select>
-            <select id="size${i}">
-              <option value="1,2">سایز 1 و 2</option>
-              <option value="1">سایز 1</option>
-              <option value="2">سایز 2</option>
-            </select>
-          </div>
-          <button class="add-to-cart" id="cartBtn${i}" onclick="addToCart(${i})">افزودن به سبد</button>
-          <div class="buttons">
-            <button class="add-stock" onclick="updateStock(${i}, 1)">+ افزودن</button>
-            <button class="remove-stock" onclick="updateStock(${i}, -1)">- کم کردن</button>
-          </div>
-        </div>
-      `;
-      checkButton(i);
-    }
-  }
-
-  // ذخیره موجودی در localStorage
-  function saveStock() {
-    localStorage.setItem('stockData', JSON.stringify(stockData));
-  }
-
-  // ذخیره سبد خرید در localStorage
-  function saveCart() {
-    localStorage.setItem('cartData', JSON.stringify(cart));
-  }
-
-  // افزودن به سبد خرید
-  function addToCart(productId) {
-    const color = document.getElementById(`color${productId}`).value;
-    const size = document.getElementById(`size${productId}`).value;
-    const stockKey = `stock${productId}`;
-    if (stockData[stockKey] <= 0) {
-      alert("❌ موجودی این محصول تمام شده است!");
-      return;
-    }
-
-    // چک کن آیا همین محصول با رنگ و سایز هست یا نه
-    let found = false;
-    for (let item of cart) {
-      if (item.productId === productId && item.color === color && item.size === size) {
-        if (stockData[stockKey] >= item.quantity + 1) {
-          item.quantity++;
-          found = true;
-          break;
-        } else {
-          alert("موجودی کافی نیست!");
-          return;
-        }
-      }
-    }
-    if (!found) {
-      cart.push({productId, color, size, quantity:1});
-    }
-    stockData[stockKey]--;
-    updateStockUI(productId);
-    saveStock();
-    saveCart();
-    loadCartUI();
-    alert(`✅ محصول ${productId} (${color}، ${size}) به سبد خرید اضافه شد`);
-  }
-
-  // آپدیت موجودی و فعال/غیرفعال کردن دکمه‌ها
-  function updateStock(productId, change) {
-    const stockKey = `stock${productId}`;
-    stockData[stockKey] = Math.max(0, stockData[stockKey] + change);
-
-    // اگر کم می‌کنیم و موجودی کافی نباشد، تلاش برای کاهش سبد هم
-    if (change < 0) {
-      // حذف از سبد به همان تعداد (اگر سبد بیشتر از موجودی است)
-      let toRemove = -change;
-      for (let i = cart.length -1; i >= 0 && toRemove > 0; i--) {
-        let item = cart[i];
-        if (item.productId === productId) {
-          if (item.quantity > toRemove) {
-            item.quantity -= toRemove;
-            toRemove = 0;
-          } else {
-            toRemove -= item.quantity;
-            cart.splice(i,1);
-          }
-        }
-      }
-    }
-    updateStockUI(productId);
-    saveStock();
-    saveCart();
-    loadCartUI();
-  }
-
-  // آپدیت نمایش موجودی محصول و دکمه افزودن
-  function updateStockUI(productId) {
-    document.getElementById(`stock${productId}`).innerText = `موجودی: ${stockData[`stock${productId}`]}`;
-    checkButton(productId);
-  }
-
-  // غیر فعال کردن دکمه افزودن اگر موجودی صفر بود
-  function checkButton(productId) {
-    const btn = document.getElementById(`cartBtn${productId}`);
-    btn.disabled = stockData[`stock${productId}`] <= 0;
-  }
-
-  // بارگذاری سبد خرید و نمایش در جدول
-  function loadCartUI() {
-    const tbody = document.querySelector("#cartTable tbody");
-    tbody.innerHTML = "";
-    if (cart.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">سبد خرید خالی است</td></tr>`;
-      return;
-    }
-    cart.forEach((item, index) => {
-      tbody.innerHTML += `
-        <tr>
-          <td>کد کالا ${item.productId}</td>
-          <td>${item.color}</td>
-          <td>${item.size}</td>
-          <td>${item.quantity}</td>
-          <td>
-            <span class="qty-btn qty-add" onclick="changeCartQuantity(${index}, 1)">+</span>
-            <span class="qty-btn qty-remove" onclick="changeCartQuantity(${index}, -1)">-</span>
-            <span class="qty-btn qty-remove" style="background:#555;" onclick="removeCartItem(${index})">×</span>
-          </td>
-        </tr>
-      `;
+    products.forEach(p => {
+      const card = createProductCard(p);
+      container.appendChild(card);
     });
   }
 
-  // تغییر تعداد در سبد خرید
-  function changeCartQuantity(index, change) {
-    const item = cart[index];
-    const stockKey = `stock${item.productId}`;
-    if (change > 0) {
-      // اضافه کردن به سبد اگر موجودی اجازه داد
-      if (stockData[stockKey] >= change) {
-        item.quantity += change;
-        stockData[stockKey] -= change;
-      } else {
-        alert("موجودی کافی نیست!");
-        return;
-      }
+  loadProducts();
+
+  // اگر کاربر در حین کار حالت سیستم را تغییر داد، تم هم تغییر کند
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+    if(e.matches) {
+      document.body.classList.add('dark');
     } else {
-      // کم کردن از سبد و بازگرداندن به موجودی
-      if (item.quantity + change > 0) {
-        item.quantity += change;
-        stockData[stockKey] -= change; // چون change منفی است، باید منهای منفی = جمع شود
-      } else {
-        // اگر تعداد می‌شود صفر یا کمتر، حذف آیتم
-        removeCartItem(index);
-        return;
-      }
+      document.body.classList.remove('dark');
     }
-    saveStock();
-    saveCart();
-    updateStockUI(item.productId);
-    loadCartUI();
-  }
-
-  // حذف کامل آیتم از سبد خرید
-  function removeCartItem(index) {
-    const item = cart[index];
-    const stockKey = `stock${item.productId}`;
-    // بازگرداندن موجودی
-    stockData[stockKey] += item.quantity;
-    cart.splice(index, 1);
-    saveStock();
-    saveCart();
-    updateStockUI(item.productId);
-    loadCartUI();
-  }
-
-  // نهایی کردن سفارش و ساخت لینک واتساپ
-  function finalizeOrder() {
-    const name = document.getElementById('customerName').value.trim();
-    if (!name) {
-      alert("لطفا نام مشتری را وارد کنید");
-      return;
-    }
-    if (cart.length === 0) {
-      alert("سبد خرید شما خالی است!");
-      return;
-    }
-
-    let message = `🥀 بسته ای « ${name} »`;
-
-    cart.forEach(item => {message += `
-☑️  کد      : 10${item.productId}
-☑️  رنگ    : ${item.color} 
-☑️  سایز   : ${item.size}
-*☑️  تعداد  : ${item.quantity} عدد*
---------------------------`;
-    });
-
-    // لینک واتساپ به شماره دلخواه خودتان تغییر دهید:
-    const whatsappNumber = "+989105522346"; // شماره واتساپ با کد کشور بدون + یا 00
-
-    // ساخت لینک
-    const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-
-    // باز کردن لینک در تب جدید
-    window.open(url, '_blank');
-
-    // پاک کردن سبد خرید پس از نهایی شدن
-    cart = [];
-    saveCart();
-    loadCartUI();
-  }
-
+  });
 </script>
 
 </body>
-  </html>
+</html>
