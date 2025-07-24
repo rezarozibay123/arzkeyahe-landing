@@ -1,0 +1,7 @@
+[
+  { "id": 1, "name": "مانتو مدل A", "image": "1.jpg", "stock": 110 },
+  { "id": 2, "name": "مانتو مدل B", "image": "2.jpg", "stock": 7 },
+  { "id": 3, "name": "مانتو مدل C", "image": "3.jpg", "stock": 15 },
+  { "id": 4, "name": "مانتو مدل D", "image": "4.jpg", "stock": 10 },
+  { "id": 5, "name": "مانتو مدل E", "image": "5.jpg", "stock": 3 }
+]
