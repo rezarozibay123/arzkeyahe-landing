@@ -6,24 +6,46 @@
   <title>فروشگاه VIP Shop</title>
   <style>
     body {
-      font-family: 'Tahoma', sans-serif;
-      background: #f0f0f0;
-      margin: 0; padding: 0;
+      font-family: Tahoma, sans-serif;
       direction: rtl;
+      background: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      text-align: center;
     }
+
+    #coin {
+      width: 160px;
+      height: 160px;
+      margin: 50px auto;
+      background: url('https://rezarozibay123.github.io/arzkeyahe-landing/2.jpg') no-repeat center;
+      background-size: contain;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    #counter {
+      font-size: 18px;
+      color: #ff4081;
+      margin-top: 10px;
+    }
+
     #shopContainer {
+      display: none;
       max-width: 1200px;
       margin: 20px auto;
       padding: 10px;
     }
+
     .container {
       display: grid;
-      grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 15px;
       padding: 20px;
-      background:#fff;
-      border-radius:10px;
+      background: #fff;
+      border-radius: 10px;
     }
+
     .dress {
       background: #fff;
       border-radius: 12px;
@@ -32,22 +54,23 @@
       padding: 10px;
       transition: transform 0.3s;
     }
+
     .dress:hover {
       transform: translateY(-5px);
     }
+
     .dress img {
       width: 100%;
       border-radius: 12px;
     }
-    .dress h3 {
-      margin: 10px 0 5px;
-    }
+
     .options select {
       margin: 5px;
       padding: 5px;
       border-radius: 6px;
       border: 1px solid #ccc;
     }
+
     .add-to-cart {
       background-color: #ff4081;
       border: none;
@@ -55,9 +78,9 @@
       padding: 8px 15px;
       border-radius: 15px;
       cursor: pointer;
-      transition: background 0.3s;
       margin-top: 5px;
     }
+
     #cartSummary {
       background: #fff;
       max-width: 800px;
@@ -65,21 +88,23 @@
       padding: 15px;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      text-align: right;
     }
-    #cartSummary table {
+
+    table {
       width: 100%;
       border-collapse: collapse;
       margin-bottom: 10px;
     }
-    #cartSummary th, #cartSummary td {
+
+    th, td {
       border: 1px solid #ddd;
       padding: 8px;
-      vertical-align: middle;
     }
-    #cartSummary th {
+
+    th {
       background-color: #f2f2f2;
     }
+
     .qty-btn {
       cursor: pointer;
       padding: 2px 7px;
@@ -88,12 +113,10 @@
       font-weight: bold;
       margin: 0 3px;
     }
-    .qty-add {
-      background-color: #4caf50;
-    }
-    .qty-remove {
-      background-color: #f44336;
-    }
+
+    .qty-add { background-color: #4caf50; }
+    .qty-remove { background-color: #f44336; }
+
     input#customerName {
       width: 80%;
       padding: 10px;
@@ -103,6 +126,7 @@
       font-size: 16px;
       text-align: center;
     }
+
     button {
       background-color: #ff4081;
       border: none;
@@ -111,23 +135,28 @@
       font-size: 16px;
       border-radius: 25px;
       cursor: pointer;
-      transition: background 0.3s;
     }
-    button:hover {
-      background-color: #e73370;
+
+    header {
+      background: #ff4081;
+      color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      font-size: 24px;
     }
   </style>
 </head>
 <body>
 
+<h3>برای ورود به فروشگاه روی لوگو بزنید یا بگو "باز شو"</h3>
+<div id="coin"></div>
+<div id="counter">تعداد لمس: ۰</div>
+
 <div id="shopContainer">
-  <header style="background:#ff4081; color:#fff; padding:20px; text-align:center; font-size:24px; border-radius:10px;">
-    فروشگاه وی ای پی شاپ
-    <br>
-    <small>تهران، بازار بزرگ پارسیان طبقه دوم، گذر ۲، پلاک ۴۱/۵</small>
-    <br>
-    <small>اینستاگرام و تلگرام: manto_vip_shop</small>
-    <br>
+  <header>
+    فروشگاه وی ای پی شاپ<br>
+    <small>تهران، بازار بزرگ پارسیان طبقه دوم، گذر ۲، پلاک ۴۱/۵</small><br>
+    <small>اینستاگرام و تلگرام: manto_vip_shop</small><br>
     <small>📞 09128307890 - 09371740280</small>
   </header>
 
@@ -148,12 +177,84 @@
       <tbody></tbody>
     </table>
     <input type="text" id="customerName" placeholder="نام مشتری را وارد کنید" />
-    <br/><br/>
+    <br><br>
     <button onclick="finalizeOrder()">نهایی کردن سفارش و ارسال به واتساپ</button>
   </div>
 </div>
 
 <script>
+  // قفل رمزدار
+  let sequence = [];
+  let count = 0;
+  let isLong = false;
+  let pressTimer;
+  const password = ["short", "short", "short", "long", "long", "short"];
+
+  const coin = document.getElementById("coin");
+  const counter = document.getElementById("counter");
+  const shopContainer = document.getElementById("shopContainer");
+
+  function updateCounter() {
+    counter.innerText = "تعداد لمس: " + count;
+  }
+
+  function checkSequence() {
+    if (sequence.length > password.length) sequence = [];
+    for (let i = 0; i < sequence.length; i++) {
+      if (sequence[i] !== password[i]) {
+        sequence = [];
+        return;
+      }
+    }
+    if (sequence.length === password.length) {
+      openStore();
+    }
+  }
+
+  function openStore() {
+    shopContainer.style.display = "block";
+    coin.style.display = "none";
+    alert("✅ فروشگاه باز شد!");
+    if ("vibrate" in navigator) navigator.vibrate([200, 100, 200]);
+    loadShop();
+    loadCartUI();
+  }
+
+  coin.addEventListener("touchstart", () => {
+    isLong = false;
+    pressTimer = setTimeout(() => {
+      isLong = true;
+      sequence.push("long");
+      count++;
+      updateCounter();
+    }, 600);
+  });
+
+  coin.addEventListener("touchend", () => {
+    clearTimeout(pressTimer);
+    if (!isLong) {
+      sequence.push("short");
+      count++;
+      updateCounter();
+    }
+    checkSequence();
+  });
+
+  // تشخیص صوتی
+  window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if ('SpeechRecognition' in window) {
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'fa-IR';
+    recognition.continuous = true;
+    recognition.onresult = (event) => {
+      const text = event.results[event.results.length - 1][0].transcript.trim();
+      if (text.includes("باز شو") || text.includes("بازشو")) openStore();
+    };
+    recognition.onerror = (e) => console.warn("Speech error:", e);
+    recognition.start();
+  }
+
+  // عملکرد فروشگاه
   const totalProducts = 50;
   let cart = JSON.parse(localStorage.getItem('cartData')) || [];
 
@@ -162,34 +263,23 @@
     container.innerHTML = '';
     for (let i = 1; i <= totalProducts; i++) {
       container.innerHTML += `
-        <div class="dress" id="dress${i}">
-          <img src="${i}.jpg" alt="کد کالا 10${i}" />
+        <div class="dress">
+          <img src="${i}.jpg" alt="کد کالا 10${i}">
           <h3>کد کالا 10${i}</h3>
           <div class="options">
             <select id="color${i}">
               <option value="رنگ">رنگ</option>
-              <option value="آبی">آبی</option>
-              <option value="سبز">سبز</option>
-              <option value="قرمز">قرمز</option>
-              <option value="قهوه‌ای">قهوه‌ای</option>
-              <option value="کرم روشن">کرم روشن</option>
-              <option value="کرم تیره">کرم تیره</option>
-              <option value="سفید">سفید</option>
-              <option value="طوسی">طوسی</option>
-              <option value="مشکی">مشکی</option>
-              <option value="آبی روشن">آبی روشن</option>
-              <option value="زرد">زرد</option>
-              <option value="سبز تیره">سبز تیره</option>
+              <option>آبی</option><option>سبز</option><option>قرمز</option><option>قهوه‌ای</option>
+              <option>کرم روشن</option><option>کرم تیره</option><option>سفید</option>
+              <option>طوسی</option><option>مشکی</option><option>آبی روشن</option>
+              <option>زرد</option><option>سبز تیره</option>
             </select>
             <select id="size${i}">
-              <option value="1,2">سایز 1 و 2</option>
-              <option value="1">سایز 1</option>
-              <option value="2">سایز 2</option>
+              <option>سایز 1 و 2</option><option>سایز 1</option><option>سایز 2</option>
             </select>
           </div>
           <button class="add-to-cart" onclick="addToCart(${i})">افزودن به سبد</button>
-        </div>
-      `;
+        </div>`;
     }
   }
 
@@ -200,6 +290,7 @@
   function addToCart(productId) {
     const color = document.getElementById(`color${productId}`).value;
     const size = document.getElementById(`size${productId}`).value;
+    if (color === "رنگ") return alert("لطفاً رنگ را انتخاب کنید.");
     let found = false;
     for (let item of cart) {
       if (item.productId === productId && item.color === color && item.size === size) {
@@ -208,19 +299,16 @@
         break;
       }
     }
-    if (!found) {
-      cart.push({productId, color, size, quantity: 1});
-    }
+    if (!found) cart.push({productId, color, size, quantity: 1});
     saveCart();
     loadCartUI();
-    alert(`✅ محصول ${productId} (${color}، ${size}) به سبد خرید اضافه شد`);
   }
 
   function loadCartUI() {
     const tbody = document.querySelector("#cartTable tbody");
     tbody.innerHTML = "";
     if (cart.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">سبد خرید خالی است</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="5">سبد خرید خالی است</td></tr>`;
       return;
     }
     cart.forEach((item, index) => {
@@ -235,8 +323,7 @@
             <span class="qty-btn qty-remove" onclick="changeCartQuantity(${index}, -1)">-</span>
             <span class="qty-btn qty-remove" style="background:#555;" onclick="removeCartItem(${index})">×</span>
           </td>
-        </tr>
-      `;
+        </tr>`;
     });
   }
 
@@ -260,38 +347,25 @@
 
   function finalizeOrder() {
     const name = document.getElementById('customerName').value.trim();
-    if (!name) {
-      alert("لطفا نام مشتری را وارد کنید");
-      return;
-    }
-    if (cart.length === 0) {
-      alert("سبد خرید شما خالی است!");
-      return;
-    }
+    if (!name) return alert("لطفا نام مشتری را وارد کنید");
+    if (cart.length === 0) return alert("سبد خرید شما خالی است!");
 
     let message = `🥀®️`;
     cart.forEach(item => {
       message += `
-☑️  کد      : ${item.productId}10
-☑️  رنگ    : ${item.color} 
-☑️  سایز   : ${item.size}
-*☑️  تعداد  : ${item.quantity} عدد*
+☑️  کد : ${item.productId}10
+☑️  رنگ : ${item.color}
+☑️  سایز : ${item.size}
+*☑️  تعداد : ${item.quantity} عدد*
 --------------------------`;
     });
-    message += `\n🛍️بسته ای « ${name} »`;
-
-    const whatsappNumber = "989105522346";
-    const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+    message += `\n🛍️ بسته ای «${name}»`;
+    const url = `https://wa.me/989105522346?text=${encodeURIComponent(message)}`;
     window.open(url, '_blank');
     cart = [];
     saveCart();
     loadCartUI();
   }
-
-  // اجرای اولیه
-  loadShop();
-  loadCartUI();
 </script>
-
 </body>
-</html>
+  </html>
