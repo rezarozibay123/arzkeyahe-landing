@@ -248,7 +248,7 @@
     recognition.continuous = true;
     recognition.onresult = (event) => {
       const text = event.results[event.results.length - 1][0].transcript.trim();
-      if (text.includes("باز شو") || text.includes("بازشو")) openStore();
+      if (text.includes("رضا موجودی انبار بفرست") || text.includes("رضا موجودی انبار بفرست")) openStore();
     };
     recognition.onerror = (e) => console.warn("Speech error:", e);
     recognition.start();
