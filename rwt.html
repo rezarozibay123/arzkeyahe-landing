@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>فروشگاه VIP Shop</title>
+  <style>
+    body {
+      font-family: 'Tahoma', sans-serif;
+      background: #f0f0f0;
+      margin: 0; padding: 0;
+      direction: rtl;
+    }
+    #shopContainer {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 10px;
+    }
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+      gap: 15px;
+      padding: 20px;
+      background:#fff;
+      border-radius:10px;
+    }
+    .dress {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      text-align: center;
+      padding: 10px;
+      transition: transform 0.3s;
+    }
+    .dress:hover {
+      transform: translateY(-5px);
+    }
+    .dress img {
+      width: 100%;
+      border-radius: 12px;
+    }
+    .dress h3 {
+      margin: 10px 0 5px;
+    }
+    .options select {
+      margin: 5px;
+      padding: 5px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    .add-to-cart {
+      background-color: #ff4081;
+      border: none;
+      color: #fff;
+      padding: 8px 15px;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: background 0.3s;
+      margin-top: 5px;
+    }
+    #cartSummary {
+      background: #fff;
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: right;
+    }
+    #cartSummary table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 10px;
+    }
+    #cartSummary th, #cartSummary td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      vertical-align: middle;
+    }
+    #cartSummary th {
+      background-color: #f2f2f2;
+    }
+    .qty-btn {
+      cursor: pointer;
+      padding: 2px 7px;
+      border-radius: 4px;
+      color: white;
+      font-weight: bold;
+      margin: 0 3px;
+    }
+    .qty-add {
+      background-color: #4caf50;
+    }
+    .qty-remove {
+      background-color: #f44336;
+    }
+    input#customerName {
+      width: 80%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      text-align: center;
+    }
+    button {
+      background-color: #ff4081;
+      border: none;
+      color: #fff;
+      padding: 10px 25px;
+      font-size: 16px;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background-color: #e73370;
+    }
+  </style>
+</head>
+<body>
+
+<div id="shopContainer">
+  <header style="background:#ff4081; color:#fff; padding:20px; text-align:center; font-size:24px; border-radius:10px;">
+    فروشگاه وی ای پی شاپ
+    <br>
+    <small>تهران، بازار بزرگ پارسیان طبقه دوم، گذر ۲، پلاک ۴۱/۵</small>
+    <br>
+    <small>اینستاگرام و تلگرام: manto_vip_shop</small>
+    <br>
+    <small>📞 09128307890 - 09371740280</small>
+  </header>
+
+  <div class="container" id="productContainer"></div>
+
+  <div id="cartSummary">
+    <h3>سبد خرید شما</h3>
+    <table id="cartTable">
+      <thead>
+        <tr>
+          <th>کد کالا</th>
+          <th>رنگ</th>
+          <th>سایز</th>
+          <th>تعداد</th>
+          <th>عملیات</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <input type="text" id="customerName" placeholder="نام مشتری را وارد کنید" />
+    <br/><br/>
+    <button onclick="finalizeOrder()">نهایی کردن سفارش و ارسال به واتساپ</button>
+  </div>
+</div>
+
+<script>
+  const totalProducts = 50;
+  let cart = JSON.parse(localStorage.getItem('cartData')) || [];
+
+  function loadShop() {
+    const container = document.getElementById('productContainer');
+    container.innerHTML = '';
+    for (let i = 1; i <= totalProducts; i++) {
+      container.innerHTML += `
+        <div class="dress" id="dress${i}">
+          <img src="${i}.jpg" alt="کد کالا 10${i}" />
+          <h3>کد کالا 10${i}</h3>
+          <div class="options">
+            <select id="color${i}">
+              <option value="رنگ">رنگ</option>
+              <option value="آبی">آبی</option>
+              <option value="سبز">سبز</option>
+              <option value="قرمز">قرمز</option>
+              <option value="قهوه‌ای">قهوه‌ای</option>
+              <option value="کرم روشن">کرم روشن</option>
+              <option value="کرم تیره">کرم تیره</option>
+              <option value="سفید">سفید</option>
+              <option value="طوسی">طوسی</option>
+              <option value="مشکی">مشکی</option>
+              <option value="آبی روشن">آبی روشن</option>
+              <option value="زرد">زرد</option>
+              <option value="سبز تیره">سبز تیره</option>
+            </select>
+            <select id="size${i}">
+              <option value="1,2">سایز 1 و 2</option>
+              <option value="1">سایز 1</option>
+              <option value="2">سایز 2</option>
+            </select>
+          </div>
+          <button class="add-to-cart" onclick="addToCart(${i})">افزودن به سبد</button>
+        </div>
+      `;
+    }
+  }
+
+  function saveCart() {
+    localStorage.setItem('cartData', JSON.stringify(cart));
+  }
+
+  function addToCart(productId) {
+    const color = document.getElementById(`color${productId}`).value;
+    const size = document.getElementById(`size${productId}`).value;
+    let found = false;
+    for (let item of cart) {
+      if (item.productId === productId && item.color === color && item.size === size) {
+        item.quantity++;
+        found = true;
+        break;
+      }
+    }
+    if (!found) {
+      cart.push({productId, color, size, quantity: 1});
+    }
+    saveCart();
+    loadCartUI();
+    alert(`✅ محصول ${productId} (${color}، ${size}) به سبد خرید اضافه شد`);
+  }
+
+  function loadCartUI() {
+    const tbody = document.querySelector("#cartTable tbody");
+    tbody.innerHTML = "";
+    if (cart.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">سبد خرید خالی است</td></tr>`;
+      return;
+    }
+    cart.forEach((item, index) => {
+      tbody.innerHTML += `
+        <tr>
+          <td>کد کالا ${item.productId}10</td>
+          <td>${item.color}</td>
+          <td>${item.size}</td>
+          <td>${item.quantity}</td>
+          <td>
+            <span class="qty-btn qty-add" onclick="changeCartQuantity(${index}, 1)">+</span>
+            <span class="qty-btn qty-remove" onclick="changeCartQuantity(${index}, -1)">-</span>
+            <span class="qty-btn qty-remove" style="background:#555;" onclick="removeCartItem(${index})">×</span>
+          </td>
+        </tr>
+      `;
+    });
+  }
+
+  function changeCartQuantity(index, change) {
+    const item = cart[index];
+    if (item.quantity + change > 0) {
+      item.quantity += change;
+    } else {
+      removeCartItem(index);
+      return;
+    }
+    saveCart();
+    loadCartUI();
+  }
+
+  function removeCartItem(index) {
+    cart.splice(index, 1);
+    saveCart();
+    loadCartUI();
+  }
+
+  function finalizeOrder() {
+    const name = document.getElementById('customerName').value.trim();
+    if (!name) {
+      alert("لطفا نام مشتری را وارد کنید");
+      return;
+    }
+    if (cart.length === 0) {
+      alert("سبد خرید شما خالی است!");
+      return;
+    }
+
+    let message = `🥀®️`;
+    cart.forEach(item => {
+      message += `
+☑️  کد      : ${item.productId}10
+☑️  رنگ    : ${item.color} 
+☑️  سایز   : ${item.size}
+*☑️  تعداد  : ${item.quantity} عدد*
+--------------------------`;
+    });
+    message += `\n🛍️بسته ای « ${name} »`;
+
+    const whatsappNumber = "989105522346";
+    const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+    cart = [];
+    saveCart();
+    loadCartUI();
+  }
+
+  // اجرای اولیه
+  loadShop();
+  loadCartUI();
+</script>
+
+</body>
+</html>
