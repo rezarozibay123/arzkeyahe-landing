@@ -18,13 +18,9 @@
             background: linear-gradient(130deg, #1a2a6c, #b21f1f, #fdbb1d);
             color: #333;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             padding: 20px;
-            text-align: center;
             overflow-x: hidden;
-      }
+        }
         
         .container {
             max-width: 1200px;
@@ -38,7 +34,6 @@
             padding: 20px;
             margin-bottom: 30px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            width: 100%;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.3);
         }
@@ -94,6 +89,7 @@
             position: relative;
             margin: 40px 0;
             perspective: 1000px;
+            text-align: center;
         }
         
         #coin {
@@ -109,6 +105,7 @@
             overflow: hidden;
             transform-style: preserve-3d;
             transition: transform 0.5s;
+            margin: 0 auto;
         }
         
         #coin:hover {
@@ -172,12 +169,15 @@
             margin: 30px 0;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
             max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
         
         .instructions h2 {
             color: #ff4081;
             margin-bottom: 20px;
             font-size: 1.8rem;
+            text-align: center;
         }
         
         .step {
@@ -261,6 +261,7 @@
             font-size: 1rem;
             text-shadow: 0 1px 3px rgba(0,0,0,0.5);
             padding: 20px;
+            text-align: center;
         }
         
         .pulse {
@@ -745,4 +746,4 @@
             font-size: 1.8rem;    
             margin-top: 25px;    
             color: white;    
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);    
+            text-sh
