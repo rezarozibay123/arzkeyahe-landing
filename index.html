@@ -318,9 +318,10 @@
         
         .shop-body {
             background-color: #f8f8f5;
-            color: #339;
+            color: #333;
             direction: rtl;
             min-height: 100vh;
+            padding: 20px;
         }
         
         .shop-header {
@@ -329,6 +330,8 @@
             position: sticky;
             top: 0;
             z-index: 100;
+            border-radius: 20px;
+            margin-bottom: 20px;
         }
         
         .header-top {
@@ -558,6 +561,8 @@
             background: #2c3e50;
             color: white;
             padding: 40px 5% 20px;
+            border-radius: 20px;
+            margin-top: 20px;
         }
         
         .footer-content {
@@ -677,73 +682,65 @@
             color: #ccc;
         }
         
-        .vip-coin-container {    
-            position: relative;    
-            margin: 40px 0;    
-            perspective: 1000px;    
-        }    
+        .vip-coin-container {      
+            position: relative;      
+            margin: 40px 0;      
+            perspective: 1000px;      
+        }      
             
-        #vip-coin {    
-            width: 200px;    
-            height: 200px;    
-            background: radial-gradient(circle at 30% 30%, #ffd700, #ff9800);    
-            border-radius: 50%;    
-            cursor: pointer;    
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.8),     
-                        inset 0 -10px 20px rgba(139, 69, 19, 0.4),    
-                        inset 0 10px 20px rgba(255, 255, 255, 0.5);    
-            position: relative;    
-            overflow: hidden;    
-            transform-style: preserve-3d;    
-            transition: transform 0.5s;    
-            margin: 0 auto;  
-        }    
+        #vip-coin {      
+            width: 200px;      
+            height: 200px;      
+            background: radial-gradient(circle at 30% 30%, #ffd700, #ff9800);      
+            border-radius: 50%;      
+            cursor: pointer;      
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.8),       
+                        inset 0 -10px 20px rgba(139, 69, 19, 0.4),      
+                        inset 0 10px 20px rgba(255, 255, 255, 0.5);      
+            position: relative;      
+            overflow: hidden;      
+            transform-style: preserve-3d;      
+            transition: transform 0.5s;      
+            margin: 0 auto;    
+        }      
             
-        #vip-coin:hover {    
-            transform: rotateY(10deg) rotateX(10deg) scale(1.05);    
-        }    
+        #vip-coin:hover {      
+            transform: rotateY(10deg) rotateX(10deg) scale(1.05);      
+        }      
             
-        #vip-coin:active {    
-            transform: scale(0.95);    
-        }    
+        #vip-coin:active {      
+            transform: scale(0.95);      
+        }      
             
-        .vip-coin-design {    
-            position: absolute;    
-            width: 100%;    
-            height: 100%;    
-            display: flex;    
-            flex-direction: column;    
-            justify-content: center;    
-            align-items: center;    
-            color: #8b4513;    
-            font-weight: bold;    
-            text-align: center;    
-            padding: 20px;    
-        }    
+        .vip-coin-design {      
+            position: absolute;      
+            width: 100%;      
+            height: 100%;      
+            display: flex;      
+            flex-direction: column;      
+            justify-content: center;      
+            align-items: center;      
+            color: #8b4513;      
+            font-weight: bold;      
+            text-align: center;      
+            padding: 20px;      
+        }      
             
-        .vip-coin-front {    
-            background: radial-gradient(circle at center, #ffd700, #daa520);    
-        }    
+        .vip-coin-front {      
+            background: radial-gradient(circle at center, #ffd700, #daa520);      
+        }      
             
-        .vip-coin-back {    
-            background: radial-gradient(circle at center, #daa520, #b8860b);    
-            transform: rotateY(180deg);    
-            backface-visibility: hidden;    
-        }    
+        .vip-coin-back {      
+            background: radial-gradient(circle at center, #daa520, #b8860b);      
+            transform: rotateY(180deg);      
+            backface-visibility: hidden;      
+        }      
             
-        .vip-coin-icon {    
-            font-size: 4rem;    
-            margin-bottom: 10px;    
-            color: #8b4513;    
-        }    
+        .vip-coin-icon {      
+            font-size: 4rem;      
+            margin-bottom: 10px;      
+            color: #8b4513;      
+        }      
             
-        .vip-coin-text {    
-            font-size: 1.8rem;    
-            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);    
-        }    
+        .vip-coin-text {      
             
-        #vip-counter {    
-            font-size: 1.8rem;    
-            margin-top: 25px;    
-            color: white;    
-            text-sh
