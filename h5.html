@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>محصولات ایردراپ تعجب‌آور با چند رنگ</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Vazirmatn&display=swap');
+
+    body {
+      margin: 0; padding: 30px;
+      font-family: 'Vazirmatn', Tahoma, sans-serif;
+      background: #0f0c29;  
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      font-weight: 900;
+      font-size: 3.2rem;
+      margin-bottom: 20px;
+      background: linear-gradient(270deg, #ff416c, #ff4b2b, #ff416c);
+      background-size: 600% 600%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientAnimation 6s ease infinite;
+      user-select: none;
+      text-align: center;
+      letter-spacing: 0.15em;
+    }
+
+    @keyframes gradientAnimation {
+      0%{background-position:0% 50%}
+      50%{background-position:100% 50%}
+      100%{background-position:0% 50%}
+    }
+
+    .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 22px;
+      justify-content: center;
+      max-width: 1080px;
+      width: 100%;
+    }
+
+    .card {
+      background: linear-gradient(135deg, #ff4b2b, #ff416c);
+      border-radius: 20px;
+      box-shadow: 0 0 25px #ff416ccc, 0 0 40px #ff4b2bcc;
+      width: 220px;
+      padding: 15px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      text-align: center;
+      user-select: none;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+    .card:hover {
+      transform: scale(1.1) rotate(2deg);
+      box-shadow: 0 0 40px #ff416ccc, 0 0 60px #ff4b2bcc;
+    }
+
+    .card img {
+      width: 100%;
+      border-radius: 14px;
+      margin-bottom: 8px;
+      filter: drop-shadow(0 0 10px #ff4b2b);
+      transition: filter 0.3s ease;
+      user-select: none;
+    }
+    .card:hover img {
+      filter: drop-shadow(0 0 20px #ff416c);
+    }
+
+    .card h3 {
+      margin: 0 0 6px;
+      font-weight: 800;
+      font-size: 1.3rem;
+      text-shadow: 0 0 8px #ff416c;
+    }
+
+    .stock {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: #ffe5e0;
+      text-shadow: 0 0 6px #ff4b2b;
+      margin-top: 4px;
+      user-select: text;
+    }
+
+    /* مودال */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    .modal.show {
+      display: flex;
+    }
+    .modal-content {
+      background: #1f1c2c;
+      border-radius: 24px;
+      max-width: 500px;
+      width: 90%;
+      padding: 25px 30px;
+      text-align: center;
+      box-shadow: 0 0 50px #ff416caa;
+      position: relative;
+      user-select: none;
+    }
+    .modal-content img {
+      width: 100%;
+      border-radius: 18px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 25px #ff4b2bcc;
+      user-select: none;
+    }
+    .modal-content h2 {
+      margin: 10px 0 15px;
+      color: #ff416c;
+      font-weight: 900;
+      font-size: 2rem;
+      text-shadow: 0 0 10px #ff4b2b;
+    }
+    .modal-content p.stock {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #ffc9c4;
+      text-shadow: 0 0 8px #ff416caa;
+      user-select: text;
+      margin-bottom: 20px;
+    }
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: #ff416c;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      font-weight: 900;
+      border-radius: 12px;
+      padding: 5px 14px;
+      cursor: pointer;
+      box-shadow: 0 0 20px #ff416caa;
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+    .close-btn:hover {
+      background: #e23e4d;
+      box-shadow: 0 0 30px #e23e4dcc;
+    }
+
+    /* دکمه‌های تغییر رنگ (عکس) */
+    .nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #ff416c;
+      border: none;
+      color: white;
+      font-size: 2rem;
+      font-weight: 900;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      cursor: pointer;
+      box-shadow: 0 0 20px #ff416caa;
+      user-select: none;
+      transition: background-color 0.3s ease;
+    }
+    .nav-btn:hover {
+      background: #e23e4d;
+      box-shadow: 0 0 30px #e23e4dcc;
+    }
+    .nav-prev {
+      left: 10px;
+    }
+    .nav-next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>MANTO VIP SHOP</h1>
+
+  <div id="totalStockDisplay" 
+       style="position: fixed; top: 20px; right: 20px; 
+              background: #ff416c; padding: 12px 20px; 
+              font-weight: 900; font-size: 1.2rem; 
+              border-radius: 12px; box-shadow: 0 0 25px #ff4b2bcc; 
+              user-select: none; color: white; 
+              font-family: 'Vazirmatn', Tahoma, sans-serif; z-index: 10000;">
+    AIRDROP: در حال محاسبه...
+  </div>
+
+  <div class="gallery" id="gallery">
+    <!-- محصولات اضافه می‌شوند -->
+  </div>
+
+  <div class="modal" id="modal" aria-modal="true" role="dialog" aria-hidden="true">
+    <div class="modal-content">
+      <button class="close-btn" id="closeBtn" aria-label="بستن پنجره">×</button>
+      <button class="nav-btn nav-prev" id="prevBtn" aria-label="رنگ قبلی">‹</button>
+      <button class="nav-btn nav-next" id="nextBtn" aria-label="رنگ بعدی">›</button>
+      <img src="" alt="تصویر محصول" id="modalImg" />
+      <h2 id="modalTitle"></h2>
+      <p class="stock" id="modalStock"></p>
+    </div>
+  </div>
+
+<script>
+  // محصولات با چند رنگ و تعداد موجودی هر رنگ
+  const products = [
+    { name: "محصول 1", colors: [
+        {image: "I1_1.jpg", stock: 5, colorName: "قرمز"},
+        {image: "I1_2.jpg", stock: 3, colorName: "آبی"}
+      ] },
+    { name: "محصول 2", colors: [
+        {image: "I2_1.jpg", stock: 2, colorName: "مشکی"}
+      ] },
+    { name: "محصول 3", colors: [
+        {image: "I3_1.jpg", stock: 7, colorName: "سبز"},
+        {image: "I3_2.jpg", stock: 1, colorName: "زرد"},
+        {image: "I3_3.jpg", stock: 4, colorName: "نارنجی"}
+      ] },
+    { name: "محصول 4", colors: [
+        {image: "I4_1.jpg", stock: 6, colorName: "سفید"},
+       {image: "I4_2.jpg", stock: 2, colorName: "طلایی"}
+      ] },
+    { name: "محصول 5", colors: [
+        {image: "I5_1.jpg", stock: 8, colorName: "بنفش"}
+      ] },
+    { name: "محصول 6", colors: [
+        {image: "I6_1.jpg", stock: 1, colorName: "قرمز"},
+        {image: "I6_2.jpg", stock: 3, colorName: "آبی"}
+      ] },
+    { name: "محصول 7", colors: [
+        {image: "I7_1.jpg", stock: 4, colorName: "سبز"}
+      ] },
+    { name: "محصول 8", colors: [
+        {image: "I8_1.jpg", stock: 5, colorName: "مشکی"},
+        {image: "I8_2.jpg", stock: 7, colorName: "نقره‌ای"}
+      ] },
+    { name: "محصول 9", colors: [
+        {image: "I9_1.jpg", stock: 2, colorName: "زرد"},
+        {image: "I9_2.jpg", stock: 1, colorName: "نارنجی"}
+      ] },
+    { name: "محصول 10", colors: [
+        {image: "I10_1.jpg", stock: 6, colorName: "قرمز"}
+      ] },
+    // ... بقیه محصولات طبق نمونه اصلی شما ...
+  ];
+
+  const gallery = document.getElementById('gallery');
+  const modal = document.getElementById('modal');
+  const modalImg = document.getElementById('modalImg');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalStock = document.getElementById('modalStock');
+  const closeBtn = document.getElementById('closeBtn');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const totalStockDisplay = document.getElementById('totalStockDisplay');
+
+  let currentProductIndex = 0;
+  let currentColorIndex = 0;
+
+  function displayProducts() {
+    gallery.innerHTML = '';
+    products.forEach((product, productIndex) => {
+      const totalStock = product.colors.reduce((acc, c) => acc + c.stock, 0);
+      const mainImage = product.colors[0].image;
+
+      const card = document.createElement('div');
+      card.classList.add('card');
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('role', 'button');
+      card.setAttribute('aria-label', `${product.name} - موجودی کل: ${totalStock} عدد`);
+      card.innerHTML = `
+        <img src="${mainImage}" alt="${product.name} - رنگ ${product.colors[0].colorName}" loading="lazy" />
+        <h3>${product.name}</h3>
+        <p class="stock">موجودی کل: ${totalStock} عدد</p>
+      `;
+
+      card.addEventListener('click', () => {
+        openModal(productIndex, 0);
+      });
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openModal(productIndex, 0);
+        }
+      });
+
+      gallery.appendChild(card);
+    });
+  }
+
+  function displayTotalStock() {
+    let total = 0;
+    products.forEach(product => {
+      product.colors.forEach(color => {
+        total += color.stock;
+      });
+    });
+    totalStockDisplay.textContent = ` موجودی کل ${total} عدد`;
+  }
+
+  function openModal(productIndex, colorIndex) {
+    currentProductIndex = productIndex;
+    currentColorIndex = colorIndex;
+
+    updateModal();
+    modal.classList.add('show');
+    modal.setAttribute('aria-hidden', 'false');
+    closeBtn.focus();
+
+    totalStockDisplay.style.display = 'none';
+  }
+
+  function updateModal() {
+    const product = products[currentProductIndex];
+    const color = product.colors[currentColorIndex];
+
+    modalImg.src = `${color.image}`;
+    modalImg.alt = `${product.name} - رنگ ${color.colorName}`;
+    modalTitle.textContent = product.name;
+    modalStock.textContent = `موجودی رنگ ${color.colorName}: ${color.stock} عدد`;
+
+    if (product.colors.length <= 1) {
+      prevBtn.style.display = 'none';
+      nextBtn.style.display = 'none';
+    } else {
+      prevBtn.style.display = 'block';
+      nextBtn.style.display = 'block';
+    }
+  }
+
+  function closeModal() {
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden', 'true');
+    modalImg.src = '';
+    modalTitle.textContent = '';
+    modalStock.textContent = '';
+
+    totalStockDisplay.style.display = 'block';
+  }
+
+  function prevColor() {
+    const product = products[currentProductIndex];
+    currentColorIndex = (currentColorIndex - 1 + product.colors.length) % product.colors.length;
+    updateModal();
+  }
+
+  function nextColor() {
+    const product = products[currentProductIndex];
+    currentColorIndex = (currentColorIndex + 1) % product.colors.length;
+    updateModal();
+  }
+
+  closeBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', e => {
+    if (e.target === modal) closeModal();
+  });
+  window.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && modal.classList.contains('show')) {
+      closeModal();
+    }
+    if (modal.classList.contains('show')) {
+      if (e.key === 'ArrowLeft') {
+        prevColor();
+      } else if (e.key === 'ArrowRight') {
+        nextColor();
+      }
+    }
+  });
+  prevBtn.addEventListener('click', prevColor);
+  nextBtn.addEventListener('click', nextColor);
+
+  displayProducts();
+  displayTotalStock();
+
+</script>
+
+</body>
+</html>
