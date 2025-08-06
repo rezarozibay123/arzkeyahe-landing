@@ -1,130 +1,465 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>تخفیف ویژه امروز</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Vazirmatn&display=swap');
+<!DOCTYPE html>  
+<html lang="fa" dir="rtl">  
+<head>  
+<meta charset="UTF-8" />  
+<meta name="viewport" content="width=device-width, initial-scale=1" />  
+<title>فروشگاه مانتو بیتا - تخفیف ویژه</title>  
+<style>  
+  @import url('https://fonts.googleapis.com/css2?family=Vazirmatn&display=swap');  
+  
+  /* Reset */  
+  * {  
+    box-sizing: border-box;  
+    margin: 0; padding: 0;  
+  }  
+  
+  body {  
+    font-family: 'Vazirmatn', sans-serif;  
+    background: #fafafa;  
+    color: #222;  
+    line-height: 1.5;  
+    min-height: 100vh;  
+    display: flex;  
+    flex-direction: column;  
+  }  
+  
+  a {  
+    text-decoration: none;  
+    color: inherit;  
+  }  
+  
+  /* Header */  
+  header {  
+    background: #ff2d55;  
+    color: white;  
+    padding: 20px 15px;  
+    text-align: center;  
+    position: sticky;  
+    top: 0;  
+    z-index: 100;  
+    box-shadow: 0 2px 10px rgba(255,45,85,0.3);  
+  }  
+  
+  header h1 {  
+    font-size: 1.9rem;  
+    margin-bottom: 5px;  
+  }  
+  
+  header .clock {  
+    font-size: 1.1rem;  
+    font-weight: 500;  
+    letter-spacing: 1px;  
+  }  
+  
+  /* Countdown */  
+  #countdown {  
+    background: #ffe6eb;  
+    color: #d32f2f;  
+    font-weight: 700;  
+    text-align: center;  
+    padding: 12px 0;  
+    font-size: 1.2rem;  
+    box-shadow: inset 0 0 10px #ff2d55aa;  
+  }  
+  
+  /* Single Banner */  
+  .banner {  
+    margin: 20px auto;  
+    width: 90%;  
+    max-width: 1024px;  
+    border-radius: 10px;  
+    overflow: hidden;  
+    box-shadow: 0 5px 15px rgb(0 0 0 / 0.1);  
+  }  
+  
+  .banner img {  
+    width: 100%;  
+    display: block;  
+    object-fit: cover;  
+  }  
+  
+  /* Products Grid */  
+  main {  
+    flex-grow: 1;  
+    max-width: 1100px;  
+    width: 90%;  
+    margin: 30px auto 50px;  
+  }  
+  
+  .products-grid {  
+    display: grid;  
+    grid-template-columns: repeat(auto-fit,minmax(220px,1fr));  
+    gap: 22px;  
+  }  
+  
+  .product-card {  
+    background: white;  
+    border-radius: 12px;  
+    box-shadow: 0 3px 15px rgb(0 0 0 / 0.1);  
+    overflow: hidden;  
+    display: flex;  
+    flex-direction: column;  
+    transition: box-shadow 0.3s ease;  
+    position: relative;  
+  }  
+  
+  .product-card:hover {  
+    box-shadow: 0 6px 25px rgb(255 45 85 / 0.25);  
+  }  
+  
+  .product-image {  
+    width: 100%;  
+    height: 220px;  
+    object-fit: cover;  
+    cursor: pointer; /* اضافه شده برای نشان دادن کلیک پذیر بودن */  
+  }  
+  
+  .product-info {  
+    padding: 15px 18px;  
+    flex-grow: 1;  
+    display: flex;  
+    flex-direction: column;  
+    justify-content: space-between;  
+  }  
+  
+  .product-name {  
+    font-weight: 700;  
+    font-size: 1.1rem;  
+    margin-bottom: 8px;  
+    color: #ff2d55;  
+    min-height: 48px;  
+  }  
+  
+  .product-color {  
+    font-size: 0.9rem;  
+    color: #777;  
+    margin-bottom: 10px;  
+  }  
+  
+  .price-wrapper {  
+    margin-top: auto;  
+  }  
+  
+  .price {  
+    font-weight: 700;  
+    font-size: 1.1rem;  
+    color: #222;  
+  }  
+  
+  .old-price {  
+    font-size: 0.9rem;  
+    text-decoration: line-through;  
+    color: #999;  
+    margin-left: 10px;  
+  }  
+  
+  .discount-tag {  
+    background: #ff2d55;  
+    color: white;  
+    font-weight: 700;  
+    font-size: 0.8rem;  
+    padding: 3px 7px;  
+    border-radius: 7px;  
+    position: absolute;  
+    top: 15px;  
+    left: 15px;  
+    z-index: 10;  
+  }  
+  
+  .btn-buy {  
+    background: #25d366; /* رنگ سبز واتس‌اپ */  
+    color: white;  
+    border: none;  
+    border-radius: 7px;  
+    padding: 12px 0;  
+    font-weight: 700;  
+    font-size: 1rem;  
+    cursor: pointer;  
+    margin-top: 15px;  
+    width: 100%;  
+    display: inline-block;  
+    text-align: center;  
+    transition: background 0.3s ease;  
+  }  
+  
+  .btn-buy:hover {  
+    background: #128c4a;  
+  }  
+  
+  /* Footer */  
+  footer {  
+    background: #222;  
+    color: #ccc;  
+    padding: 25px 15px;  
+    text-align: center;  
+    font-size: 0.9rem;  
+  }  
+  
+  /* Responsive */  
+  @media (max-width: 720px) {  
+    .product-card {  
+      height: auto;  
+    }  
+  
+    .product-name {  
+      min-height: auto;  
+    }  
+  }
 
-    body {
-      font-family: 'Vazirmatn', sans-serif;
-      background: linear-gradient(to right, #f8f9fa, #ffecec);
-      color: #333;
-      text-align: center;
-      padding: 30px;
-    }
+  /* مودال نمایش تصویر بزرگ */  
+  #imageModal {  
+    display: none; /* پنهان در ابتدا */  
+    position: fixed;  
+    z-index: 2000;  
+    left: 0;  
+    top: 0;  
+    width: 100%;  
+    height: 100%;  
+    overflow: auto;  
+    background-color: rgba(0,0,0,0.8);  
+    align-items: center;  
+    justify-content: center;  
+  }  
 
-    .clock {
-      font-size: 2em;
-      margin-bottom: 10px;
-    }
+  #imageModal.active {  
+    display: flex;  
+  }  
 
-    .timer {
-      font-size: 1.5em;
-      color: #d9534f;
-      margin-bottom: 30px;
-    }
+  #modalContent {  
+    max-width: 90%;  
+    max-height: 90%;  
+    border-radius: 10px;  
+    box-shadow: 0 0 15px #fff;  
+  }
 
-    .info-box {
-      background-color: #fff5f5;
-      border-radius: 16px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      padding: 20px;
-      margin-top: 30px;
-      line-height: 1.9;
-      text-align: right;
-      direction: rtl;
-    }
+  #modalContent img {  
+    width: 100%;  
+    height: auto;  
+    border-radius: 10px;  
+  }
 
-    .info-box strong {
-      color: #e91e63;
-    }
+  #modalCloseBtn {  
+    position: fixed;  
+    top: 25px;  
+    right: 25px;  
+    font-size: 30px;  
+    color: white;  
+    cursor: pointer;  
+    font-weight: bold;  
+    user-select: none;  
+    z-index: 2100;  
+  }
 
-    .secret-open {
-      cursor: pointer;
-      color: #999;
-      margin-top: 15px;
-      font-size: 0.8em;
-    }
+</style>  
+</head>  
+<body>  
+  
+<header>  
+  <h1>فروشگاه مانتو وی آی پی شاپ</h1>  
+  <div class="clock" id="clock">در حال بارگذاری ساعت...</div>  
+</header>  
+  
+<div id="countdown">در حال بارگذاری زمان تخفیف...</div>  
+  
+<div class="banner" aria-label="بنر تبلیغاتی">  
+  <img src="img/I3_1.jpg" alt="بنر تبلیغاتی" />  
+</div>  
+  
+<main>  
+  <section class="products-grid" id="productsGrid" aria-label="محصولات فروشگاه">  
+    <!-- محصولات با JS بارگذاری می‌شوند -->  
+  </section>  
+</main>  
+  
+<footer>  
+  تمامی حقوق محفوظ است © 2025 فروشگاه مانتو وی آی پی شاپ 
+</footer>  
 
-    .highlight {
-      color: #ff4081;
-      font-weight: bold;
-    }
-  </style>
-</head>
-<body>
+<!-- مودال نمایش تصویر بزرگ -->  
+<div id="imageModal" aria-modal="true" role="dialog" tabindex="-1">  
+  <span id="modalCloseBtn" aria-label="بستن تصویر">×</span>  
+  <div id="modalContent">  
+    <img src="" alt="تصویر بزرگ محصول" />  
+  </div>  
+</div>  
+  
+<script>  
+  // ساعت فارسی  
+  function updateClock() {  
+    const now = new Date();  
+    const faDate = new Intl.DateTimeFormat('fa-IR-u-nu-latn', {  
+      year: 'numeric',  
+      month: 'long',  
+      day: 'numeric',  
+      hour: '2-digit',  
+      minute: '2-digit',  
+      second: '2-digit'  
+    }).format(now);  
+    document.getElementById('clock').innerText = faDate;  
+  }  
+  setInterval(updateClock, 1000);  
+  updateClock();  
+  
+  // شمارش معکوس تخفیف تا پایان روز  
+  function startCountdown() {  
+    const now = new Date();  
+    const end = new Date();  
+    end.setHours(23, 59, 59, 999);  
+    const diff = end - now;  
+  
+    if (diff <= 0) {  
+      document.getElementById('countdown').innerText = "🎉 تخفیف به پایان رسید!";  
+      return;  
+    }  
+  
+    const h = Math.floor(diff / (1000 * 60 * 60));  
+    const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));  
+    const s = Math.floor((diff % (1000 * 60)) / 1000);  
+  
+    document.getElementById('countdown').innerText =  
+      `⏳فعلا در حالی تست  : ${h} ساعت و ${m} دقیقه و ${s} ثانیه`;  
+  
+    setTimeout(startCountdown, 1000);  
+  }  
+  startCountdown();  
+  
+  // محصولات نمونه (۱۳ محصول)  
+  const products = [  
+    {name:"مانتو مدرن گلدار",color:"صورتی",price:890000,oldPrice:1100000,image:"img/I3_2.jpg",discount:true},  
+    {name:"پالتو زمستانی",color:"مشکی",price:1290000,oldPrice:1500000,image:"img/I1_3.jpg",discount:true},  
+    {name:"بارانی کژوال",color:"سبز زیتونی",price:790000,oldPrice:null,image:"img/I1_1.jpg",discount:false},  
+    {name:"مانتو تابستانی",color:"آبی روشن",price:560000,oldPrice:650000,image:"img/I1_2.jpg",discount:true},  
+    {name:"کت زنانه کلاسیک",color:"خاکی",price:1340000,oldPrice:null,image:"img/I3_3.jpg",discount:false},  
+    {name:"مانتو رسمی",color:"طوسی",price:1120000,oldPrice:1250000,image:"img/I3_2.jpg",discount:true},  
+    {name:"پالتو خزدار",color:"قهوه‌ای",price:1890000,oldPrice:2100000,image:"img/I3_1.jpg",discount:true},  
+    {name:"بارانی ضدآب",color:"بژ",price:850000,oldPrice:null,image:"img/I2_3.jpg",discount:false},  
+    {name:"مانتو کتان",color:"کرمی",price:670000,oldPrice:null,image:"img/I2_2.jpg",discount:false},  
+    {name:"کت پاییزه",color:"زرشکی",price:1340000,oldPrice:1450000,image:"img/I2_1.jpg",discount:true},  
+    {name:"مانتو مجلسی",color:"بنفش",price:980000,oldPrice:null,image:"img/I1_3.jpg",discount:false},  
+    {name:"پالتو اسپرت",color:"طوسی روشن",price:1520000,oldPrice:1700000,image:"img/I1_1.jpg",discount:true},  
+    {name:"بارانی شیک",color:"آبی نفتی",price:790000,oldPrice:null,image:"img/I1_2.jpg",discount:false},  
+  ];  
+  
+  function formatPrice(num){  
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g,",") + " تومان";  
+  }  
+  
+  function createProductCard(product){  
+    const card = document.createElement('article');  
+    card.className = 'product-card';  
+    card.style.position = 'relative';  
+  
+    if(product.discount){  
+      const discTag = document.createElement('div');  
+      discTag.className = 'discount-tag';  
+      discTag.textContent = 'تخفیف';  
+      card.appendChild(discTag);  
+    }  
+  
+    const img = document.createElement('img');  
+    img.className = 'product-image';  
+    img.src = product.image;  
+    img.alt = product.name;  
+    img.tabIndex = 0;  // قابل فوکوس بودن برای دسترس‌پذیری  
+    card.appendChild(img);  
+  
+    const info = document.createElement('div');  
+    info.className = 'product-info';  
+  
+    const name = document.createElement('h2');  
+    name.className = 'product-name';  
+    name.textContent = product.name;  
+    info.appendChild(name);  
+  
+    const color = document.createElement('p');  
+    color.className = 'product-color';  
+    color.textContent = 'رنگ: ' + product.color;  
+    info.appendChild(color);  
+  
+    const priceWrapper = document.createElement('div');  
+    priceWrapper.className = 'price-wrapper';  
+  
+    const price = document.createElement('span');  
+    price.className = 'price';  
+    price.textContent = formatPrice(product.price);  
+    priceWrapper.appendChild(price);  
+  
+    if(product.oldPrice){  
+      const oldPrice = document.createElement('span');  
+      oldPrice.className = 'old-price';  
+      oldPrice.textContent = formatPrice(product.oldPrice);  
+      priceWrapper.appendChild(oldPrice);  
+    }  
+  
+    info.appendChild(priceWrapper);  
+  
+    const btnBuy = document.createElement('a');  
+    btnBuy.className = 'btn-buy';  
+    btnBuy.textContent = 'ورود به کانال تلگرام';  
+    btnBuy.href = 'https://t.me/manto_vip_shop';  
+    btnBuy.target = '_blank';  
+    btnBuy.rel = 'noopener noreferrer';  
+  
+    info.appendChild(btnBuy);  
+  
+    card.appendChild(info);  
+  
+    // افزودن رویداد کلیک روی تصویر برای نمایش مودال  
+    img.addEventListener('click', () => {  
+      openModal(product.image, product.name);  
+    });  
 
-  <div class="clock" id="clock"></div>
-  <div class="timer" id="countdown">در حال بارگذاری زمان تخفیف...</div>
-
-  <div class="info-box">
-    <p><strong>تولید و پخش انواع مانتو پالتو 🇹🇷🇮🇷</strong></p>
-    <p>ارسال به تمام نقاط کشور</p>
-    <p><a href="https://instagram.com/manto_vip_shop" target="_blank">Instagram.com/manto_vip_shop</a></p>
-    <p>😍 تهران بازار بزرگ پارسیان طبقه دوم گذر ۲ پلاک ۵/۴۱</p>
-    <p>شعبه دوم بازار بزرگ کوچه کربلایی احسان مال طبقه دوم پلاک ۵۲۴</p>
-    <p>mehdikhansari7890@</p>
-    <p>📞 09128307890 - 09371740280</p>
-  </div>
-
-  <div class="secret-open" id="secret">© Admin: Reza Muradi</div>
-
-  <script>
-    // تاریخ شمسی و ساعت زنده
-    function updateClock() {
-      const now = new Date();
-      const faDate = new Intl.DateTimeFormat('fa-IR-u-nu-latn', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-      }).format(now);
-      document.getElementById('clock').innerText = faDate;
-    }
-
-    setInterval(updateClock, 1000);
-    updateClock();
-
-    // شمارش معکوس تا پایان روز
-    function startCountdown() {
-      const now = new Date();
-      const end = new Date();
-      end.setHours(23, 59, 59, 999);
-      const diff = end - now;
-
-      if (diff <= 0) {
-        document.getElementById('countdown').innerText = "🎉 تخفیف به پایان رسید!";
-        return;
-      }
-
-      const hours = Math.floor(diff / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-      document.getElementById('countdown').innerText =
-        `⏳ زمان باقی‌مانده تخفیف: ${hours} ساعت و ${minutes} دقیقه و ${seconds} ثانیه`;
-
-      setTimeout(startCountdown, 1000);
-    }
-
-    startCountdown();
-
-    // باز کردن h5.html با کلیک مخفی
-    let clickCount = 0;
-    document.getElementById('clock').addEventListener('click', () => {
-      clickCount++;
-      if (clickCount === 10) {
-        window.location.href = "h5.html";
-      }
-      setTimeout(() => {
-        clickCount = 0;
-      }, 2000); // ریست بعد ۲ ثانیه
-    });
-  </script>
-
-</body>
+    // افزودن کلید Enter برای باز کردن مودال (دسترس‌پذیری)  
+    img.addEventListener('keydown', (e) => {  
+      if(e.key === "Enter" || e.key === " ") {  
+        e.preventDefault();  
+        openModal(product.image, product.name);  
+      }  
+    });  
+  
+    return card;  
+  }  
+  
+  const productsGrid = document.getElementById('productsGrid');  
+  products.forEach(p => {  
+    productsGrid.appendChild(createProductCard(p));  
+  });  
+  
+  // نمایش مودال  
+  const imageModal = document.getElementById('imageModal');  
+  const modalImg = imageModal.querySelector('img');  
+  const modalCloseBtn = document.getElementById('modalCloseBtn');  
+  
+  function openModal(src, alt) {  
+    modalImg.src = src;  
+    modalImg.alt = alt;  
+    imageModal.classList.add('active');  
+    imageModal.focus();  
+  }  
+  
+  function closeModal() {  
+    imageModal.classList.remove('active');  
+    modalImg.src = '';  
+    modalImg.alt = '';  
+  }  
+  
+  // بستن مودال با کلیک روی دکمه  
+  modalCloseBtn.addEventListener('click', closeModal);  
+  
+  // بستن مودال با کلیک روی زمینه مودال  
+  imageModal.addEventListener('click', (e) => {  
+    if(e.target === imageModal) {  
+      closeModal();  
+    }  
+  });  
+  
+  // بستن مودال با کلید Escape  
+  window.addEventListener('keydown', (e) => {  
+    if(e.key === "Escape" && imageModal.classList.contains('active')) {  
+      closeModal();  
+    }  
+  });  
+</script>  
+  
+</body>  
 </html>
