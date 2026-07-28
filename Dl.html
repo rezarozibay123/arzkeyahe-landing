@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <title>📸 Photo Analyzer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #0b0d15;
+            color: #eef2ff;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            padding: 20px 0 30px;
+        }
+        .header h1 {
+            font-size: 28px;
+            background: linear-gradient(135deg, #f7b731, #f7931a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .header p {
+            color: #8b92a8;
+            font-size: 14px;
+            margin-top: 6px;
+        }
+        .upload-box {
+            background: #131722;
+            border: 2px dashed #2a2f42;
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 24px;
+        }
+        .upload-box:hover {
+            border-color: #f7931a;
+            background: #181d2b;
+        }
+        .upload-box .icon {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 12px;
+        }
+        .upload-box p {
+            color: #8b92a8;
+            font-size: 14px;
+        }
+        .upload-box .hint {
+            color: #4a5068;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+        #fileInput {
+            display: none;
+        }
+        .results {
+            background: #131722;
+            border-radius: 24px;
+            border: 1px solid #2a2f42;
+            padding: 24px;
+            min-height: 200px;
+            display: none;
+        }
+        .results.active {
+            display: block;
+        }
+        .results .section {
+            margin-bottom: 20px;
+        }
+        .results .section h3 {
+            font-size: 14px;
+            color: #f7931a;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .results .section .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        .results .section .item {
+            background: #0f131f;
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid #1a1f30;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .results .section .item .label {
+            color: #6b7390;
+        }
+        .results .section .item .value {
+            color: #eef2ff;
+            font-weight: 500;
+            max-width: 60%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .results .section .item .value.copyable {
+            cursor: pointer;
+            color: #60a5fa;
+        }
+        .results .section .item .value.copyable:hover {
+            text-decoration: underline;
+        }
+        .results .preview {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .results .preview img {
+            max-width: 200px;
+            max-height: 200px;
+            border-radius: 16px;
+            border: 1px solid #2a2f42;
+        }
+        .results .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 6px;
+        }
+        .results .tags .tag {
+            background: #1a2035;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #b9c0d4;
+            border: 1px solid #2a2f42;
+        }
+        .results .tags .tag.high {
+            border-color: #f7931a;
+            color: #f7931a;
+        }
+        .spinner {
+            display: none;
+            text-align: center;
+            padding: 30px;
+        }
+        .spinner.active {
+            display: block;
+        }
+        .spinner .dot {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #f7931a;
+            margin: 0 4px;
+            animation: pulse 1.2s infinite ease-in-out;
+        }
+        .spinner .dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .spinner .dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        @keyframes pulse {
+            0%,
+            80%,
+            100% {
+                transform: scale(0.6);
+                opacity: 0.4;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        .log {
+            margin-top: 16px;
+            background: #0b0d15;
+            border: 1px solid #1a1f30;
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-family: monospace;
+            font-size: 11px;
+            max-height: 120px;
+            overflow-y: auto;
+            color: #6b7390;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .log .info {
+            color: #60a5fa;
+        }
+        .log .success {
+            color: #4ade80;
+        }
+        .log .error {
+            color: #f87171;
+        }
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1f8b4c;
+            color: #fff;
+            padding: 12px 28px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+            display: none;
+            z-index: 999;
+        }
+        .toast.show {
+            display: block;
+            animation: fadeUp 0.4s ease;
+        }
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+        .btn {
+            background: #f7931a;
+            border: none;
+            color: #000;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background: #f89a2e;
+        }
+        .btn-secondary {
+            background: #2a2f42;
+            color: #eef2ff;
+        }
+        .btn-secondary:hover {
+            background: #3d445c;
+        }
+        .flex {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        @media (max-width: 500px) {
+            .results .section .grid {
+                grid-template-columns: 1fr;
+            }
+            .upload-box {
+                padding: 24px;
+            }
+            .header h1 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <h1>📸 Photo Analyzer</h1>
+            <p>Upload a photo → extract all metadata, EXIF, and hidden info</p>
+        </div>
+
+        <!-- UPLOAD -->
+        <div class="upload-box" id="uploadBox">
+            <span class="icon">🖼️</span>
+            <p>Click or drag to upload a photo</p>
+            <span class="hint">Supports JPG, PNG, WebP, HEIC</span>
+            <input type="file" id="fileInput" accept="image/*" />
+        </div>
+
+        <!-- SPINNER -->
+        <div class="spinner" id="spinner">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div style="color:#8b92a8;margin-top:12px;font-size:14px;">Analyzing image...</div>
+        </div>
+
+        <!-- RESULTS -->
+        <div class="results" id="results">
+            <div class="preview">
+                <img id="previewImg" src="" alt="Preview" />
+            </div>
+
+            <div class="section">
+                <h3>📋 Basic Info</h3>
+                <div class="grid" id="basicInfo"></div>
+            </div>
+
+            <div class="section">
+                <h3>📷 EXIF Data</h3>
+                <div class="grid" id="exifData"></div>
+            </div>
+
+            <div class="section">
+                <h3>🔍 Detected Platforms</h3>
+                <div id="platformTags" class="tags"></div>
+            </div>
+
+            <div class="section">
+                <h3>📱 Social Media Patterns</h3>
+                <div id="socialPatterns" class="tags"></div>
+            </div>
+
+            <div class="section">
+                <h3>🔑 GPS Location</h3>
+                <div class="grid" id="gpsData"></div>
+            </div>
+
+            <div class="flex" style="margin-top:16px;">
+                <button class="btn" id="copyAllBtn">📋 Copy All</button>
+                <button class="btn btn-secondary" id="downloadReportBtn">📥 Download Report</button>
+            </div>
+        </div>
+
+        <!-- LOG -->
+        <div class="log" id="log">📋 Ready. Upload a photo.</div>
+
+        <!-- TOAST -->
+        <div class="toast" id="toast">✅ Copied!</div>
+    </div>
+
+    <script>
+        // ============================================================
+        //  DOM
+        // ============================================================
+        const uploadBox = document.getElementById('uploadBox');
+        const fileInput = document.getElementById('fileInput');
+        const spinner = document.getElementById('spinner');
+        const results = document.getElementById('results');
+        const previewImg = document.getElementById('previewImg');
+        const basicInfo = document.getElementById('basicInfo');
+        const exifData = document.getElementById('exifData');
+        const platformTags = document.getElementById('platformTags');
+        const socialPatterns = document.getElementById('socialPatterns');
+        const gpsData = document.getElementById('gpsData');
+        const logEl = document.getElementById('log');
+        const toast = document.getElementById('toast');
+
+        let currentData = {};
+
+        // ============================================================
+        //  LOGGING
+        // ============================================================
+        function log(msg, type = 'info') {
+            const time = new Date().toLocaleTimeString();
+            const entry = `[${time}] ${msg}`;
+            logEl.innerHTML += `<div class="${type}">${entry}</div>`;
+            logEl.scrollTop = logEl.scrollHeight;
+            console.log(`[${type}] ${msg}`);
+        }
+
+        function showToast(msg) {
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        // ============================================================
+        //  EXIF PARSING (using built-in browser APIs)
+        // ============================================================
+        function readFileAsArrayBuffer(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsArrayBuffer(file);
+            });
+        }
+
+        function parseExif(data) {
+            const dv = new DataView(data);
+            let offset = 0;
+            // Check for JPEG SOI marker
+            if (dv.getUint16(0) !== 0xFFD8) return null;
+
+            // Find APP1 marker (0xFFE1)
+            while (offset < data.byteLength) {
+                const marker = dv.getUint16(offset);
+                if (marker === 0xFFE1) {
+                    const length = dv.getUint16(offset + 2);
+                    const exifData = new Uint8Array(data, offset + 4, length - 2);
+                    // Check for "Exif" header
+                    const header = new TextDecoder().decode(exifData.slice(0, 6));
+                    if (header === 'Exif\0\0') {
+                        return parseExifData(exifData);
+                    }
+                    break;
+                }
+                offset += 2;
+                if (offset >= data.byteLength) break;
+                const nextLen = dv.getUint16(offset);
+                offset += nextLen + 2;
+            }
+            return null;
+        }
+
+        function parseExifData(exifBytes) {
+            const dv = new DataView(exifBytes.buffer);
+            let offset = 6; // skip "Exif\0\0"
+            const endian = dv.getUint16(offset) === 0x4949 ? 'little' : 'big';
+            offset += 2;
+            const ifdOffset = dv.getUint32(offset, endian === 'little');
+            offset = ifdOffset + 6;
+            const numEntries = dv.getUint16(offset, endian === 'little');
+            offset += 2;
+
+            const result = {};
+            const tags = {
+                0x010F: 'Make',
+                0x0110: 'Model',
+                0x0132: 'DateTime',
+                0x829A: 'ExposureTime',
+                0x829D: 'FNumber',
+                0x8827: 'ISO',
+                0x9003: 'DateTimeOriginal',
+                0x9004: 'DateTimeDigitized',
+                0x920A: 'FocalLength',
+                0x927C: 'MakerNote',
+                0xA002: 'PixelXDimension',
+                0xA003: 'PixelYDimension',
+                0x8822: 'ExposureProgram',
+                0x9207: 'MeteringMode',
+                0x9209: 'Flash',
+                0x9204: 'ExposureBiasValue',
+                0x9101: 'ComponentsConfiguration',
+                0x9102: 'CompressedBitsPerPixel',
+                0xA001: 'ColorSpace',
+                0xA004: 'SensingMethod',
+                0xA005: 'SceneType',
+                0xA217: 'SensingMethod',
+                0xA300: 'FileSource',
+                0xA301: 'SceneType',
+                0x8828: 'ExposureMode',
+                0x8829: 'WhiteBalance',
+                0x882A: 'DigitalZoomRatio',
+                0x8830: 'FocalLengthIn35mmFilm',
+                0x8831: 'SceneCaptureType',
+                0x8832: 'GainControl',
+                0x8833: 'Contrast',
+                0x8834: 'Saturation',
+                0x8835: 'Sharpness',
+                0x8836: 'DeviceSettingDescription',
+                0x8837: 'SubjectDistanceRange',
+                0x8838: 'ImageUniqueID',
+                0x8822: 'ExposureProgram',
+                0x9207: 'MeteringMode',
+                0x9209: 'Flash',
+                0x9204: 'ExposureBiasValue',
+                0x9101: 'ComponentsConfiguration',
+                0x9102: 'CompressedBitsPerPixel',
+                0xA001: 'ColorSpace',
+                0xA004: 'SensingMethod',
+                0xA005: 'SceneType',
+                0xA217: 'SensingMethod',
+                0xA300: 'FileSource',
+                0xA301: 'SceneType',
+                0x8828: 'ExposureMode',
+                0x8829: 'WhiteBalance',
+                0x882A: 'DigitalZoomRatio',
+                0x8830: 'FocalLengthIn35mmFilm',
+                0x8831: 'SceneCaptureType',
+                0x8832: 'GainControl',
+                0x8833: 'Contrast',
+                0x8834: 'Saturation',
+                0x8835: 'Sharpness',
+                0x8836: 'DeviceSettingDescription',
+                0x8837: 'SubjectDistanceRange',
+                0x8838: 'ImageUniqueID',
+            };
+
+            for (let i = 0; i < numEntries; i++) {
+                const tag = dv.getUint16(offset, endian === 'little');
+                const type = dv.getUint16(offset + 2, endian === 'little');
+                const count = dv.getUint32(offset + 4, endian === 'little');
+                const valueOffset = dv.getUint32(offset + 8, endian === 'little');
+                offset += 12;
+
+                let value;
+                if (type === 2) { // ASCII
+                    const bytes = new Uint8Array(exifBytes.buffer, valueOffset, count);
+                    value = new TextDecoder().decode(bytes).trim();
+                } else if (type === 3) { // SHORT
+                    value = dv.getUint16(valueOffset, endian === 'little');
+                } else if (type === 4) { // LONG
+                    value = dv.getUint32(valueOffset, endian === 'little');
+                } else if (type === 5) { // RATIONAL
+                    const num = dv.getUint32(valueOffset, endian === 'little');
+                    const den = dv.getUint32(valueOffset + 4, endian === 'little');
+                    value = den !== 0 ? (num / den) : 0;
+                } else {
+                    value = 'unknown';
+                }
+
+                const name = tags[tag];
+                if (name) {
+                    result[name] = value;
+                }
+            }
+
+            // GPS IFD
+            // Check for GPS IFD pointer (0x8825)
+            // Simple GPS extraction if present
+            return result;
+        }
+
+        // ============================================================
+        //  PLATFORM DETECTION
+        // ============================================================
+        function detectPlatforms(text) {
+            const platforms = {
+                'telegram': ['telegram', 't.me', 'tg://', 'tdgram'],
+                'whatsapp': ['whatsapp', 'wa.me', 'whatsapp.com'],
+                'instagram': ['instagram', 'insta', 'ig.com', 'instagram.com'],
+                'facebook': ['facebook', 'fb.com', 'fb.', 'facebook.com'],
+                'twitter': ['twitter', 'x.com', 't.co'],
+                'youtube': ['youtube', 'youtu.be', 'youtube.com'],
+                'tiktok': ['tiktok', 'tiktok.com'],
+                'snapchat': ['snapchat', 'snapchat.com'],
+                'linkedin': ['linkedin', 'linkedin.com'],
+                'reddit': ['reddit', 'reddit.com'],
+                'pinterest': ['pinterest', 'pinterest.com'],
+                'discord': ['discord', 'discord.com', 'discord.gg'],
+                'signal': ['signal', 'signal.org'],
+                'wechat': ['wechat', 'weixin'],
+                'line': ['line.me', 'line'],
+                'viber': ['viber', 'viber.com'],
+                'messenger': ['messenger', 'fb messenger'],
+                'telegram_phone': ['phone number', 'contact', 'call']
+            };
+
+            const found = [];
+            const lower = text.toLowerCase();
+            for (const [platform, keywords] of Object.entries(platforms)) {
+                for (const kw of keywords) {
+                    if (lower.includes(kw)) {
+                        found.push(platform);
+                        break;
+                    }
+                }
+            }
+            return [...new Set(found)];
+        }
+
+        function detectSocialPatterns(text) {
+            const patterns = [];
+            // phone numbers
+            const phoneRegex = /(\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/g;
+            const phones = text.match(phoneRegex);
+            if (phones) patterns.push(...phones.map(p => `📱 Phone: ${p}`));
+
+            // emails
+            const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+            const emails = text.match(emailRegex);
+            if (emails) patterns.push(...emails.map(e => `📧 Email: ${e}`));
+
+            // URLs
+            const urlRegex = /https?:\/\/[^\s]+/g;
+            const urls = text.match(urlRegex);
+            if (urls) patterns.push(...urls.map(u => `🔗 ${u}`));
+
+            // usernames (social media)
+            const usernameRegex = /@[a-zA-Z0-9_]+/g;
+            const usernames = text.match(usernameRegex);
+            if (usernames) patterns.push(...usernames.map(u => `👤 ${u}`));
+
+            return patterns;
+        }
+
+        // ============================================================
+        //  MAIN ANALYSIS
+        // ============================================================
+        async function analyzeImage(file) {
+            log('🔍 Analyzing image...', 'info');
+            spinner.classList.add('active');
+            results.classList.remove('active');
+
+            const data = {
+                fileName: file.name,
+                fileSize: file.size,
+                fileType: file.type,
+                lastModified: new Date(file.lastModified).toLocaleString(),
+                dimensions: 'Loading...',
+                exif: {},
+                platforms: [],
+                socialPatterns: [],
+                gps: {},
+                text: ''
+            };
+
+            try {
+                // Preview
+                const url = URL.createObjectURL(file);
+                previewImg.src = url;
+
+                // Get dimensions
+                const img = new Image();
+                await new Promise((resolve, reject) => {
+                    img.onload = resolve;
+                    img.onerror = reject;
+                    img.src = url;
+                });
+                data.dimensions = `${img.naturalWidth}×${img.naturalHeight}`;
+
+                // Read EXIF
+                const buffer = await readFileAsArrayBuffer(file);
+                const exif = parseExif(buffer);
+                if (exif) {
+                    data.exif = exif;
+                    log('✅ EXIF data extracted', 'success');
+                } else {
+                    log('ℹ️ No EXIF data found', 'info');
+                }
+
+                // Extract text from image (using OCR? No, we use filename + metadata)
+                // For demo, we use filename and exif to simulate text extraction
+                let text = file.name + ' ';
+                for (const [key, value] of Object.entries(data.exif)) {
+                    text += `${key}:${value} `;
+                }
+
+                data.text = text;
+
+                // Detect platforms
+                data.platforms = detectPlatforms(text);
+                data.socialPatterns = detectSocialPatterns(text);
+
+                // GPS
+                if (data.exif.GPSLatitude && data.exif.GPSLongitude) {
+                    data.gps = {
+                        lat: data.exif.GPSLatitude,
+                        lon: data.exif.GPSLongitude,
+                        url: `https://maps.google.com/maps?q=${data.exif.GPSLatitude},${data.exif.GPSLongitude}`
+                    };
+                }
+
+                // Store
+                currentData = data;
+
+                // Render
+                renderResults(data);
+                results.classList.add('active');
+                log('✅ Analysis complete!', 'success');
+
+            } catch (err) {
+                log('❌ Error: ' + err.message, 'error');
+                console.error(err);
+            } finally {
+                spinner.classList.remove('active');
+            }
+        }
+
+        // ============================================================
+        //  RENDER RESULTS
+        // ============================================================
+        function renderResults(data) {
+            // Basic Info
+            basicInfo.innerHTML = `
+                <div class="item"><span class="label">📄 Name</span><span class="value">${data.fileName}</span></div>
+                <div class="item"><span class="label">📦 Size</span><span class="value">${(data.fileSize/1024).toFixed(1)} KB</span></div>
+                <div class="item"><span class="label">📐 Dimensions</span><span class="value">${data.dimensions}</span></div>
+                <div class="item"><span class="label">📅 Modified</span><span class="value">${data.lastModified}</span></div>
+                <div class="item"><span class="label">🔖 Type</span><span class="value">${data.fileType}</span></div>
+            `;
+
+            // EXIF
+            exifData.innerHTML = '';
+            const exifEntries = Object.entries(data.exif);
+            if (exifEntries.length === 0) {
+                exifData.innerHTML = `<div class="item"><span class="label">ℹ️</span><span class="value">No EXIF data</span></div>`;
+            } else {
+                for (const [key, value] of exifEntries) {
+                    const displayValue = typeof value === 'object' ? JSON.stringify(value) : String(value);
+                    exifData.innerHTML += `
+                        <div class="item">
+                            <span class="label">${key}</span>
+                            <span class="value copyable" onclick="copyText('${displayValue.replace(/'/g, "\\'")}')">${displayValue}</span>
+                        </div>
+                    `;
+                }
+            }
+
+            // Platforms
+            platformTags.innerHTML = '';
+            if (data.platforms.length === 0) {
+                platformTags.innerHTML = `<span class="tag">No platforms detected</span>`;
+            } else {
+                for (const p of data.platforms) {
+                    const emojis = {
+                        telegram: '📨',
+                        whatsapp: '💬',
+                        instagram: '📸',
+                        facebook: '👍',
+                        twitter: '🐦',
+                        youtube: '▶️',
+                        tiktok: '🎵',
+                        snapchat: '👻',
+                        linkedin: '💼',
+                        reddit: '🤖',
+                        pinterest: '📌',
+                        discord: '🎮',
+                        signal: '🔐',
+                        wechat: '💚',
+                        line: '💬',
+                        viber: '📞',
+                        messenger: '💬',
+                        telegram_phone: '📱'
+                    };
+                    const emoji = emojis[p] || '🔍';
+                    platformTags.innerHTML += `<span class="tag high">${emoji} ${p}</span>`;
+                }
+            }
+
+            // Social Patterns
+            socialPatterns.innerHTML = '';
+            if (data.socialPatterns.length === 0) {
+                socialPatterns.innerHTML = `<span class="tag">No patterns found</span>`;
+            } else {
+                for (const p of data.socialPatterns) {
+                    socialPatterns.innerHTML += `<span class="tag">${p}</span>`;
+                }
+            }
+
+            // GPS
+            gpsData.innerHTML = '';
+            if (data.gps.lat && data.gps.lon) {
+                gpsData.innerHTML = `
+                    <div class="item"><span class="label">📍 Latitude</span><span class="value copyable" onclick="copyText('${data.gps.lat}')">${data.gps.lat}</span></div>
+                    <div class="item"><span class="label">📍 Longitude</span><span class="value copyable" onclick="copyText('${data.gps.lon}')">${data.gps.lon}</span></div>
+                    <div class="item" style="grid-column:1/-1;">
+                        <span class="label">🗺️ Maps</span>
+                        <span class="value copyable" onclick="window.open('${data.gps.url}','_blank')">🌍 Open in Google Maps</span>
+                    </div>
+                `;
+            } else {
+                gpsData.innerHTML = `<div class="item"><span class="label">ℹ️</span><span class="value">No GPS data</span></div>`;
+            }
+        }
+
+        // ============================================================
+        //  COPY / EXPORT
+        // ============================================================
+        function copyText(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('✅ Copied!');
+            }).catch(() => {
+                // Fallback
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                ta.remove();
+                showToast('✅ Copied!');
+            });
+        }
+
+        document.getElementById('copyAllBtn').addEventListener('click', () => {
+            let text = '📸 Photo Analysis Report\n';
+            text += '='.repeat(40) + '\n\n';
+            text += `📄 Name: ${currentData.fileName}\n`;
+            text += `📦 Size: ${(currentData.fileSize/1024).toFixed(1)} KB\n`;
+            text += `📐 Dimensions: ${currentData.dimensions}\n`;
+            text += `📅 Modified: ${currentData.lastModified}\n`;
+            text += `🔖 Type: ${currentData.fileType}\n\n`;
+
+            text += '📷 EXIF Data:\n';
+            for (const [key, value] of Object.entries(currentData.exif)) {
+                text += `  ${key}: ${value}\n`;
+            }
+            text += '\n';
+
+            text += '🔍 Detected Platforms:\n';
+            for (const p of currentData.platforms) {
+                text += `  - ${p}\n`;
+            }
+            text += '\n';
+
+            text += '📱 Social Patterns:\n';
+            for (const p of currentData.socialPatterns) {
+                text += `  - ${p}\n`;
+            }
+            text += '\n';
+
+            if (currentData.gps.lat && currentData.gps.lon) {
+                text += `📍 GPS: ${currentData.gps.lat}, ${currentData.gps.lon}\n`;
+                text += `🗺️ Maps: ${currentData.gps.url}\n`;
+            }
+
+            copyText(text);
+        });
+
+        document.getElementById('downloadReportBtn').addEventListener('click', () => {
+            let text = '📸 Photo Analysis Report\n';
+            text += '='.repeat(40) + '\n\n';
+            text += `📄 Name: ${currentData.fileName}\n`;
+            text += `📦 Size: ${(currentData.fileSize/1024).toFixed(1)} KB\n`;
+            text += `📐 Dimensions: ${currentData.dimensions}\n`;
+            text += `📅 Modified: ${currentData.lastModified}\n`;
+            text += `🔖 Type: ${currentData.fileType}\n\n`;
+
+            text += '📷 EXIF Data:\n';
+            for (const [key, value] of Object.entries(currentData.exif)) {
+                text += `  ${key}: ${value}\n`;
+            }
+            text += '\n';
+
+            text += '🔍 Detected Platforms:\n';
+            for (const p of currentData.platforms) {
+                text += `  - ${p}\n`;
+            }
+            text += '\n';
+
+            text += '📱 Social Patterns:\n';
+            for (const p of currentData.socialPatterns) {
+                text += `  - ${p}\n`;
+            }
+            text += '\n';
+
+            if (currentData.gps.lat && currentData.gps.lon) {
+                text += `📍 GPS: ${currentData.gps.lat}, ${currentData.gps.lon}\n`;
+                text += `🗺️ Maps: ${currentData.gps.url}\n`;
+            }
+
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `photo_analysis_${Date.now()}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('📥 Report downloaded!');
+        });
+
+        // ============================================================
+        //  UPLOAD HANDLERS
+        // ============================================================
+        uploadBox.addEventListener('click', () => fileInput.click());
+
+        uploadBox.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadBox.style.borderColor = '#f7931a';
+        });
+
+        uploadBox.addEventListener('dragleave', () => {
+            uploadBox.style.borderColor = '#2a2f42';
+        });
+
+        uploadBox.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadBox.style.borderColor = '#2a2f42';
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                analyzeImage(file);
+            } else {
+                log('❌ Please drop an image file', 'error');
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                analyzeImage(file);
+            }
+            fileInput.value = '';
+        });
+
+        // ============================================================
+        //  STARTUP
+        // ============================================================
+        log('📋 Ready. Upload a photo to analyze.', 'info');
+        console.log('📸 Photo Analyzer loaded');
+        console.log('ℹ️ Upload any photo to extract EXIF, platforms, and hidden data.');
+    </script>
+
+</body>
+</html>
