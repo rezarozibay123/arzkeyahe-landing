@@ -1,0 +1,1249 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#0f172a">
+<title>خدمات مرادی | مدیریت روادید</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root {
+  --bg: #f0f2f5;
+  --surface: #ffffff;
+  --ink: #0f172a;
+  --muted: #64748b;
+  --line: #e2e8f0;
+  --navy: #0f172a;
+  --blue: #1e40af;
+  --gold: #c9a84c;
+  --green: #059669;
+  --amber: #d97706;
+  --red: #dc2626;
+  --soft-green: #ecfdf5;
+  --soft-amber: #fffbeb;
+  --soft-red: #fef2f2;
+  --soft-blue: #eff6ff;
+  --soft-gray: #f1f5f9;
+  --soft-gold: #fef9ee;
+  --shadow: 0 2px 12px rgba(15,23,42,.06);
+  --shadow-lg: 0 8px 30px rgba(15,23,42,.1);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --nav-h: 64px;
+  --sidebar-w: 280px;
+  --header-h: 56px;
+}
+
+body.tg-dark {
+  --bg: #0b1220;
+  --surface: #141c2e;
+  --ink: #f1f5f9;
+  --muted: #94a3b8;
+  --line: #1e293b;
+  --soft-green: #064e3b;
+  --soft-amber: #451a03;
+  --soft-red: #450a0a;
+  --soft-blue: #1e3a5f;
+  --soft-gray: #1e293b;
+  --soft-gold: #2a2410;
+  --shadow: 0 2px 12px rgba(0,0,0,.3);
+  --shadow-lg: 0 8px 30px rgba(0,0,0,.4);
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: Tahoma, "Noto Sans Arabic", "Segoe UI", system-ui, sans-serif;
+  line-height: 1.55;
+  overflow-x: hidden;
+  padding-top: var(--safe-top);
+}
+
+button, input, select, textarea { font: inherit; color: inherit; border: none; background: none; outline: none; }
+button { cursor: pointer; }
+
+/* ─── Layout shell ─── */
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* Sidebar (desktop) / drawer (mobile) */
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--surface);
+  border-left: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: fixed;
+  top: 0; right: 0; bottom: 0;
+  z-index: 60;
+  transform: translateX(100%);
+  transition: transform .28s cubic-bezier(.22,1,.36,1);
+  padding-top: var(--safe-top);
+  padding-bottom: var(--safe-bottom);
+}
+.sidebar.open { transform: translateX(0); box-shadow: -8px 0 30px rgba(0,0,0,.15); }
+.sidebar-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.4);
+  z-index: 55; display: none; opacity: 0; transition: opacity .25s;
+}
+.sidebar-overlay.open { display: block; opacity: 1; }
+
+.sidebar-head {
+  padding: 16px 16px 12px;
+  border-bottom: 1px solid var(--line);
+  display: flex; align-items: center; gap: 10px;
+}
+.logo {
+  width: 38px; height: 38px;
+  background: linear-gradient(135deg, #0f172a, #1e3a5f);
+  border-radius: 11px;
+  display: grid; place-items: center;
+  color: var(--gold); font-weight: 800; font-size: 15px;
+  border: 1.5px solid var(--gold); flex-shrink: 0;
+}
+.sidebar-head h1 { font-size: 14px; font-weight: 800; }
+.sidebar-head p { font-size: 10px; color: var(--muted); }
+
+.sidebar-search {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+}
+.sidebar-search input {
+  width: 100%; padding: 10px 12px;
+  background: var(--bg); border: 1px solid var(--line);
+  border-radius: 10px; font-size: 12px;
+}
+.sidebar-search input:focus { border-color: var(--blue); }
+
+.sidebar-nav {
+  flex: 1; overflow-y: auto; padding: 8px;
+}
+.side-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: 11px;
+  font-size: 13px; font-weight: 600; color: var(--muted);
+  transition: background .15s, color .15s; margin-bottom: 2px;
+}
+.side-item:hover, .side-item.active {
+  background: var(--soft-blue); color: var(--blue);
+}
+body.tg-dark .side-item:hover, body.tg-dark .side-item.active {
+  background: var(--soft-blue); color: #60a5fa;
+}
+.side-item .count {
+  margin-right: auto;
+  background: var(--soft-gray); color: var(--muted);
+  font-size: 11px; font-weight: 700;
+  padding: 2px 8px; border-radius: 20px;
+}
+.side-item.active .count { background: var(--blue); color: #fff; }
+.side-item .icon { font-size: 16px; width: 22px; text-align: center; }
+
+.sidebar-foot {
+  padding: 12px; border-top: 1px solid var(--line);
+}
+.sidebar-foot .btn-add {
+  width: 100%; padding: 12px;
+  background: var(--navy); color: #fff;
+  border-radius: 12px; font-weight: 800; font-size: 13px;
+  text-align: center; transition: transform .12s;
+}
+.sidebar-foot .btn-add:active { transform: scale(.97); }
+body.tg-dark .sidebar-foot .btn-add { background: #3b82f6; }
+
+/* Main area */
+.main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: calc(var(--nav-h) + var(--safe-bottom));
+}
+
+/* Top bar */
+.topbar {
+  position: sticky; top: 0; z-index: 40;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: 10px 14px;
+  display: flex; align-items: center; gap: 10px;
+  min-height: var(--header-h);
+}
+.menu-btn {
+  width: 40px; height: 40px; border-radius: 11px;
+  background: var(--soft-gray);
+  display: grid; place-items: center; font-size: 18px; flex-shrink: 0;
+}
+.topbar-title { flex: 1; min-width: 0; }
+.topbar-title h2 { font-size: 15px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.topbar-title p { font-size: 11px; color: var(--muted); }
+.topbar-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.icon-btn {
+  width: 38px; height: 38px; border-radius: 11px;
+  background: var(--soft-gray);
+  display: grid; place-items: center; font-size: 15px;
+  transition: transform .12s;
+}
+.icon-btn:active { transform: scale(.92); }
+
+/* Content */
+.content { flex: 1; padding: 14px; max-width: 1100px; width: 100%; margin: 0 auto; }
+
+/* Stats */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.stat-card {
+  background: var(--surface); border-radius: 14px; padding: 14px;
+  box-shadow: var(--shadow); border: 1px solid var(--line);
+  text-align: center;
+}
+.stat-card .label { font-size: 11px; color: var(--muted); font-weight: 600; }
+.stat-card .num { font-size: 22px; font-weight: 800; margin-top: 4px; }
+.stat-card .dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  display: inline-block; margin-left: 3px; vertical-align: middle;
+}
+
+/* Search + filters */
+.toolbar {
+  display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;
+}
+.search-bar {
+  flex: 1; min-width: 160px;
+  display: flex; align-items: center; gap: 8px;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 12px; padding: 0 12px; box-shadow: var(--shadow);
+}
+.search-bar input { flex: 1; padding: 11px 0; font-size: 13px; background: transparent; }
+.search-bar input::placeholder { color: var(--muted); }
+.filter-select {
+  padding: 10px 12px; background: var(--surface);
+  border: 1px solid var(--line); border-radius: 12px;
+  font-size: 12px; font-weight: 600; min-width: 120px;
+  box-shadow: var(--shadow);
+}
+
+/* ─── Folder groups (مربوط) ─── */
+.folder-group {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.folder-head {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: background .15s;
+  user-select: none;
+}
+.folder-head:hover { background: var(--soft-gray); }
+.folder-icon {
+  width: 42px; height: 42px; border-radius: 12px;
+  background: linear-gradient(135deg, #1e3a5f, #334155);
+  display: grid; place-items: center;
+  color: var(--gold); font-size: 18px; flex-shrink: 0;
+}
+.folder-info { flex: 1; min-width: 0; }
+.folder-info .fname {
+  font-size: 14px; font-weight: 800;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.folder-info .fmeta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.folder-badge {
+  background: var(--soft-gold); color: #92640a;
+  font-size: 11px; font-weight: 800;
+  padding: 4px 10px; border-radius: 20px; flex-shrink: 0;
+}
+body.tg-dark .folder-badge { color: var(--gold); }
+.folder-chevron {
+  font-size: 12px; color: var(--muted); transition: transform .2s; flex-shrink: 0;
+}
+.folder-group.open .folder-chevron { transform: rotate(180deg); }
+
+.folder-body {
+  display: none;
+  border-top: 1px solid var(--line);
+  padding: 8px;
+  background: var(--bg);
+}
+.folder-group.open .folder-body { display: block; }
+
+/* Person rows inside folder */
+.person-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px;
+  background: var(--surface);
+  border-radius: 12px;
+  margin-bottom: 6px;
+  border: 1px solid var(--line);
+  cursor: pointer;
+  transition: transform .12s, box-shadow .12s;
+}
+.person-row:last-child { margin-bottom: 0; }
+.person-row:active { transform: scale(.98); }
+.person-row:hover { box-shadow: var(--shadow); }
+.person-avatar {
+  width: 40px; height: 40px; border-radius: 11px;
+  background: linear-gradient(145deg, #1e293b, #475569);
+  display: grid; place-items: center;
+  color: #fff; font-weight: 800; font-size: 14px; flex-shrink: 0;
+}
+.person-info { flex: 1; min-width: 0; }
+.person-info .pname {
+  font-size: 13px; font-weight: 800;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.person-info .pmeta {
+  font-size: 11px; color: var(--muted); margin-top: 2px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.person-tags { display: flex; gap: 4px; flex-wrap: wrap; flex-shrink: 0; }
+
+.tag {
+  display: inline-block; padding: 2px 8px; border-radius: 20px;
+  font-size: 10px; font-weight: 700; white-space: nowrap;
+}
+.tag.green { background: var(--soft-green); color: var(--green); }
+.tag.amber { background: var(--soft-amber); color: var(--amber); }
+.tag.red { background: var(--soft-red); color: var(--red); }
+.tag.blue { background: var(--soft-blue); color: var(--blue); }
+.tag.gray { background: var(--soft-gray); color: var(--muted); }
+
+.empty-state { text-align: center; padding: 48px 24px; color: var(--muted); }
+.empty-state .icon { font-size: 40px; margin-bottom: 12px; opacity: .4; }
+.empty-state p { font-size: 13px; }
+
+/* Bottom nav (mobile) */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 50;
+  background: var(--surface); border-top: 1px solid var(--line);
+  display: flex; justify-content: space-around; align-items: center;
+  height: calc(var(--nav-h) + var(--safe-bottom));
+  padding-bottom: var(--safe-bottom);
+  box-shadow: 0 -2px 16px rgba(15,23,42,.06);
+}
+.nav-item {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  font-size: 10px; font-weight: 600; color: var(--muted); padding: 6px 10px;
+}
+.nav-item.active { color: var(--navy); }
+body.tg-dark .nav-item.active { color: #60a5fa; }
+.nav-item .nav-icon { font-size: 18px; line-height: 1; }
+
+/* FAB */
+.fab {
+  position: fixed;
+  bottom: calc(var(--nav-h) + var(--safe-bottom) + 14px);
+  left: 16px; z-index: 45;
+  width: 52px; height: 52px; border-radius: 15px;
+  background: var(--navy); color: #fff; font-size: 22px;
+  display: grid; place-items: center;
+  box-shadow: 0 6px 20px rgba(15,23,42,.3);
+  transition: transform .15s;
+}
+.fab:active { transform: scale(.92); }
+body.tg-dark .fab { background: #3b82f6; }
+
+/* Sheets */
+.sheet-backdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 80;
+  display: none; opacity: 0; transition: opacity .25s;
+}
+.sheet-backdrop.open { display: block; opacity: 1; }
+.sheet {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 90;
+  background: var(--bg); border-radius: 22px 22px 0 0;
+  max-height: 92vh; overflow-y: auto;
+  transform: translateY(100%);
+  transition: transform .32s cubic-bezier(.22,1,.36,1);
+  padding-bottom: calc(var(--safe-bottom) + 16px);
+}
+.sheet.open { transform: translateY(0); }
+.sheet-handle {
+  width: 36px; height: 4px; background: var(--line);
+  border-radius: 4px; margin: 10px auto 0;
+}
+.sheet-hero {
+  height: 120px; background: linear-gradient(145deg, #0f172a, #1e3a5f);
+  margin: 12px 16px 0; border-radius: 18px;
+  display: grid; place-items: center; position: relative;
+}
+.sheet-hero .big-avatar {
+  width: 60px; height: 60px; border-radius: 50%;
+  background: rgba(255,255,255,.1); border: 2px solid rgba(255,255,255,.3);
+  display: grid; place-items: center; color: #fff; font-size: 24px; font-weight: 800;
+}
+.sheet-hero .sheet-close {
+  position: absolute; top: 10px; right: 10px;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: rgba(255,255,255,.15); color: #fff;
+  display: grid; place-items: center; font-size: 13px;
+}
+.sheet-body { padding: 14px 18px 0; }
+.sheet-title { font-size: 18px; font-weight: 800; margin-bottom: 2px; }
+.sheet-sub { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+.sheet-badges { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 14px; }
+.sheet-badges .tag { font-size: 11px; padding: 3px 10px; }
+
+.detail-rows { margin-bottom: 14px; }
+.detail-row {
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
+  padding: 11px 0; border-bottom: 1px solid var(--line);
+}
+.detail-row:last-child { border-bottom: 0; }
+.detail-row .d-label { font-size: 12px; color: var(--muted); font-weight: 600; flex-shrink: 0; min-width: 90px; }
+.detail-row .d-value { font-size: 13px; font-weight: 700; text-align: left; word-break: break-word; }
+
+.info-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px;
+}
+.info-box {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 12px; padding: 11px 12px;
+}
+.info-box .label { font-size: 10px; color: var(--muted); font-weight: 600; }
+.info-box .value { font-size: 12px; font-weight: 700; margin-top: 2px; }
+
+.sheet-section { margin-bottom: 12px; }
+.sheet-section h4 { font-size: 12px; font-weight: 800; margin-bottom: 6px; }
+.sheet-section p {
+  font-size: 12px; color: var(--muted); line-height: 1.6;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 11px; padding: 11px;
+}
+
+.sheet-actions {
+  display: flex; gap: 8px; padding: 8px 18px 0; flex-wrap: wrap;
+}
+.btn-primary {
+  flex: 1; min-width: 90px;
+  background: var(--navy); color: #fff; font-weight: 800; font-size: 13px;
+  padding: 13px; border-radius: 12px; text-align: center; transition: transform .12s;
+}
+.btn-primary:active { transform: scale(.97); }
+body.tg-dark .btn-primary { background: #3b82f6; }
+.btn-secondary {
+  flex: 0 0 auto; width: 46px;
+  background: var(--soft-red); color: var(--red); font-size: 15px;
+  border-radius: 12px; display: grid; place-items: center;
+  border: 1px solid color-mix(in srgb, var(--red) 20%, transparent);
+}
+.btn-print {
+  flex: 0 0 auto; width: 46px;
+  background: var(--soft-blue); color: var(--blue); font-size: 15px;
+  border-radius: 12px; display: grid; place-items: center;
+  border: 1px solid color-mix(in srgb, var(--blue) 20%, transparent);
+}
+
+/* Form */
+.form-group { margin-bottom: 11px; }
+.form-group label {
+  display: block; font-size: 11px; font-weight: 700; color: var(--muted); margin-bottom: 4px;
+}
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%; padding: 11px 12px;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 11px; font-size: 13px;
+  transition: border-color .15s, box-shadow .15s;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+  border-color: var(--blue); box-shadow: 0 0 0 3px rgba(30,64,175,.12);
+}
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.form-actions { display: flex; gap: 8px; padding: 10px 18px 0; }
+.form-actions .btn-primary { flex: 1; }
+.btn-ghost {
+  flex: 0 0 auto; padding: 13px 16px; border-radius: 12px;
+  font-weight: 700; font-size: 13px; color: var(--muted); background: var(--soft-gray);
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: calc(var(--nav-h) + var(--safe-bottom) + 20px);
+  left: 50%; transform: translateX(-50%) translateY(80px);
+  background: var(--navy); color: #fff; padding: 11px 20px; border-radius: 12px;
+  font-size: 12px; font-weight: 700; z-index: 200; opacity: 0;
+  transition: all .3s; pointer-events: none; max-width: 85%; text-align: center;
+  box-shadow: 0 6px 24px rgba(0,0,0,.25); white-space: nowrap;
+}
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+body.tg-dark .toast { background: #1e3a5f; }
+
+.view { display: none; }
+.view.active { display: block; }
+
+.guide-list { padding: 0; }
+.guide-item {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 12px; padding: 12px; margin-bottom: 7px; box-shadow: var(--shadow);
+}
+.guide-item .tag { flex-shrink: 0; }
+.guide-item span { font-size: 12px; }
+
+.cancel-card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+  padding: 12px; margin-bottom: 8px;
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;
+  box-shadow: var(--shadow); cursor: pointer;
+}
+.cancel-card .name { font-weight: 800; font-size: 13px; }
+.cancel-card .reason { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+/* Print */
+@media print {
+  body { background: #fff !important; color: #000 !important; padding: 0 !important; }
+  .sidebar, .sidebar-overlay, .topbar, .bottom-nav, .fab, .stats-row, .toolbar,
+  .folder-group, .view, .sheet-backdrop, .sheet-handle, .sheet-hero .sheet-close,
+  .sheet-actions, .toast { display: none !important; }
+  .main { padding: 0 !important; }
+  .sheet-backdrop.open, .sheet.open {
+    display: block !important; position: static !important;
+    transform: none !important; opacity: 1 !important;
+    background: #fff !important; max-height: none !important;
+    border-radius: 0 !important; overflow: visible !important; padding: 0 !important;
+  }
+  .sheet-hero { height: auto !important; background: none !important; margin: 0 0 12px !important; border-radius: 0 !important; border-bottom: 2px solid #0f172a; padding-bottom: 10px; }
+  .sheet-hero .big-avatar { display: none !important; }
+  .sheet-body { padding: 0 !important; }
+  .sheet-title { font-size: 16pt !important; color: #000 !important; }
+  .detail-row { border-color: #ccc !important; }
+  .d-label { color: #555 !important; }
+  .d-value { color: #000 !important; }
+  .tag { border: 1px solid #999; color: #000 !important; background: #f0f0f0 !important; }
+  .print-only { display: block !important; }
+  .print-header {
+    display: flex !important; justify-content: space-between; align-items: center;
+    border-bottom: 3px solid #0f172a; padding-bottom: 10px; margin-bottom: 16px;
+  }
+  .print-header h1 { font-size: 14pt; margin: 0; }
+  .print-header p { font-size: 9pt; color: #555; margin: 2px 0 0; }
+  .print-footer {
+    display: block !important; margin-top: 24px; padding-top: 8px;
+    border-top: 1px solid #ccc; font-size: 9pt; color: #666; text-align: center;
+  }
+}
+.print-only { display: none; }
+
+/* ─── Desktop ─── */
+@media (min-width: 768px) {
+  .sidebar {
+    position: sticky; top: 0; height: 100vh; height: 100dvh;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+  .sidebar-overlay { display: none !important; }
+  .menu-btn { display: none; }
+  .bottom-nav { display: none; }
+  .fab { display: none; }
+  .main { padding-bottom: 0; }
+  .app-shell { flex-direction: row-reverse; }
+  .stats-row { grid-template-columns: repeat(5, 1fr); }
+  .sheet {
+    max-width: 520px; margin: 0 auto; left: 0; right: 0;
+    border-radius: 18px; bottom: auto; top: 50%;
+    transform: translateY(100vh);
+    max-height: 85vh;
+  }
+  .sheet.open { transform: translateY(-50%); }
+  .sheet-backdrop { display: none; }
+  .sheet-backdrop.open {
+    display: flex !important; align-items: center; justify-content: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .stats-row { grid-template-columns: repeat(3, 1fr); }
+  .stat-card:nth-child(4), .stat-card:nth-child(5) { display: none; }
+  .form-row { grid-template-columns: 1fr; }
+}
+@media (max-width: 400px) {
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+  .person-tags .tag:nth-child(2) { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-head">
+      <div class="logo">م</div>
+      <div>
+        <h1>خدمات مرادی</h1>
+        <p>مدیریت روادید و کارت کار</p>
+      </div>
+    </div>
+    <div class="sidebar-search">
+      <input id="sideSearch" placeholder="جستجوی مربوط…" autocomplete="off">
+    </div>
+    <nav class="sidebar-nav" id="sideNav">
+      <!-- filled by JS: all + each مربوط folder -->
+    </nav>
+    <div class="sidebar-foot">
+      <button class="btn-add" id="sideAddBtn">+ ثبت پرونده جدید</button>
+    </div>
+  </aside>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- Main -->
+  <div class="main">
+    <header class="topbar">
+      <button class="menu-btn" id="menuBtn">☰</button>
+      <div class="topbar-title">
+        <h2 id="pageTitle">همه پرونده‌ها</h2>
+        <p id="pageSub">گروه‌بندی بر اساس مربوط</p>
+      </div>
+      <div class="topbar-actions">
+        <button class="icon-btn" id="exportBtn" title="CSV">⇩</button>
+        <button class="icon-btn" id="expandAllBtn" title="باز/بسته کردن همه">⊞</button>
+      </div>
+    </header>
+
+    <div class="content">
+      <!-- HOME -->
+      <div class="view active" id="viewHome">
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="label"><span class="dot" style="background:#64748b"></span>مجموع</div>
+            <div class="num" id="statTotal">۰</div>
+          </div>
+          <div class="stat-card">
+            <div class="label"><span class="dot" style="background:#059669"></span>صادر</div>
+            <div class="num" id="statVisa">۰</div>
+          </div>
+          <div class="stat-card">
+            <div class="label"><span class="dot" style="background:#1e40af"></span>کارت کار</div>
+            <div class="num" id="statCard">۰</div>
+          </div>
+          <div class="stat-card">
+            <div class="label"><span class="dot" style="background:#d97706"></span>جای دیگر</div>
+            <div class="num" id="statOther">۰</div>
+          </div>
+          <div class="stat-card">
+            <div class="label"><span class="dot" style="background:#dc2626"></span>کنسلی</div>
+            <div class="num" id="statCancel">۰</div>
+          </div>
+        </div>
+
+        <div class="toolbar">
+          <div class="search-bar">
+            <span style="color:var(--muted)">⌕</span>
+            <input id="search" placeholder="جستجو نام، شغل، شرکت…" autocomplete="off">
+          </div>
+          <select class="filter-select" id="visaFilter">
+            <option value="">همهٔ روادید</option>
+            <option>صادرشده</option>
+            <option>در حال بررسی</option>
+            <option>در انتظار</option>
+            <option>روادید جای دیگر</option>
+            <option>کنسل‌شده</option>
+          </select>
+        </div>
+
+        <div id="folderList"></div>
+      </div>
+
+      <!-- CANCELS -->
+      <div class="view" id="viewCancels">
+        <div id="cancelList"></div>
+      </div>
+
+      <!-- GUIDE -->
+      <div class="view" id="viewGuide">
+        <div class="guide-list">
+          <div class="guide-item"><span class="tag green">صادرشده</span><span>روادید با موفقیت صادر شده</span></div>
+          <div class="guide-item"><span class="tag amber">در حال بررسی</span><span>پرونده در مرحله بررسی</span></div>
+          <div class="guide-item"><span class="tag amber">در انتظار</span><span>منتظر اقدام یا مدارک</span></div>
+          <div class="guide-item"><span class="tag blue">روادید جای دیگر</span><span>از مسیر دیگری اخذ شده</span></div>
+          <div class="guide-item"><span class="tag red">کنسل‌شده</span><span>پرونده لغو شده</span></div>
+          <div class="guide-item"><span class="tag green">ثبت‌شده</span><span>کارت کار ثبت شده</span></div>
+          <div class="guide-item"><span class="tag gray">نامشخص</span><span>وضعیت کارت کار نامشخص</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button class="fab" id="fabAdd">+</button>
+
+<nav class="bottom-nav">
+  <button class="nav-item active" data-view="viewHome"><span class="nav-icon">⌂</span><span>خانه</span></button>
+  <button class="nav-item" data-view="viewCancels"><span class="nav-icon">✕</span><span>کنسلی</span></button>
+  <button class="nav-item" data-view="viewGuide"><span class="nav-icon">ⓘ</span><span>راهنما</span></button>
+  <button class="nav-item" id="navMenu"><span class="nav-icon">☰</span><span>فهرست</span></button>
+</nav>
+
+<!-- DETAIL -->
+<div class="sheet-backdrop" id="detailBackdrop"></div>
+<div class="sheet" id="detailSheet">
+  <div class="sheet-handle"></div>
+  <div class="print-only print-header">
+    <div><h1>خدمات مرادی</h1><p>برگه مشخصات پرونده</p></div>
+    <div style="text-align:left;font-size:9pt;color:#555" id="printDate"></div>
+  </div>
+  <div class="sheet-hero">
+    <button class="sheet-close" id="detailClose">✕</button>
+    <div class="big-avatar" id="detailAvatar">؟</div>
+  </div>
+  <div class="sheet-body">
+    <div class="sheet-title" id="detailName">—</div>
+    <div class="sheet-sub" id="detailSub">—</div>
+    <div class="sheet-badges" id="detailBadges"></div>
+    <div class="detail-rows">
+      <div class="detail-row"><span class="d-label">نام و نام خانوادگی</span><span class="d-value" id="dName">—</span></div>
+      <div class="detail-row"><span class="d-label">نام شرکت</span><span class="d-value" id="dCompany">—</span></div>
+      <div class="detail-row"><span class="d-label">نام کارفرما</span><span class="d-value" id="dEmployer">—</span></div>
+      <div class="detail-row"><span class="d-label">شغل</span><span class="d-value" id="dJob">—</span></div>
+      <div class="detail-row"><span class="d-label">آدرس</span><span class="d-value" id="dAddress">—</span></div>
+      <div class="detail-row"><span class="d-label">مربوط</span><span class="d-value" id="dRep">—</span></div>
+    </div>
+    <div class="info-grid">
+      <div class="info-box"><div class="label">وضعیت روادید</div><div class="value" id="detailVisa">—</div></div>
+      <div class="info-box"><div class="label">وضعیت کارت کار</div><div class="value" id="detailCard">—</div></div>
+      <div class="info-box"><div class="label">تاریخ ثبت</div><div class="value" id="detailDate">—</div></div>
+      <div class="info-box"><div class="label">شناسه</div><div class="value" id="detailId">—</div></div>
+    </div>
+    <div class="sheet-section" id="detailReasonBox" style="display:none"><h4>دلیل کنسلی</h4><p id="detailReason">—</p></div>
+    <div class="sheet-section" id="detailNotesBox" style="display:none"><h4>یادداشت</h4><p id="detailNotes">—</p></div>
+  </div>
+  <div class="sheet-actions">
+    <button class="btn-primary" id="detailEdit">ویرایش</button>
+    <button class="btn-print" id="detailPrint">🖨</button>
+    <button class="btn-secondary" id="detailDelete">🗑</button>
+  </div>
+  <div class="print-only print-footer">خدمات مرادی · برگه مشخصات پرونده</div>
+</div>
+
+<!-- FORM -->
+<div class="sheet-backdrop" id="formBackdrop"></div>
+<div class="sheet" id="formSheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-body" style="padding-top:14px">
+    <div class="sheet-title" id="formTitle" style="font-size:17px;margin-bottom:12px">ثبت پرونده</div>
+    <form id="recordForm">
+      <input type="hidden" id="recordId">
+      <div class="form-group">
+        <label>نام و نام خانوادگی *</label>
+        <input id="personName" required placeholder="علی احمدی">
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>نام شرکت</label><input id="company" placeholder="نام شرکت"></div>
+        <div class="form-group"><label>نام کارفرما</label><input id="employer" placeholder="نام کارفرما"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>شغل</label><input id="job" placeholder="کارگر ساختمانی"></div>
+        <div class="form-group"><label>مربوط *</label><input id="repName" required placeholder="احمد ولی" list="repList"></div>
+      </div>
+      <datalist id="repList"></datalist>
+      <div class="form-group">
+        <label>آدرس</label>
+        <textarea id="address" rows="2" placeholder="آدرس محل کار یا سکونت"></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>وضعیت روادید</label>
+          <select id="visaStatus">
+            <option>در انتظار</option><option>در حال بررسی</option><option>صادرشده</option>
+            <option>روادید جای دیگر</option><option>کنسل‌شده</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>وضعیت کارت کار</label>
+          <select id="cardStatus">
+            <option>نامشخص</option><option>در انتظار</option><option>ثبت‌شده</option><option>ثبت نشده</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group"><label>تاریخ ثبت</label><input id="dateAdded" type="date"></div>
+      <div class="form-group"><label>دلیل کنسلی</label><textarea id="cancelReason" rows="2" placeholder="در صورت کنسل‌شدن"></textarea></div>
+      <div class="form-group"><label>یادداشت</label><textarea id="notes" rows="2" placeholder="اختیاری"></textarea></div>
+    </form>
+  </div>
+  <div class="form-actions">
+    <button class="btn-primary" id="saveBtn">ذخیره</button>
+    <button class="btn-ghost" id="formCancel">انصراف</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+
+const tg = window.Telegram?.WebApp;
+const isTG = !!tg;
+if (isTG) {
+  tg.ready(); tg.expand();
+  try { tg.disableVerticalSwipes?.(); } catch(_){}
+  try { tg.setHeaderColor("secondary_bg_color"); } catch(_){}
+  try { tg.setBackgroundColor("bg_color"); } catch(_){}
+  const applyTheme = () => document.body.classList.toggle("tg-dark", tg.colorScheme === "dark");
+  applyTheme();
+  tg.onEvent("themeChanged", applyTheme);
+  tg.BackButton.onClick(() => {
+    if (formOpen) closeForm();
+    else if (detailOpen) closeDetail();
+    else if (sidebarOpen && window.innerWidth < 768) closeSidebar();
+    else tg.close();
+  });
+}
+
+const DEMO = [
+  {id:1,name:"علی احمدی",rep:"احمد ولی",company:"شرکت نمونه الف",employer:"محمود رضایی",job:"کارگر ساختمانی",address:"تهران، خیابان آزادی، پلاک ۱۲",visa:"صادرشده",card:"ثبت‌شده",date:"2026-10-03",reason:"",notes:"نمونه"},
+  {id:2,name:"محمد نوری",rep:"احمد ولی",company:"شرکت نمونه ب",employer:"حسین کاظمی",job:"راننده",address:"کرج، بلوار دانشجو",visa:"در حال بررسی",card:"در انتظار",date:"2026-10-05",reason:"",notes:"مدارک نمونه"},
+  {id:3,name:"حسین رحیمی",rep:"احمد ولی",company:"شرکت نمونه الف",employer:"محمود رضایی",job:"نقاش",address:"تهران، شهرک غرب",visa:"کنسل‌شده",card:"ثبت نشده",date:"2026-10-08",reason:"درخواست لغو فرضی",notes:""},
+  {id:4,name:"کریم صادقی",rep:"مربوط نمونه دوم",company:"شرکت نمونه ج",employer:"علی مرادی",job:"نجار",address:"اصفهان، خیابان چهارباغ",visa:"روادید جای دیگر",card:"نامشخص",date:"2026-10-10",reason:"",notes:""},
+  {id:5,name:"فرید احمدی",rep:"مربوط نمونه دوم",company:"شرکت نمونه ب",employer:"حسین کاظمی",job:"لوله کش",address:"شیراز، بلوار جمهوری",visa:"در انتظار",card:"ثبت‌شده",date:"2026-10-12",reason:"",notes:""},
+  {id:6,name:"رضا کریمی",rep:"احمد ولی",company:"شرکت نمونه د",employer:"سعید محمدی",job:"برقکار",address:"مشهد، خیابان امام رضا",visa:"صادرشده",card:"ثبت‌شده",date:"2026-10-15",reason:"",notes:""},
+  {id:7,name:"امیر حسینی",rep:"مربوط نمونه دوم",company:"شرکت نمونه الف",employer:"محمود رضایی",job:"جوشکار",address:"تبریز، خیابان آزادی",visa:"در حال بررسی",card:"در انتظار",date:"2026-10-18",reason:"",notes:"نیاز به مدارک"},
+  {id:8,name:"سعید جعفری",rep:"مربوط نمونه سوم",company:"شرکت نمونه هـ",employer:"رضا نوری",job:"کاشی‌کار",address:"قم، خیابان امام",visa:"در انتظار",card:"نامشخص",date:"2026-10-20",reason:"",notes:""}
+];
+
+const KEY = "moradi_visa_tg_v5";
+let records;
+try {
+  const s = localStorage.getItem(KEY);
+  records = s ? JSON.parse(s) : DEMO.map(x=>({...x}));
+} catch { records = DEMO.map(x=>({...x})); }
+records = records.map(r => ({employer:"",job:"",address:"",...r}));
+
+let activeRep = "";          // "" = all
+let openFolders = new Set(); // which folders are expanded
+let allExpanded = true;
+let detailOpen = false;
+let formOpen = false;
+let sidebarOpen = false;
+let currentDetailId = null;
+
+const $ = id => document.getElementById(id);
+const faNum = n => String(n).replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
+const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const initial = name => (name||"؟").trim().charAt(0);
+const dash = v => (v && String(v).trim()) ? v : "—";
+
+function persist() {
+  try { localStorage.setItem(KEY, JSON.stringify(records)); }
+  catch { showToast("ذخیره ممکن نشد"); }
+}
+
+function tagClass(s) {
+  if (s==="صادرشده"||s==="ثبت‌شده") return "green";
+  if (s==="در حال بررسی"||s==="در انتظار") return "amber";
+  if (s==="کنسل‌شده") return "red";
+  if (s==="روادید جای دیگر") return "blue";
+  return "gray";
+}
+function tag(s) { return `<span class="tag ${tagClass(s)}">${esc(s)}</span>`; }
+
+function showToast(msg, ms=2200) {
+  const el = $("toast");
+  el.textContent = msg;
+  el.classList.add("show");
+  clearTimeout(el._t);
+  el._t = setTimeout(()=>el.classList.remove("show"), ms);
+}
+function haptic(t="light") { try{tg?.HapticFeedback?.impactOccurred(t);}catch(_){} }
+
+/* Group by مربوط */
+function groupByRep(list) {
+  const map = new Map();
+  list.forEach(r => {
+    const key = (r.rep || "بدون مربوط").trim() || "بدون مربوط";
+    if (!map.has(key)) map.set(key, []);
+    map.get(key).push(r);
+  });
+  // sort people inside each folder by id desc
+  map.forEach(arr => arr.sort((a,b)=>b.id-a.id));
+  // sort folders by size then name
+  return [...map.entries()].sort((a,b) => b[1].length - a[1].length || a[0].localeCompare(b[0],"fa"));
+}
+
+function getRepNames() {
+  return [...new Set(records.map(r => (r.rep||"").trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"fa"));
+}
+
+function filtered() {
+  const q = $("search").value.trim().toLowerCase();
+  const vf = $("visaFilter").value;
+  return records.filter(r => {
+    if (activeRep && (r.rep||"").trim() !== activeRep) return false;
+    const hay = [r.name,r.rep,r.company,r.employer,r.job,r.address,r.notes].join(" ").toLowerCase();
+    return (!q||hay.includes(q)) && (!vf||r.visa===vf);
+  });
+}
+
+/* Render */
+function renderStats() {
+  const src = activeRep ? records.filter(r=>(r.rep||"").trim()===activeRep) : records;
+  $("statTotal").textContent = faNum(src.length);
+  $("statVisa").textContent = faNum(src.filter(r=>r.visa==="صادرشده").length);
+  $("statCard").textContent = faNum(src.filter(r=>r.card==="ثبت‌شده").length);
+  $("statOther").textContent = faNum(src.filter(r=>r.visa==="روادید جای دیگر").length);
+  $("statCancel").textContent = faNum(src.filter(r=>r.visa==="کنسل‌شده").length);
+}
+
+function renderSidebar() {
+  const q = ($("sideSearch").value||"").trim().toLowerCase();
+  const reps = getRepNames().filter(n => !q || n.toLowerCase().includes(q));
+  const total = records.length;
+
+  let html = `
+    <button class="side-item ${activeRep===""?"active":""}" data-rep="">
+      <span class="icon">📁</span>
+      <span>همه پرونده‌ها</span>
+      <span class="count">${faNum(total)}</span>
+    </button>
+  `;
+  reps.forEach(name => {
+    const count = records.filter(r=>(r.rep||"").trim()===name).length;
+    html += `
+      <button class="side-item ${activeRep===name?"active":""}" data-rep="${esc(name)}">
+        <span class="icon">📂</span>
+        <span>${esc(name)}</span>
+        <span class="count">${faNum(count)}</span>
+      </button>
+    `;
+  });
+  $("sideNav").innerHTML = html;
+
+  // datalist for form
+  $("repList").innerHTML = getRepNames().map(n=>`<option value="${esc(n)}">`).join("");
+}
+
+function renderFolders() {
+  const list = filtered();
+  const groups = groupByRep(list);
+  const el = $("folderList");
+
+  if (!groups.length) {
+    el.innerHTML = `<div class="empty-state"><div class="icon">📂</div><p>موردی پیدا نشد</p></div>`;
+    return;
+  }
+
+  // If filtering by one rep, auto-open that folder
+  if (activeRep) openFolders.add(activeRep);
+
+  el.innerHTML = groups.map(([repName, people]) => {
+    const isOpen = openFolders.has(repName) || allExpanded;
+    const issued = people.filter(p=>p.visa==="صادرشده").length;
+    return `
+      <div class="folder-group ${isOpen?"open":""}" data-folder="${esc(repName)}">
+        <div class="folder-head" data-toggle="${esc(repName)}">
+          <div class="folder-icon">📂</div>
+          <div class="folder-info">
+            <div class="fname">${esc(repName)}</div>
+            <div class="fmeta">${faNum(people.length)} نفر · ${faNum(issued)} صادرشده</div>
+          </div>
+          <span class="folder-badge">${faNum(people.length)}</span>
+          <span class="folder-chevron">▼</span>
+        </div>
+        <div class="folder-body">
+          ${people.map(r => `
+            <div class="person-row" data-id="${r.id}">
+              <div class="person-avatar">${esc(initial(r.name))}</div>
+              <div class="person-info">
+                <div class="pname">${esc(r.name)}</div>
+                <div class="pmeta">${esc(r.job||"—")} · ${esc(r.company||"—")}</div>
+              </div>
+              <div class="person-tags">${tag(r.visa)} ${tag(r.card)}</div>
+            </div>
+          `).join("")}
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderCancels() {
+  const list = records.filter(r=>r.visa==="کنسل‌شده").sort((a,b)=>b.id-a.id);
+  $("cancelList").innerHTML = list.length
+    ? list.map(r=>`
+      <div class="cancel-card" data-id="${r.id}">
+        <div>
+          <div class="name">${esc(r.name)}</div>
+          <div class="reason">مربوط: ${esc(r.rep)} · ${esc(r.reason||"دلیل ثبت نشده")}</div>
+        </div>
+        ${tag("کنسل‌شده")}
+      </div>
+    `).join("")
+    : `<div class="empty-state"><div class="icon">✓</div><p>کنسلی ثبت نشده</p></div>`;
+}
+
+function updatePageTitle() {
+  if (activeRep) {
+    $("pageTitle").textContent = activeRep;
+    const c = records.filter(r=>(r.rep||"").trim()===activeRep).length;
+    $("pageSub").textContent = faNum(c) + " پرونده در این مربوط";
+  } else {
+    $("pageTitle").textContent = "همه پرونده‌ها";
+    $("pageSub").textContent = "گروه‌بندی بر اساس مربوط · " + faNum(records.length) + " پرونده";
+  }
+}
+
+/** Auto-refresh entire UI after any data change */
+function render() {
+  renderStats();
+  renderSidebar();
+  renderFolders();
+  renderCancels();
+  updatePageTitle();
+}
+
+/* Sidebar */
+function openSidebar() {
+  $("sidebar").classList.add("open");
+  $("sidebarOverlay").classList.add("open");
+  sidebarOpen = true;
+  if (isTG) tg.BackButton.show();
+}
+function closeSidebar() {
+  $("sidebar").classList.remove("open");
+  $("sidebarOverlay").classList.remove("open");
+  sidebarOpen = false;
+  if (isTG && !detailOpen && !formOpen) tg.BackButton.hide();
+}
+
+/* Detail */
+function openDetail(id) {
+  const r = records.find(x=>x.id===id);
+  if (!r) return;
+  currentDetailId = id;
+  $("detailAvatar").textContent = initial(r.name);
+  $("detailName").textContent = r.name;
+  $("detailSub").textContent = (r.job?r.job+" · ":"") + "مربوط: " + r.rep;
+  $("detailBadges").innerHTML = tag(r.visa)+" "+tag(r.card);
+  $("dName").textContent = dash(r.name);
+  $("dCompany").textContent = dash(r.company);
+  $("dEmployer").textContent = dash(r.employer);
+  $("dJob").textContent = dash(r.job);
+  $("dAddress").textContent = dash(r.address);
+  $("dRep").textContent = dash(r.rep);
+  $("detailVisa").textContent = r.visa;
+  $("detailCard").textContent = r.card;
+  $("detailDate").textContent = dash(r.date);
+  $("detailId").textContent = "#"+r.id;
+  if (r.reason) { $("detailReasonBox").style.display=""; $("detailReason").textContent=r.reason; }
+  else $("detailReasonBox").style.display="none";
+  if (r.notes) { $("detailNotesBox").style.display=""; $("detailNotes").textContent=r.notes; }
+  else $("detailNotesBox").style.display="none";
+  const now = new Date();
+  $("printDate").textContent = now.toLocaleDateString("fa-IR")+" · "+now.toLocaleTimeString("fa-IR",{hour:"2-digit",minute:"2-digit"});
+  $("detailBackdrop").classList.add("open");
+  $("detailSheet").classList.add("open");
+  detailOpen = true;
+  if (isTG) tg.BackButton.show();
+  haptic("light");
+}
+function closeDetail() {
+  $("detailBackdrop").classList.remove("open");
+  $("detailSheet").classList.remove("open");
+  detailOpen = false; currentDetailId = null;
+  if (isTG && !formOpen && !sidebarOpen) tg.BackButton.hide();
+}
+
+/* Form */
+function openForm(r=null) {
+  $("recordForm").reset();
+  $("recordId").value = r ? r.id : "";
+  $("formTitle").textContent = r ? "ویرایش پرونده" : "ثبت پرونده جدید";
+  $("dateAdded").value = r?.date || new Date().toISOString().slice(0,10);
+  if (r) {
+    $("personName").value = r.name||"";
+    $("company").value = r.company||"";
+    $("employer").value = r.employer||"";
+    $("job").value = r.job||"";
+    $("repName").value = r.rep||"";
+    $("address").value = r.address||"";
+    $("visaStatus").value = r.visa;
+    $("cardStatus").value = r.card;
+    $("cancelReason").value = r.reason||"";
+    $("notes").value = r.notes||"";
+  } else if (activeRep) {
+    $("repName").value = activeRep;
+  }
+  $("formBackdrop").classList.add("open");
+  $("formSheet").classList.add("open");
+  formOpen = true;
+  if (isTG) tg.BackButton.show();
+  haptic("light");
+  setTimeout(()=>$("personName").focus(),280);
+}
+function closeForm() {
+  $("formBackdrop").classList.remove("open");
+  $("formSheet").classList.remove("open");
+  formOpen = false;
+  if (isTG && !detailOpen && !sidebarOpen) tg.BackButton.hide();
+}
+
+function deleteRecord(id) {
+  const r = records.find(x=>x.id===id);
+  if (!r) return;
+  const go = () => {
+    records = records.filter(x=>x.id!==id);
+    persist(); closeDetail(); render();
+    showToast("پرونده حذف شد"); haptic("medium");
+  };
+  if (isTG && tg.showPopup) {
+    tg.showPopup({
+      title:"حذف پرونده", message:`«${r.name}» حذف شود؟`,
+      buttons:[{id:"ok",type:"destructive",text:"حذف"},{id:"cancel",type:"cancel"}]
+    }, btn => { if(btn==="ok") go(); });
+  } else if (confirm(`«${r.name}» حذف شود؟`)) go();
+}
+
+function saveRecord() {
+  const id = $("recordId").value ? Number($("recordId").value) : Math.max(0,...records.map(r=>r.id))+1;
+  const old = records.find(r=>r.id===id);
+  const rec = {
+    id,
+    name: $("personName").value.trim(),
+    company: $("company").value.trim(),
+    employer: $("employer").value.trim(),
+    job: $("job").value.trim(),
+    rep: $("repName").value.trim(),
+    address: $("address").value.trim(),
+    visa: $("visaStatus").value,
+    card: $("cardStatus").value,
+    date: $("dateAdded").value,
+    reason: $("cancelReason").value.trim(),
+    notes: $("notes").value.trim()
+  };
+  if (!rec.name||!rec.rep) { showToast("نام شخص و مربوط الزامی است"); haptic("heavy"); return; }
+  const doSave = () => {
+    if (old) records = records.map(r=>r.id===id?rec:r);
+    else records.push(rec);
+    // auto-open the folder of this rep
+    openFolders.add(rec.rep);
+    persist(); closeForm(); closeDetail(); render();
+    showToast(old?"به‌روزرسانی شد":"پرونده ثبت شد"); haptic("medium");
+  };
+  if (old && old.visa!=="کنسل‌شده" && rec.visa==="کنسل‌شده" && !rec.reason) {
+    if (isTG&&tg.showPopup) {
+      tg.showPopup({
+        title:"دلیل کنسلی خالی", message:"ادامه می‌دهید؟",
+        buttons:[{id:"ok",type:"default",text:"ادامه"},{id:"cancel",type:"cancel"}]
+      }, btn=>{if(btn==="ok")doSave();});
+    } else if (confirm("دلیل کنسلی خالی است. ادامه؟")) doSave();
+    return;
+  }
+  doSave();
+}
+
+/* Events */
+$("menuBtn").addEventListener("click", openSidebar);
+$("navMenu").addEventListener("click", openSidebar);
+$("sidebarOverlay").addEventListener("click", closeSidebar);
+$("sideAddBtn").addEventListener("click", ()=>{ closeSidebar(); openForm(); });
+$("fabAdd").addEventListener("click", ()=>openForm());
+$("saveBtn").addEventListener("click", e=>{ e.preventDefault(); saveRecord(); });
+$("formCancel").addEventListener("click", closeForm);
+$("formBackdrop").addEventListener("click", closeForm);
+$("detailClose").addEventListener("click", closeDetail);
+$("detailBackdrop").addEventListener("click", closeDetail);
+$("detailEdit").addEventListener("click", ()=>{
+  const r = records.find(x=>x.id===currentDetailId);
+  if (r) { closeDetail(); openForm(r); }
+});
+$("detailDelete").addEventListener("click", ()=>{ if(currentDetailId) deleteRecord(currentDetailId); });
+$("detailPrint").addEventListener("click", ()=>{ if(detailOpen){ haptic("light"); window.print(); } });
+
+// Sidebar rep filter
+$("sideNav").addEventListener("click", e => {
+  const btn = e.target.closest("[data-rep]");
+  if (!btn) return;
+  activeRep = btn.dataset.rep;
+  closeSidebar();
+  render();
+  haptic("light");
+});
+
+// Folder toggle
+$("folderList").addEventListener("click", e => {
+  const toggle = e.target.closest("[data-toggle]");
+  if (toggle) {
+    const name = toggle.dataset.toggle;
+    if (openFolders.has(name)) openFolders.delete(name);
+    else openFolders.add(name);
+    allExpanded = false;
+    renderFolders();
+    return;
+  }
+  const row = e.target.closest("[data-id]");
+  if (row) openDetail(Number(row.dataset.id));
+});
+
+// Cancel cards
+$("cancelList").addEventListener("click", e => {
+  const card = e.target.closest("[data-id]");
+  if (card) openDetail(Number(card.dataset.id));
+});
+
+$("search").addEventListener("input", ()=>{ renderFolders(); renderStats(); });
+$("visaFilter").addEventListener("change", ()=>{ renderFolders(); renderStats(); });
+$("sideSearch").addEventListener("input", renderSidebar);
+
+$("expandAllBtn").addEventListener("click", ()=>{
+  allExpanded = !allExpanded;
+  if (allExpanded) {
+    groupByRep(filtered()).forEach(([name])=>openFolders.add(name));
+  } else {
+    openFolders.clear();
+  }
+  renderFolders();
+  haptic("light");
+});
+
+// Bottom nav views
+document.querySelectorAll(".nav-item[data-view]").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    document.querySelectorAll(".nav-item").forEach(n=>n.classList.remove("active"));
+    btn.classList.add("active");
+    document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+    $(btn.dataset.view).classList.add("active");
+    haptic("light");
+  });
+});
+
+$("exportBtn").addEventListener("click", ()=>{
+  const list = filtered();
+  const headers = ["نام و نام خانوادگی","شرکت","کارفرما","شغل","آدرس","مربوط","وضعیت روادید","وضعیت کارت کار","تاریخ ثبت","دلیل کنسلی","یادداشت"];
+  const rows = list.map(r=>[r.name,r.company,r.employer,r.job,r.address,r.rep,r.visa,r.card,r.date,r.reason,r.notes]);
+  const csv = "\uFEFF"+[headers,...rows].map(row=>row.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\r\n");
+  const blob = new Blob([csv],{type:"text/csv;charset=utf-8;"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a"); a.href=url; a.download="moradi-visa.csv"; a.click();
+  URL.revokeObjectURL(url);
+  showToast("فایل CSV آماده شد"); haptic("light");
+});
+
+document.addEventListener("keydown", e=>{
+  if (e.key==="Escape") {
+    if (formOpen) closeForm();
+    else if (detailOpen) closeDetail();
+    else if (sidebarOpen) closeSidebar();
+  }
+});
+
+// Init: open all folders
+groupByRep(records).forEach(([name])=>openFolders.add(name));
+render();
+</script>
+</body>
+</html>
